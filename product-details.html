@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        House of KA | Luxury Fashion
+    </title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top luxury-navbar dark-navbar">
+
+        <div class="container">
+    
+          
+        <div class="container">
+    
+            <!-- LOGO -->
+            <a class="navbar-brand luxury-brand"
+                href="index.html">
+    
+                <div class="logo-text-wrapper">
+    
+                    <h1 class="brand-logo-text">
+                        HOUSE OF KA
+                    </h1>
+    
+                    <span class="logo-mini-text">
+                        REFINED • RADIANT • REGAL
+                    </span>
+    
+                </div>
+    
+            </a>
+
+              <!-- RIGHT SIDE -->
+              <div class="nav-right-wrapper">
+
+
+                     
+                <!-- SEARCH -->
+                <div class="luxury-search-box">
+    
+                    <i class="bi bi-search"></i>
+    
+                    <input type="text"
+                    id="search-input"
+                    placeholder="Search Products...">
+                </div>
+
+                <div id="search-results">
+                </div>
+                </div>
+
+
+                 <!-- RIGHT SIDE -->
+              <div class="nav-right-wrapper">
+     
+
+                <!-- DESKTOP ICONS -->
+                <div class="desktop-icons">
+    
+                  <a href="wishlist.html">
+                     <i class="bi bi-heart"></i>
+                  </a>
+    
+                    <a href="cart.html"
+                        class="cart-icon">
+    
+                        <i class="bi bi-cart3"></i>
+    
+                        <span id="desktop-cart-count">
+                            0
+                        </span>
+    
+                    </a>
+
+                    <a href="signup.html" class="account-icon">
+
+                        <i class="bi bi-person"></i>
+                    
+                    </a>
+    
+                </div>
+
+
+                <!--MOBIOLE ICON-->
+     
+            <div class="mobile-icons">
+                    
+            <i class="bi bi-search" id="openSearch"></i>
+            
+
+                
+               <!-- HEART -->
+              
+               <a href="wishlist.html">
+                <i class="bi bi-heart"></i>
+             </a>
+
+ 
+                   <!-- CART -->
+               <a href="cart.html" class="cart-icon">
+
+                <i class="bi bi-cart3"></i>
+
+                 <span id="mobile-cart-count">
+                 0
+             </span>
+     
+                </a>
+
+                <a href="signup.html" class="account-icon">
+
+                    <i class="bi bi-person"></i>
+                
+                </a>
+
+           <!-- MENU BUTTON -->
+               <button class="mobile-menu-btn"
+               type="button"
+              data-bs-toggle="collapse"
+               data-bs-target="#mobileMenu">
+
+            <i class="bi bi-list"></i>
+
+         </button>
+
+            </div>
+     
+    
+            </div>
+    
+        </div>
+    
+    </nav>
+    
+    <!-- MOBILE MENU -->
+    <div class="collapse mobile-menu"
+        id="mobileMenu">
+    
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="aboutus.html">
+            About Us 
+        </a>
+
+        <a href="shop.html">
+            Shop
+        </a>
+         
+        <a href="#collections">
+            Collections
+        </a>
+    
+        <a href="#lookbook">
+            Lookbook
+        </a>
+    
+        <a href="#contact">
+            Contact
+        </a>
+    
+    </div>
+ <!-- =========================
+     LUXURY BREADCRUMB
+========================= -->
+
+<section class="luxury-breadcrumb">
+
+    <div class="container">
+
+        <div class="breadcrumb-wrapper">
+
+            <!-- HOME -->
+            <a href="index.html" class="breadcrumb-home">
+
+                <i class="bi bi-house-door"></i>
+
+            </a>
+
+            <i class="bi bi-chevron-right"></i>
+
+            <!-- CATEGORY -->
+            <span class="breadcrumb-category">
+
+                View Collection
+
+            </span>
+
+            <i class="bi bi-chevron-right"></i>
+
+            <!-- PRODUCT -->
+            <span id="breadcrumb-product"
+                class="breadcrumb-product">
+
+                House of Kagendo
+
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+    <!-- =========================
+         PRODUCT DETAILS
+    ========================= -->
+
+    <!-- PRODUCT DETAILS -->
+<section class="product-details-section">
+    <div class="container">
+    <div class="row align-items-center">
+    
+    <!-- LEFT -->
+    <div class="col-lg-6">
+    <div class="product-gallery">
+    
+    <div class="main-image">
+    <img id="product-image" src="">
+    </div>
+    
+    <div class="thumbnail-wrapper" id="thumbnail-wrapper">
+    <!-- thumbnails will be dynamic later -->
+    </div>
+    
+    </div>
+    </div>
+    
+    <!-- RIGHT -->
+    <div class="col-lg-6">
+    
+    <p class="product-category-text">Our Collection</p>
+    
+    <h1 id="product-name" class="product-title"></h1>
+    
+    <div class="product-price-box">
+    <span id="product-price" class="new-price"></span>
+    </div>
+    
+    <p id="product-description" class="product-description"></p>
+    
+    <!-- SIZE -->
+    <div class="product-option-section">
+    <h5>Select Size</h5>
+    <div class="size-wrapper" id="product-sizes"></div>
+    </div>
+    
+    <!-- COLOR -->
+    <div class="product-option-section">
+    <h5>Select Color</h5>
+    <div class="color-wrapper" id="product-colors"></div>
+    </div>
+    
+    <!-- QUANTITY -->
+    <div class="product-option-section">
+    <h5>Quantity</h5>
+    
+    <div class="quantity-box">
+    <button id="minus-btn">-</button>
+    <span id="quantity-number">1</span>
+    <button id="plus-btn">+</button>
+    </div>
+    
+    </div>
+    
+    <!-- BUTTONS -->
+    <div class="product-buttons">
+    
+    <button class="add-cart-btn">
+    <i class="bi bi-cart3"></i> Add To Cart
+    </button>
+    
+    <button class="buy-now-btn">
+    Buy Now
+    </button>
+    
+    </div>
+    
+    </div>
+    
+    </div>
+    </div>
+    </section>
+    
+
+    <!-- =========================
+         RELATED PRODUCTS
+    ========================= -->
+
+    <section class="related-products">
+
+        <div class="container-fluid px-2">
+    
+            <div class="section-header text-center">
+                <p class="mini-title">HOUSE OF KA</p>
+                <h2>You May Also Like</h2>
+            </div>
+    
+            <!-- FIX: ADD ROW -->
+            <div class="row">
+    
+                <!-- PRODUCT 1 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="product-card"
+                        data-id="5"
+                        data-name="Apex Set"
+                        data-price="5000"
+                        data-image="KA img/KA img 24.jpeg">
+    
+                        <div class="product-image">
+                            <a href="product-details.html?id=5">
+                            <img src="KA img/KA img 24.jpeg" class="img-fluid"></a>
+    
+                            <div class="product-icons">
+                                <i class="bi bi-heart wishlist-btn"></i>
+                                <a href="product-details.html?id=5">
+                                    <i class="bi bi-eye"></i>  
+                                </a>
+                                <i class="bi bi-box-arrow-up"></i>
+                                <a href="product-details.html?id=5">
+                                    <i class="bi bi-cart3"></i>
+                                    </a>
+                            </div>
+                        </div>
+    
+                         
+                     <div class="product-content">
+                     <h5>Apex Set</h5>
+                     <p>KES 5,000</p>
+                     <a href="product-details.html?id=5"
+                     class="buy-now-btn text-decoration-none">
+                         Buy Now
+                     </a>
+                     
+                        </div>
+    
+                    </div>
+                </div>
+    
+                <!-- PRODUCT 2 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="product-card"
+                        data-id="6"
+                        data-name="Marv Set"
+                        data-price="4500"
+                        data-image="KA img/KA img 25.jpeg">
+    
+                        <div class="product-image">
+                            <a href="product-details.html?id=6">
+                                <img src="KA img/KA img 25.jpeg" class="img-fluid">
+                            </a>
+    
+                            <div class="product-icons">
+                                <i class="bi bi-heart wishlist-btn"></i>
+                                <a href="product-details.html?id=6">
+                                <i class="bi bi-eye"></i>
+                                </a>
+                                <i class="bi bi-box-arrow-up"></i>
+                                <a href="product-details.html?id=6">
+                                    <i class="bi bi-cart3"></i>
+                                    </a>
+                            </div>
+                        </div>
+
+
+                        <div class="product-content">
+                            <h5>Marv Set</h5>
+                            <p>KES 4,500</p>
+                            <a href="product-details.html?id=6"
+        class="buy-now-btn text-decoration-none">
+            Buy Now
+        </a>
+        
+                        </div>
+    
+                    </div>
+                </div>
+    
+                <!-- PRODUCT 3 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="product-card"
+                        data-id="7"
+                        data-name="Zuri Set"
+                        data-price="3200"
+                        data-image="KA img/KA img 8.jpeg">
+    
+                        <div class="product-image">
+                            <a href="product-details.html?id=7">
+                                <img src="KA img/KA img 8.jpeg" class="img-fluid">
+                            </a>
+    
+                            <div class="product-icons">
+                                <i class="bi bi-heart wishlist-btn"></i>
+                                <a href="product-details.html?id=7">
+                                 <i class="bi bi-eye"></i>
+                                </a>
+                                <i class="bi bi-box-arrow-up"></i>
+                                <a href="product-details.html?id=7">
+                                    <i class="bi bi-cart3"></i>
+                                    </a>
+                            </div>
+                        </div>
+    
+                        <div class="product-content">
+                            <h5>Zuri Set</h5>
+                            <p>KES 3,200</p>
+                            <a href="product-details.html?id=7"
+        class="buy-now-btn text-decoration-none">
+            Buy Now
+        </a>
+        
+                        </div>
+    
+                    </div>
+                </div>
+    
+                <!-- PRODUCT 4 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="product-card"
+                        data-id="8"
+                        data-name="Dress Set"
+                        data-price="3500"
+                        data-image="KA img/KA img 30.jpeg">
+     
+                        <div class="product-image">
+                            <a href="product-details.html?id=8">
+                                <img src="KA img/KA img 30.jpeg" class="img-fluid">
+                            </a>
+    
+                            <div class="product-icons">
+                                <i class="bi bi-heart wishlist-btn"></i>
+                                <a href="product-details.html?id=8">
+                                  <i class="bi bi-eye"></i>
+                                </a>
+                                <i class="bi bi-box-arrow-up"></i>
+                                <a href="product-details.html?id=8">
+                                    <i class="bi bi-cart3"></i>
+                                    </a>
+                            </div>
+                        </div>
+    
+                        <div class="product-content">
+                            <h5>Dress Set</h5>
+                            <p>KES 3,500</p>
+                            <a href="product-details.html?id=8"
+        class="buy-now-btn text-decoration-none">
+            Buy Now
+        </a>
+        
+                        </div>
+    
+                    </div>
+                </div>
+    
+            </div> 
+            <!-- END ROW -->
+
+            <div id="customAlert" class="custom-alert">
+
+                <div class="custom-alert-box">
+            
+                    <h4 id="alertTitle"></h4>
+            
+                    <p id="alertMessage"></p>
+            
+                    <button id="alertBtn">
+                        OK
+                    </button>
+            
+                </div>
+            
+            </div>
+    
+        </div>
+    
+    </section>
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer class="footer">
+
+        <div class="container">
+    
+            <div class="row gy-5">
+    
+                <!-- =========================
+                     BRAND SECTION
+                ========================= -->
+    
+                <div class="col-lg-4">
+    
+                    <div class="footer-brand-wrapper">
+    
+                        <!-- ACTUAL LOGO -->
+                        <img src="KA img/House Of Ka Log.jpg"
+                            alt="House of KA"
+                            class="footer-logo">
+    
+                        <!-- DESCRIPTION -->
+                        <p class="footer-brand-text">
+    
+                            House of KA is a luxury fashion brand inspired
+                            by femininity, confidence, sophistication,
+                            and timeless elegance for the modern woman.
+    
+                        </p>
+    
+                        <!-- NEWSLETTER -->
+                        <div class="footer-newsletter">
+    
+                            <input 
+                            type="email"
+                            id="newsLetterEmail"
+                            placeholder="Enter your email">
+    
+    
+                            <button>
+    
+                                Subscribe
+    
+                            </button>
+    
+                        </div>
+    
+                    </div>
+    
+                </div>
+    
+                <!-- =========================
+                     QUICK LINKS
+                ========================= -->
+    
+                <div class="col-lg-2 col-md-6">
+    
+                    <h5 class="footer-title">
+    
+                        Quick Links
+    
+                    </h5>
+    
+                    <ul class="footer-links">
+    
+                        <li>
+                            <a href="index.html">
+    
+                                Home
+    
+                            </a>
+                        </li>
+    
+                        <li>
+                            <a href="shop.html">
+    
+                                Shop
+    
+                            </a>
+                        </li>
+    
+                        <li>
+                            <a href="#collections">
+    
+                                Collections
+    
+                            </a>
+                        </li>
+    
+                        <li>
+                            <a href="#lookbook">
+    
+                                Lookbook
+    
+                            </a>
+                        </li>
+    
+                        <li>
+                            <a href="cart.html">
+    
+                                Cart
+    
+                            </a>
+                        </li>
+    
+                    </ul>
+    
+                </div>
+    
+                <!-- =========================
+                     CUSTOMER CARE
+                ========================= -->
+    
+                <div class="col-lg-3 col-md-6">
+    
+                    <h5 class="footer-title">
+    
+                        Customer Care
+    
+                    </h5>
+    
+                    <ul class="footer-links">
+    
+                        <li>
+                            <a href="#">
+    
+                                Shipping Policy
+    
+                            </a>
+                        </li>
+    
+                        <li>
+                            <a href="#">
+    
+                                Returns & Exchanges
+    
+                            </a>
+                        </li>
+    
+                        <li>
+                            <a href="#">
+    
+                                Privacy Policy
+    
+                            </a>
+                        </li>
+    
+                        <li>
+                            <a href="#">
+    
+                                Terms & Conditions
+    
+                            </a>
+                        </li>
+    
+                        <li>
+                            <a href="#contact">
+    
+                                Contact Us
+    
+                            </a>
+                        </li>
+    
+                    </ul>
+    
+                </div>
+    
+                <!-- =========================
+                     CONTACT & SOCIALS
+                ========================= -->
+    
+                <div class="col-lg-3">
+    
+                    <h5 class="footer-title">
+    
+                        Contact
+    
+                    </h5>
+    
+                    <div class="footer-contact">
+    
+                        <p>
+    
+                            <i class="bi bi-geo-alt"></i>
+    
+                            Nairobi, Kenya
+    
+                        </p>
+    
+                        <p>
+    
+                            <i class="bi bi-envelope"></i>
+    
+                            houseofka@gmail.com
+    
+                        </p>
+    
+                        <p>
+    
+                            <i class="bi bi-telephone"></i>
+    
+                            +254 700 000 000
+    
+                        </p>
+    
+                    </div>
+    
+                    <!-- SOCIALS -->
+                    <div class="social-icons">
+    
+                        <a href="#">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+    
+                        <a href="#">
+                            <i class="bi bi-tiktok"></i>
+                        </a>
+    
+                        <a href="#">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+    
+                        <a href="#">
+                            <i class="bi bi-pinterest"></i>
+                        </a>
+    
+                    </div>
+    
+                </div>
+    
+            </div>
+    
+            <!-- LINE -->
+            <hr class="footer-line">
+    
+            <!-- BOTTOM -->
+            <div class="footer-bottom-wrapper">
+    
+                <p class="footer-copy">
+    
+                    © 2026 House of KA • All Rights Reserved
+    
+                </p>
+    
+                <!-- PAYMENT ICONS -->
+                <div class="payment-icons">
+    
+                    <i class="bi bi-credit-card"></i>
+    
+                    <i class="bi bi-paypal"></i>
+    
+                    <i class="bi bi-wallet2"></i>
+    
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    </footer>
+  
+
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- AOS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <script src="products.js"></script>
+  <script src="main.js"></script>
+
+<script>
+// GET PRODUCT
+const params = new URLSearchParams(window.location.search);
+const productId = parseInt(params.get("id"));
+
+const product = products.find(
+    p => p.id === productId
+);
+
+let selectedSize = "";
+let selectedColor = "";
+let qty = 1;
+
+// LOAD PRODUCT
+if(product){
+
+    document.getElementById("product-image").src =
+    product.images[0];
+
+    const wrapper =
+    document.getElementById(
+        "thumbnail-wrapper"
+    );
+
+    wrapper.innerHTML = "";
+
+    product.images.forEach(img => {
+
+        const thumb =
+        document.createElement("img");
+
+        thumb.src = img;
+
+        thumb.classList.add(
+            "thumbnail"
+        );
+
+        thumb.onclick = () => {
+
+            document.getElementById(
+                "product-image"
+            ).src = img;
+
+        };
+
+        wrapper.appendChild(thumb);
+
+    });
+
+    document.getElementById(
+        "product-name"
+    ).innerText = product.name;
+
+    document.getElementById(
+        "product-price"
+    ).innerText =
+    "KES " + product.price;
+
+    document.getElementById(
+        "product-description"
+    ).innerText =
+    product.description;
+
+    // COLORS
+    const colorBox =
+    document.getElementById(
+        "product-colors"
+    );
+
+    product.colors.forEach(color => {
+
+        const el =
+        document.createElement("span");
+
+        el.classList.add(
+            "color-circle"
+        );
+
+        el.style.background =
+        color;
+
+        el.addEventListener("click", () => {
+
+            document
+            .querySelectorAll(".color-circle")
+            .forEach(item => {
+
+                item.classList.remove(
+                    "active-color"
+                );
+
+            });
+
+            el.classList.add(
+                "active-color"
+            );
+
+            selectedColor =
+            color;
+
+        });
+
+        colorBox.appendChild(el);
+
+    });
+
+    // SIZES
+    const sizeBox =
+    document.getElementById(
+        "product-sizes"
+    );
+
+    product.sizes.forEach(size => {
+
+        const btn =
+        document.createElement("button");
+
+        btn.innerText = size;
+
+        btn.classList.add(
+            "size-btn"
+        );
+
+        btn.addEventListener("click", () => {
+
+            document
+            .querySelectorAll(".size-btn")
+            .forEach(item => {
+
+                item.classList.remove(
+                    "active-size"
+                );
+
+            });
+
+            btn.classList.add(
+                "active-size"
+            );
+
+            selectedSize =
+            size;
+
+        });
+
+        sizeBox.appendChild(btn);
+
+    });
+
+}
+
+// QUANTITY
+document.getElementById(
+    "plus-btn"
+).onclick = () => {
+
+    qty++;
+
+    document.getElementById(
+        "quantity-number"
+    ).innerText = qty;
+
+};
+
+document.getElementById(
+    "minus-btn"
+).onclick = () => {
+
+    if(qty > 1){
+
+        qty--;
+
+        document.getElementById(
+            "quantity-number"
+        ).innerText = qty;
+
+    }
+
+};
+
+// ADD TO CART
+function showAlert(title,message){
+
+document.getElementById(
+    "alertTitle"
+).innerText = title;
+
+document.getElementById(
+    "alertMessage"
+).innerText = message;
+
+document.getElementById(
+    "customAlert"
+).style.display = "flex";
+
+}
+
+document.getElementById(
+"alertBtn"
+).onclick = () => {
+
+document.getElementById(
+    "customAlert"
+).style.display = "none";
+
+};
+
+document.querySelector(
+    ".add-cart-btn"
+).onclick = () => {
+
+    if(!selectedSize){
+
+        showAlert(
+            "Size Required",
+            "Please select Preferred size."
+        );
+
+        return;
+    }
+
+    if(!selectedColor){
+
+        showAlert(
+            "Color Required",
+            "Please select your preferred color."
+        );
+
+        return;
+    }
+
+    let cart =
+    JSON.parse(
+        localStorage.getItem("cart")
+    ) || [];
+
+    const existing =
+    cart.find(item =>
+
+        item.id === product.id &&
+        item.size === selectedSize &&
+        item.color === selectedColor
+
+    );
+
+    if(existing){
+
+        existing.quantity += qty;
+
+    }else{
+
+        cart.push({
+
+            id: product.id,
+
+            name: product.name,
+
+            price: product.price,
+
+            image: product.images[0],
+
+            quantity: qty,
+
+            size: selectedSize,
+
+            color: selectedColor
+
+        });
+
+    }
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+    updateCartCount();
+
+    showCartNotification(
+        product.name + "added to cart"
+    );
+
+};
+
+// BUY NOW
+document.querySelector(
+    ".buy-now-btn"
+).onclick = () => {
+
+    if(!selectedSize){
+
+        showAlert(
+            "Size Required",
+            "Please select Preferred size."
+        );
+
+
+        return;
+    }
+
+    if(!selectedColor){
+
+        
+        showAlert(
+            "Color Required",
+            "Please select your preferred color."
+        );
+
+
+        return;
+    }
+
+    localStorage.setItem(
+        "checkoutProduct",
+        JSON.stringify({
+
+            id: product.id,
+
+            name: product.name,
+
+            price: product.price,
+
+            image: product.images[0],
+
+            quantity: qty,
+
+            size: selectedSize,
+
+            color: selectedColor
+
+        })
+    );
+
+    window.location.href =
+    "checkout.html";
+
+};
+
+// UPDATE CART COUNT
+function updateCartCount(){
+
+    let cart =
+    JSON.parse(
+        localStorage.getItem("cart")
+    ) || [];
+
+    let total =
+    cart.reduce(
+        (sum,item) =>
+        sum + item.quantity,
+        0
+    );
+
+    const desktopCount =
+    document.getElementById(
+        "desktop-cart-count"
+    );
+
+    const mobileCount =
+    document.getElementById(
+        "mobile-cart-count"
+    );
+
+    if(desktopCount){
+
+        desktopCount.innerText =
+        total;
+
+    }
+
+    if(mobileCount){
+
+        mobileCount.innerText =
+        total;
+
+    }
+
+}
+
+updateCartCount();
+
+if(product){
+
+    document.getElementById(
+        "breadcrumb-product"
+    ).innerText =
+    product.name;
+
+}
+     
+    </script>
+
+</body>
+
+</html>
