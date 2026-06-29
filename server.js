@@ -2,7 +2,11 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const nodemailer = require("nodemailer");
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
 
 const NewsletterSubscriber =
 require("./models/userModel");
@@ -136,6 +140,90 @@ app.post("/signup", async (req, res) => {
 
 });
 
+// CONTACT FORM
+
+app.post("/contact", async (req, res) => {
+
+    const {
+
+        name,
+
+        email,
+
+        subject,
+
+        message
+
+    } = req.body;
+
+    try {
+
+        const transporter =
+
+        nodemailer.createTransport({
+
+            service: "gmail",
+
+            auth: {
+
+                user: process.env.EMAIL_USER,
+
+                pass: process.env.EMAIL_PASS
+
+            }
+
+        });
+
+        await transporter.sendMail({
+
+            from: email,
+
+            to: "houseofka@gmail.com",
+
+            subject: `House of Kagendo Contact Form: ${subject}`,
+
+            html: `
+
+                <h2>New Contact Message</h2>
+
+                <p><strong>Name:</strong> ${name}</p>
+
+                <p><strong>Email:</strong> ${email}</p>
+
+                <p><strong>Subject:</strong> ${subject}</p>
+
+                <p><strong>Message:</strong></p>
+
+                <p>${message}</p>
+
+            `
+
+        });
+
+        res.status(200).json({
+
+            success: true,
+
+            message: "Message sent successfully"
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+
+            success: false,
+
+            message: "Failed to send message"
+
+        });
+
+    }
+
+});
+
 // =========================
 // NEWSLETTER SUBSCRIBE
 // =========================
@@ -174,7 +262,7 @@ app.post("/subscribe", async (req, res) => {
         res.status(201).json({
 
             message:
-            "Welcome to House of KA."
+            "Welcome to House of Kagendo."
 
         });
 

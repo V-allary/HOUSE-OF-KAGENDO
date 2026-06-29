@@ -1,4 +1,72 @@
- // =========================
+const contactForm =
+document.getElementById("contactForm");
+
+if(contactForm){
+
+    contactForm.addEventListener(
+        "submit",
+        async (e) => {
+
+            e.preventDefault();
+
+            const response =
+            await fetch("/contact", {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type":
+                    "application/json"
+
+                },
+
+                body: JSON.stringify({
+
+                    name:
+                    document.getElementById("name").value,
+
+                    email:
+                    document.getElementById("email").value,
+
+                    subject:
+                    document.getElementById("subject").value,
+
+                    message:
+                    document.getElementById("message").value
+
+                })
+
+            });
+
+            const data =
+            await response.json();
+
+            if(data.success){
+
+                showCartNotification(
+                    "Message sent successfully ✨"
+                );
+
+                contactForm.reset();
+
+            }else{
+
+                showCartNotification(
+                    "Failed to send message"
+                );
+
+            }
+
+        }
+
+    );
+
+}
+
+
+
+ // ========================
 // GET CART
 // =========================
 

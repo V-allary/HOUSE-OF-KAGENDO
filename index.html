@@ -991,15 +991,31 @@ class="lookbook-section">
                 <div class="col-lg-6 mb-4">
 
                     <form class="contact-form">
+                        <form id="contactForm"> 
 
-                        <input type="text"
-                            placeholder="Your Name">
+                        <input 
+                        type="text"
+                        id="name"
+                        placeholder="Your Name"
+                        required>
 
-                        <input type="email"
-                            placeholder="Your Email">
+                        <input 
+                        type="email"
+                        id="email"
+                        placeholder="Your Email"
+                        required>
+
+                        <input 
+                        type="subject"
+                        id="subject"
+                        placeholder="Subject"
+                        required>
 
                         <textarea rows="6"
-                            placeholder="Your Message"></textarea>
+                        id="message"
+                        placeholder="Your Message"
+                        required></textarea>
+
 
                         <button type="submit">
 
@@ -1008,6 +1024,8 @@ class="lookbook-section">
                         </button>
 
                     </form>
+                </form>
+
 
                 </div>
 
