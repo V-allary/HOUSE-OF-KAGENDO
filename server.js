@@ -1,9 +1,11 @@
 require("dotenv").config();
-
 const express = require("express");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
+
 const app = express();
+
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
@@ -140,90 +142,85 @@ app.post("/signup", async (req, res) => {
 
 });
 
-// CONTACT FORM
-
-app.post("/contact", async (req, res) => {
-
-    const {
-
-        name,
-
-        email,
-
-        subject,
-
-        message
-
-    } = req.body;
-
-    try {
-
-        const transporter =
-
-        nodemailer.createTransport({
-
-            service: "gmail",
-
-            auth: {
-
-                user: process.env.EMAIL_USER,
-
-                pass: process.env.EMAIL_PASS
-
-            }
-
-        });
-
-        await transporter.sendMail({
-
-            from: email,
-
-            to: "houseofka@gmail.com",
-
-            subject: `House of Kagendo Contact Form: ${subject}`,
-
-            html: `
-
-                <h2>New Contact Message</h2>
-
-                <p><strong>Name:</strong> ${name}</p>
-
-                <p><strong>Email:</strong> ${email}</p>
-
-                <p><strong>Subject:</strong> ${subject}</p>
-
-                <p><strong>Message:</strong></p>
-
-                <p>${message}</p>
-
-            `
-
-        });
-
-        res.status(200).json({
-
-            success: true,
-
-            message: "Message sent successfully"
-
-        });
-
-    } catch (error) {
-
-        console.error(error);
-
-        res.status(500).json({
-
-            success: false,
-
-            message: "Failed to send message"
-
-        });
-
-    }
-
+/* ===============================
+   EMAIL TRANSPORTER (ONCE)
+================================ */
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
 });
-
+ 
+ /* ===============================
+   CONTACT FORM ENDPOINT
+================================ */
+app.post("/submit-form", async (req, res) => {
+    // Honeypot spam protection
+    if (req.body.website) {
+      return res.status(200).json({ success: true });
+    }
+  
+    const name = req.body.name?.trim();
+    const email = req.body.email?.trim();
+    const subject = req.body.subject?.trim();
+    const message = req.body.message?.trim();
+  
+    // Validate required fields
+    if (!name || !email || !subject || !message) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required."
+      });
+    }
+  
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid email address."
+      });
+    }
+  
+    try {
+      await transporter.sendMail({
+        from: `"House of KA Website" <${process.env.EMAIL_USER}>`,
+        to: "houseofk.a254@gmail.com",
+        replyTo: email,
+        subject: `Website Message: ${subject}`,
+        html: `
+          <h3>New Message from House of Kagendo Website</h3>
+  
+          <p><strong>Name:</strong> ${name}</p>
+  
+          <p><strong>Email:</strong> ${email}</p>
+  
+          <p><strong>Subject:</strong> ${subject}</p>
+  
+          <p><strong>Message:</strong></p>
+          <p>${message.replace(/\n/g, "<br>")}</p>
+        `
+      });
+  
+      return res.status(200).json({
+        success: true,
+        message: "Message sent successfully."
+      });
+  
+    } catch (error) {
+      console.error("Email send error:", error);
+  
+      return res.status(500).json({
+        success: false,
+        message: "Failed to send message. Please try again later."
+      });
+    }
+  });
+  
+  
 // =========================
 // NEWSLETTER SUBSCRIBE
 // =========================
