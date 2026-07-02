@@ -10,7 +10,7 @@ if(contactForm){
             e.preventDefault();
 
             const response =
-            await fetch("/contact", {
+            await fetch("https://house-of-kagendo.onrender.com/contact", {
 
                 method: "POST",
 
