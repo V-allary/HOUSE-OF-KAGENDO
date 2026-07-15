@@ -3607,3 +3607,92 @@ a{
     color:#777 !important;
 
 }
+.empty-orders{
+
+    text-align:center;
+    
+    padding:80px 20px;
+    
+    }
+    
+    .empty-orders i{
+    
+    font-size:70px;
+    
+    color:#b88944;
+    
+    margin-bottom:20px;
+    
+    }
+    
+    .empty-orders h3{
+    
+    font-family:"Cormorant Garamond",serif;
+    
+    font-size:38px;
+    
+    margin-bottom:15px;
+    
+    }
+    
+    .empty-orders p{
+    
+    color:#666;
+    
+    margin-bottom:30px;
+    
+    }
+    
+    .continue-shopping{
+    
+    display:inline-block;
+    
+    padding:14px 40px;
+    
+    background:#000;
+    
+    color:#fff;
+    
+    text-decoration:none;
+    
+    border-radius:40px;
+    
+    transition:.3s;
+    
+    }
+    
+    .continue-shopping:hover{
+    
+    background:#b88944;
+    
+    color:#fff;
+    
+    }
+    
+    .order-card{
+    
+    background:#fff;
+    
+    border-radius:18px;
+    
+    padding:25px;
+    
+    margin-bottom:20px;
+    
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+    
+    }
+    
+    .order-status{
+    
+    background:#b88944;
+    
+    color:#fff;
+    
+    padding:6px 18px;
+    
+    border-radius:30px;
+    
+    font-size:14px;
+    
+    }
