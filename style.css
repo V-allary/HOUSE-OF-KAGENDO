@@ -3293,128 +3293,162 @@ a{
 
 .account-section{
 
+    background:#f8f7f5;
+
     min-height:100vh;
 
-    padding:140px 0 80px;
+    padding:120px 20px 60px;
 
-    background:#f8f3ec;
 }
 
-/* HEADER */
+.account-container{
 
-.account-header{
+    max-width:650px;
+
+}
+
+.account-top{
 
     text-align:center;
 
-    margin-bottom:50px;
+    margin-bottom:45px;
+
 }
 
 .account-avatar{
 
-    font-size:90px;
+    width:110px;
 
-    color:#c9a46c;
+    height:110px;
 
-    margin-bottom:15px;
+    background:#111;
+
+    color:#fff;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:55px;
+
+    margin:auto;
+
+    margin-bottom:25px;
+
 }
 
-.account-header h1{
+.account-top h2{
 
-    font-family:'Cormorant Garamond', serif;
-
-    font-size:3rem;
-
-    color:#111;
-
-    margin-bottom:10px;
-}
-
-.account-header p{
-
-    color:#777;
-
-    font-size:16px;
-}
-
-/* ACCOUNT CARDS */
-
-.account-card{
-
-    background:#fff;
-
-    border-radius:25px;
-
-    padding:40px 30px;
-
-    text-align:center;
-
-    height:100%;
-
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
-
-    transition:.4s ease;
-}
-
-.account-card:hover{
-
-    transform:translateY(-8px);
-
-    box-shadow:0 15px 40px rgba(0,0,0,.12);
-}
-
-.account-card i{
+    font-family:"Cormorant Garamond",serif;
 
     font-size:42px;
 
-    color:#c9a46c;
+    margin-bottom:10px;
 
-    margin-bottom:20px;
 }
 
-.account-card h4{
+.account-email{
 
-    font-family:'Cormorant Garamond', serif;
+    color:#888;
+
+}
+
+.account-subtitle{
+
+    color:#777;
+
+    margin-top:12px;
+
+}
+
+.account-item{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:22px;
+
+    margin-bottom:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    text-decoration:none;
+
+    color:#222;
+
+    transition:.3s;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.05);
+
+}
+
+.account-item:hover{
+
+    transform:translateY(-4px);
+
+    color:#b88944;
+
+}
+
+.account-item>i:first-child{
 
     font-size:28px;
 
-    margin-bottom:10px;
+    width:50px;
 
-    color:#111;
 }
 
-.account-card p{
-
-    color:#666;
+.account-item h5{
 
     margin:0;
+
+    font-weight:600;
+
 }
 
-/* LOGOUT BUTTON */
+.account-item span{
+
+    color:#888;
+
+    font-size:14px;
+
+}
 
 .logout-btn{
+
+    width:100%;
+
+    margin-top:30px;
 
     border:none;
 
     background:#111;
 
-    color:white;
+    color:#fff;
 
-    padding:14px 40px;
+    padding:18px;
 
-    border-radius:50px;
+    border-radius:40px;
 
     font-weight:600;
 
-    transition:.3s ease;
+    transition:.3s;
+
 }
 
 .logout-btn:hover{
 
-    background:#c9a46c;
+    background:#b88944;
 
-    color:#111;
-
-    transform:translateY(-2px);
 }
 
 /* MOBILE */
@@ -3606,72 +3640,100 @@ a{
 
     color:#777 !important;
 
-}
-.empty-orders{
+} 
+.orders-section{
 
+    padding:120px 20px 60px;
+    
+    background:#f8f7f5;
+    
+    min-height:100vh;
+    
+    }
+    
+    .orders-header{
+    
     text-align:center;
     
-    padding:80px 20px;
+    margin-bottom:45px;
+    
+    }
+    
+    .orders-header h1{
+    
+    font-size:45px;
+    
+    font-family:"Cormorant Garamond",serif;
+    
+    }
+    
+    .back-btn{
+    
+    display:inline-block;
+    
+    margin-bottom:25px;
+    
+    text-decoration:none;
+    
+    color:#111;
+    
+    font-weight:600;
+    
+    }
+    
+    .empty-orders{
+    
+    background:white;
+    
+    padding:70px 40px;
+    
+    border-radius:22px;
+    
+    text-align:center;
+    
+    box-shadow:0 15px 35px rgba(0,0,0,.05);
     
     }
     
     .empty-orders i{
     
-    font-size:70px;
+    font-size:75px;
     
     color:#b88944;
     
-    margin-bottom:20px;
+    margin-bottom:25px;
     
     }
     
-    .empty-orders h3{
-    
-    font-family:"Cormorant Garamond",serif;
-    
-    font-size:38px;
-    
-    margin-bottom:15px;
-    
-    }
-    
-    .empty-orders p{
-    
-    color:#666;
-    
-    margin-bottom:30px;
-    
-    }
-    
-    .continue-shopping{
+    .shop-btn{
     
     display:inline-block;
     
-    padding:14px 40px;
+    margin-top:25px;
     
-    background:#000;
+    background:#111;
     
-    color:#fff;
+    color:white;
+    
+    padding:14px 35px;
+    
+    border-radius:35px;
     
     text-decoration:none;
     
-    border-radius:40px;
-    
-    transition:.3s;
-    
     }
     
-    .continue-shopping:hover{
+    .shop-btn:hover{
     
     background:#b88944;
     
-    color:#fff;
+    color:white;
     
     }
     
     .order-card{
     
-    background:#fff;
+    background:white;
     
     border-radius:18px;
     
@@ -3679,20 +3741,83 @@ a{
     
     margin-bottom:20px;
     
-    box-shadow:0 10px 25px rgba(0,0,0,.06);
+    box-shadow:0 10px 30px rgba(0,0,0,.05);
     
     }
     
-    .order-status{
+    .order-top{
     
-    background:#b88944;
+    display:flex;
     
-    color:#fff;
+    justify-content:space-between;
     
-    padding:6px 18px;
+    align-items:center;
+    
+    margin-bottom:15px;
+    
+    }
+    
+    .status{
+    
+    background:#e8f7ed;
+    
+    color:#198754;
+    
+    padding:6px 14px;
     
     border-radius:30px;
     
-    font-size:14px;
+    font-size:13px;
+    
+    font-weight:600;
     
     }
+    
+    .order-total{
+    
+    font-size:22px;
+    
+    font-weight:700;
+    
+    }
+    .profile-card{
+
+        background:white;
+        
+        padding:35px;
+        
+        border-radius:22px;
+        
+        box-shadow:0 15px 35px rgba(0,0,0,.05);
+        
+        }
+        
+        .profile-card label{
+        
+        font-weight:600;
+        
+        margin-bottom:8px;
+        
+        display:block;
+        
+        color:#444;
+        
+        }
+        
+        .profile-card .form-control{
+        
+        height:55px;
+        
+        border-radius:12px;
+        
+        border:1px solid #ddd;
+        
+        }
+        
+        .profile-card .form-control:focus{
+        
+        border-color:#b88944;
+        
+        box-shadow:none;
+        
+        }

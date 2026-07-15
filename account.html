@@ -68,156 +68,147 @@
         </div>
     
 
-    <section class="account-section">
+        <section class="account-section">
 
-        <div class="container">
-
-            <!-- ACCOUNT HEADER -->
-
-            <div class="account-header">
-
-                <div class="account-avatar">
-
-                    <i class="bi bi-person-circle"></i>
-
+            <div class="container account-container">
+        
+                <div class="account-top">
+        
+                    <div class="account-avatar">
+        
+                        <i class="bi bi-person"></i>
+        
+                    </div>
+        
+                    <h2 id="account-name">
+        
+                        Welcome
+        
+                    </h2>
+        
+                    <p id="account-email">
+        
+                        customer@email.com
+        
+                    </p>
+        
+                    <p class="account-subtitle">
+        
+                        Manage your House of Kagendo account.
+        
+                    </p>
+        
                 </div>
-
-                <h1 id="account-name">
-
-                    Welcome
-
-                </h1>
-
-                <p id="account-email">
-
-                    customer@email.com
-
-                </p>
-
-            </div>
-
-            <!-- ACCOUNT DASHBOARD -->
-
-<div class="row g-4 mt-4">
-    <div class="col-lg-4">
-
-        <div class="account-card">
-            <a href="orders.html"> 
-    
-            <i class="bi bi-bag"></i>
-    
-            <h4>My Orders</h4>
-    
-            <p>View your order history.</p>
-    
-        </a>
-    </div>
-    </div>
-    </div>
-
-    <div class="col-lg-4">
-
-        <div  class="account-card">
-            <a href="wishlist.html">
-    
-            <i class="bi bi-heart"></i>
-    
-            <h4>Wishlist</h4>
-    
-            <p>Your favourite items.</p>
-    
-        </a>
-    </div>
-    </div>
-    </div>
-
-    <div class="col-lg-4">
-        <div class="account-card">
-            <a href="saved-cart.html" > 
-    
-            <i class="bi bi-cart3"></i>
-    
-            <h4>Saved Cart</h4>
-    
-            <p>Continue shopping where you left off.</p>
-    
-        </a>
-    </div>
-    </div>
-   </div>
-
-    <div class="col-lg-4">
-
-        <div class="account-card">
-            <a href="addresses.html"> 
-    
-            <i class="bi bi-geo-alt"></i>
-    
-            <h4>Shipping Addresses</h4>
-    
-            <p>Manage your delivery addresses.</p>
-    
-        </a>
-        </div>
-    
-    </div>
-    </div>
-
-    <div class="col-lg-4">
-
-         <div class="account-card">
-            <a href="prolile.html">
-    
-            <i class="bi bi-person"></i>
-    
-            <h4>Account Details</h4>
-    
-            <p>Update your personal information.</p>
-    
-        </a>
-         </div>
-    </div>
-
-    </div>
-
-    <div class="col-lg-4">
-
-        <div class="account-card">
-            <a href="security.html">
-
-            <i class="bi bi-shield-check"></i>
-
-            <h4>
-                Security
-            </h4>
-
-            <p>
-                Change password & security settings
-            </p>
-        </a>
-
-        </div>
-
-    </div>
-
-</div>
-            <!-- LOGOUT -->
-
-            <div class="text-center mt-5">
-
-                <button
-                    class="logout-btn"
-                    onclick="logout()">
-
+        
+                <div class="account-menu">
+        
+                    <a href="orders.html" class="account-item">
+        
+                        <i class="bi bi-bag"></i>
+        
+                        <div>
+        
+                            <h5>My Orders</h5>
+        
+                            <span>Track and view purchases</span>
+        
+                        </div>
+        
+                        <i class="bi bi-chevron-right"></i>
+        
+                    </a>
+        
+                    <a href="wishlist.html" class="account-item">
+        
+                        <i class="bi bi-heart"></i>
+        
+                        <div>
+        
+                            <h5>Wishlist</h5>
+        
+                            <span>Your favourite products</span>
+        
+                        </div>
+        
+                        <i class="bi bi-chevron-right"></i>
+        
+                    </a>
+        
+                    <a href="cart.html" class="account-item">
+        
+                        <i class="bi bi-cart3"></i>
+        
+                        <div>
+        
+                            <h5>Saved Cart</h5>
+        
+                            <span>Continue shopping</span>
+        
+                        </div>
+        
+                        <i class="bi bi-chevron-right"></i>
+        
+                    </a>
+        
+                    <a href="addresses.html" class="account-item">
+        
+                        <i class="bi bi-geo-alt"></i>
+        
+                        <div>
+        
+                            <h5>Shipping Addresses</h5>
+        
+                            <span>Manage deliveries</span>
+        
+                        </div>
+        
+                        <i class="bi bi-chevron-right"></i>
+        
+                    </a>
+        
+                    <a href="profile.html" class="account-item">
+        
+                        <i class="bi bi-person-vcard"></i>
+        
+                        <div>
+        
+                            <h5>Account Details</h5>
+        
+                            <span>Edit your information</span>
+        
+                        </div>
+        
+                        <i class="bi bi-chevron-right"></i>
+        
+                    </a>
+        
+                    <a href="security.html" class="account-item">
+        
+                        <i class="bi bi-shield-lock"></i>
+        
+                        <div>
+        
+                            <h5>Security</h5>
+        
+                            <span>Password & privacy</span>
+        
+                        </div>
+        
+                        <i class="bi bi-chevron-right"></i>
+        
+                    </a>
+        
+                </div>
+        
+                <button onclick="logout()" class="logout-btn">
+        
                     Logout
-
+        
                 </button>
-
+        
             </div>
-
-        </div>
-
-    </section>
+        
+        </section>
     <script>
 
         const token =

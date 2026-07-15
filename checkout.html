@@ -259,77 +259,119 @@
                 <div class="col-lg-7">
 
                     <!-- CUSTOMER DETAILS -->
-                    <div class="checkout-box">
+                    <h3>Customer Information</h3>
 
-                        <h3>
-                            Billing Details
-                        </h3>
+<form class="checkout-form" id="checkoutForm">
 
-                        <form class="checkout-form">
+<div class="row">
 
-                            <!-- NAME -->
-                            <div class="row">
+<div class="col-md-6">
 
-                                <div class="col-md-6">
+<input
+type="text"
+id="firstName"
+placeholder="First Name"
+required>
 
-                                    <input type="text"
-                                        placeholder="First Name"
-                                        required>
+</div>
 
-                                </div>
+<div class="col-md-6">
 
-                                <div class="col-md-6">
+<input
+type="text"
+id="lastName"
+placeholder="Last Name"
+required>
 
-                                    <input type="text"
-                                        placeholder="Last Name"
-                                        required>
+</div>
 
-                                </div>
+</div>
 
+<input
+type="email"
+id="email"
+placeholder="Email Address"
+required>
+
+<input
+type="tel"
+id="phone"
+placeholder="Phone Number"
+required>
+
+<hr class="my-4">
+
+<h4 class="mb-3">
+
+Delivery Address
+
+</h4>
+
+<select
+id="county"
+required>
+
+<option value="">
+
+Select County
+
+</option>
+
+<option>
+
+Nairobi
+
+</option>
+
+<option>
+
+Kiambu
+
+</option>
+
+<option>
+
+Machakos
+
+</option>
+
+<option>
+
+Kajiado
+
+</option>
+
+</select>
+
+<input
+type="text"
+id="estate"
+placeholder="Estate / Area"
+required>
+
+<input
+type="text"
+id="street"
+placeholder="Street Address"
+required>
+
+<input
+type="text"
+id="building"
+placeholder="Building / Apartment (Optional)">
+
+<textarea
+id="notes"
+rows="4"
+placeholder="Delivery Notes (Optional)">
+
+</textarea>
+
+</form>    
+                            
                             </div>
-
-                            <!-- EMAIL -->
-                            <input type="email"
-                                placeholder="Email Address"
-                                required>
-
-                            <!-- PHONE -->
-                            <input type="tel"
-                                placeholder="Phone Number"
-                                required>
-
-                            <!-- ADDRESS -->
-                            <input type="text"
-                                placeholder="Street Address"
-                                required>
-
-                            <!-- CITY -->
-                            <div class="row">
-
-                                <div class="col-md-6">
-
-                                    <input type="text"
-                                        placeholder="City">
-
-                                </div>
-
-                                <div class="col-md-6">
-
-                                    <input type="text"
-                                        placeholder="Postal Code">
-
-                                </div>
-
+                            
                             </div>
-
-                            <!-- NOTES -->
-                            <textarea rows="5"
-                                placeholder="Additional Notes">
-
-                            </textarea>
-
-                        </form>
-
                     </div>
 
                     <!-- =========================
@@ -339,81 +381,531 @@
                     <div class="checkout-box mt-4">
 
                         <h3>
-                            Payment Method
+                        
+                        Shipping Method
+                        
                         </h3>
-
-                        <!-- M-PESA -->
-                        <div class="payment-option active-payment">
-
-                            <input type="radio"
-                                checked>
-
-                            <div class="payment-content">
-
-                                <h5>
-                                    M-Pesa
-                                </h5>
-
-                                <p>
-                                    Pay quickly and securely using M-Pesa STK Push.
-                                </p>
-
-                            </div>
-
-                            <img src="images/mpesa.png"
-                                class="payment-logo">
-
+                        
+                        <div class="shipping-option">
+                        
+                        <label>
+                        
+                        <input
+                        type="radio"
+                        name="shipping"
+                        value="100"
+                        checked>
+                        
+                        <strong>
+                        
+                        Nairobi CBD
+                        
+                        </strong>
+                        
+                        <span>
+                        
+                        KES 100
+                        
+                        </span>
+                        
+                        <p>
+                        
+                        Fast delivery inside CBD.
+                        
+                        </p>
+                        
+                        </label>
+                        
                         </div>
+                        
+                        <div class="shipping-option">
+                        
+                        <label>
+                        
+                        <input
+                        type="radio"
+                        name="shipping"
+                        value="300">
+                        
+                        <strong>
+                        
+                            Inner Nairobi Zone
+                        </strong>
 
-                        <!-- CARD -->
-                        <div class="payment-option">
+                        <span> 
+                            
+                            Ksh 300.00
 
-                            <input type="radio">
+                           </span>
+                            
+                        <p> 
 
-                            <div class="payment-content">
+                            From Parklands → Chiromo → Westlands → Kilimani → Kileleshwa → Lavington → Hurlingham → State House Road → Upper Hill→ Ngara
+                        </p>
 
-                                <h5>
-                                    Credit / Debit Card
-                                </h5>
+                        <div class="shipping-option">
+                        
+                            <label>
+                            
+                            <input
+                            type="radio"
+                            name="shipping"
+                            value="300">
+                            
+                             <strong> 
+                            Upper Kiambu Road Area
+                        </strong>
+                            
+                        <span> 
+                            Ksh 300.00
+                        </span>
+                           <p> 
+                            From Oilibya Plaza → DCI → AAR
+                        </p>
 
-                                <p>
-                                    Secure Visa & Mastercard payments.
-                                </p>
 
-                            </div>
+                        <div class="shipping-option">
+                        
+                            <label>
+                            
+                            <input
+                            type="radio"
+                            name="shipping"
+                            value="350">
+                            
+                            <strong>
+                            Outside Nairobi ( Parcel Services)
+                        </strong>
+                            <span> 
+                            Ksh 350.00
+                        </span>
 
-                            <div class="card-icons">
 
-                                <i class="bi bi-credit-card"></i>
+                        <div class="shipping-option">
+                        
+                            <label>
+                            
+                            <input
+                            type="radio"
+                            name="shipping"
+                            value="350">
+                            <strong> 
+                            Upper Jogoo Road Area
 
-                            </div>
+                        </strong>
+                            
+                        <span> 
+                            Ksh 350.00
+                        </span>
 
-                        </div>
+                           <p> From Gikomba → Eastleigh → Pangani → Kamkunji</p>
+                            
 
-                        <!-- PAYPAL -->
-                        <div class="payment-option">
+                           <div class="shipping-option">
+                        
+                            <label>
+                            
+                            <input
+                            type="radio"
+                            name="shipping"
+                            value="350">
+                             
+                          <strong>  Upper Langata Road Area</strong>
+                            
+                          <span>Ksh 350.00</span>
+                          <p>From Nyayo Stadium → Highway Mall → Madaraka → Ole Sangale Link Road → Strathmore → Mbagathi → Raila Odinga Way → Ngumo → Keri R </p>
+                            
+                            
+                           <div class="shipping-option">
+                        
+                            <label>
+                            
+                            <input
+                            type="radio"
+                            name="shipping"
+                            value="400">
+                            
+                            <strong>Thika Road Area</strong>
+                            
+                            <span>400.00</span>
+                            <p>From Utalii → Allsops → Roasters → Ngumba → Garden City</p>
+                            
+                             <!-- Upper Mombasa Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="400">
+    <div class="shipping-info">
+        <h5>Upper Mombasa Road Area</h5>
+        <p>From Haile Selassie → Bunyala Road → Lusaka Road → Nairobi West → South B / South C → Nextgen</p>
+    </div>
+    <span>KES 400</span>
+</label>
 
-                            <input type="radio">
+<!-- Upper Ngong Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="400">
+    <div class="shipping-info">
+        <h5>Upper Ngong Road Area</h5>
+        <p>From Jamhuri → Kibera → Woodley Junction → Mbagathi → Prestige → Riara Road → Ngumo</p>
+    </div>
+    <span>KES 400</span>
+</label>
 
-                            <div class="payment-content">
+<!-- Upper Waiyaki Way Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="400">
+    <div class="shipping-info">
+        <h5>Upper Waiyaki Way Area</h5>
+        <p>From ABC → James Gichuru Road / Spring Valley → Peponi Road</p>
+    </div>
+    <span>KES 400</span>
+</label>
 
-                                <h5>
-                                    PayPal
-                                </h5>
+<!-- Mid Jogoo Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="500">
+    <div class="shipping-info">
+        <h5>Mid Jogoo Road Area</h5>
+        <p>From Makadara → Buruburu → Donholm → Umoja → Komarock → Kayole</p>
+    </div>
+    <span>KES 500</span>
+</label>
 
-                                <p>
-                                    Checkout safely with PayPal.
-                                </p>
+<!-- Mid Kiambu Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="500">
+    <div class="shipping-info">
+        <h5>Mid Kiambu Road Area</h5>
+        <p>From Ridgeways → Thindigua</p>
+    </div>
+    <span>KES 500</span>
+</label>
 
-                            </div>
+<!-- Mid Langata Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="500">
+    <div class="shipping-info">
+        <h5>Mid Langata Road Area</h5>
+        <p>From T-Mall / Langata Area → Nairobi Dam Estate → Wilson</p>
+    </div>
+    <span>KES 500</span>
+</label>
 
-                            <i class="bi bi-paypal"></i>
+<!-- Mid Ngong Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="500">
+    <div class="shipping-info">
+        <h5>Mid Ngong Road Area</h5>
+        <p>From Ngong Racecourse Surrounding → Talanta Sports Center Area Surrounding</p>
+    </div>
+    <span>KES 500</span>
+</label>
 
-                        </div>
+<!-- Mid Thika Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="500">
+    <div class="shipping-info">
+        <h5>Mid Thika Road Area</h5>
+        <p>From Garden Estate / Thome → Roysambu → Mirema → Kasarani → Lucky Summer / Baba Dogo</p>
+    </div>
+    <span>KES 500</span>
+</label>
 
-                    </div>
+<!-- Upper Limuru Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="500">
+    <div class="shipping-info">
+        <h5>Upper Limuru Road Area</h5>
+        <p>From Muthaiga Road / Muthaiga → Gigiri → UN → Village Market → Rosslyn → Ruaka / Gachie</p>
+    </div>
+    <span>KES 500</span>
+</label>
 
-                </div>
+<!-- Further Kiambu Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="600">
+    <div class="shipping-info">
+        <h5>Further Kiambu Road Area</h5>
+        <p>From Runda → Paradise Lost → Eden Ville → Windsor</p>
+    </div>
+    <span>KES 600</span>
+</label>
+
+<!-- Inner Ngong Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="600">
+    <div class="shipping-info">
+        <h5>Inner Ngong Road Area</h5>
+        <p>From Riruta → Karandini Road → Wanyee → Kawangware → Kabiria → Galleria → Lenana</p>
+    </div>
+    <span>KES 600</span>
+</label>
+
+<!-- Mid Mombasa Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="600">
+    <div class="shipping-info">
+        <h5>Mid Mombasa Road Area</h5>
+        <p>From Emara Ole Sereni → Imara Daima → Industrial Area</p>
+    </div>
+    <span>KES 600</span>
+</label>
+
+<!-- Mid Waiyaki Way Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="600">
+    <div class="shipping-info">
+        <h5>Mid Waiyaki Way Area</h5>
+        <p>From Loresho → Mountain View → Kangemi</p>
+    </div>
+    <span>KES 600</span>
+</label>
+
+<!-- Upper Thika Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="600">
+    <div class="shipping-info">
+        <h5>Upper Thika Road Area</h5>
+        <p>From Zimmerman → Githurai 44 & 45 → Kahawa Wendani → Sukari</p>
+    </div>
+    <span>KES 600</span>
+</label>
+
+<!-- Further Limuru Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="700">
+    <div class="shipping-info">
+        <h5>Further Limuru Road Area</h5>
+        <p>From Ndenderu → Banana → Mucatha → Gathaga → Gacharage</p>
+    </div>
+    <span>KES 700</span>
+</label>
+
+<!-- Further Ngong Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="700">
+    <div class="shipping-info">
+        <h5>Further Ngong Road Area</h5>
+        <p>From Dagoretti → Karen → Bomas → Waithaka</p>
+    </div>
+    <span>KES 700</span>
+</label>
+
+<!-- Redhill Link Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="700">
+    <div class="shipping-info">
+        <h5>Redhill Link Road Area</h5>
+        <p>From Nyari → Kitisuru → Kabete → Thigiri Ridge</p>
+    </div>
+    <span>KES 700</span>
+</label>
+
+<!-- Further Waiyaki Way Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="800">
+    <div class="shipping-info">
+        <h5>Further Waiyaki Way Area</h5>
+        <p>From Uthiru → Kinoo → Ndenderu → Kikuyu Regen → Wangige → Gitaru</p>
+    </div>
+    <span>KES 800</span>
+</label>
+
+<!-- Jacaranda Gardens Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="800">
+    <div class="shipping-info">
+        <h5>Jacaranda Gardens Area</h5>
+        <p>From Jacaranda Gardens → Kiamumbi → Kahawa West → Mwihoko</p>
+    </div>
+    <span>KES 800</span>
+</label>
+
+<!-- End of Kiambu Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="1000">
+    <div class="shipping-info">
+        <h5>End of Kiambu Road Area</h5>
+        <p>From KIST → Muthithi → Njathaini → Kiambu Town</p>
+    </div>
+    <span>KES 1,000</span>
+</label>
+
+<!-- Further Mombasa Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="1000">
+    <div class="shipping-info">
+        <h5>Further Mombasa Road Area</h5>
+        <p>From Embakasi → Syokimau → Mlolongo</p>
+    </div>
+    <span>KES 1,000</span>
+</label>
+
+<!-- Furthest Jogoo Road Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="1000">
+    <div class="shipping-info">
+        <h5>Furthest Jogoo Road Area</h5>
+        <p>From Nyayo Estate → Tasia → Embakasi → Fedha → Airport North Road → Saika → Mowlem</p>
+    </div>
+    <span>KES 1,000</span>
+</label>
+
+<!-- Rongai Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="1000">
+    <div class="shipping-info">
+        <h5>Rongai Area</h5>
+        <p>Delivery within Rongai and surrounding estates.</p>
+    </div>
+    <span>KES 1,000</span>
+</label>
+
+<!-- End of Waiyaki Way Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="1500">
+    <div class="shipping-info">
+        <h5>End of Waiyaki Way Area</h5>
+        <p>From Zambezi → Sigona → Rironi</p>
+    </div>
+    <span>KES 1,500</span>
+</label>
+
+<!-- Juba Shipping -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="1500">
+    <div class="shipping-info">
+        <h5>Juba, South Sudan Shipping</h5>
+        <p>Shipping via Besura Logistics. Charged at KES 1,500 per kg. Our team will contact you with the final shipping cost before dispatch.</p>
+    </div>
+    <span>KES 1,500+</span>
+</label>
+
+<!-- Outskirts Area -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="1500">
+    <div class="shipping-info">
+        <h5>Outskirts Area</h5>
+        <p>From Athi River → Utawala → Ngong Town → Kitengela → Kiserian</p>
+    </div>
+    <span>KES 1,500</span>
+</label>
+
+<!-- Ruiru / Membley / Juja / Thika / Tatu City -->
+<label class="shipping-option">
+    <input type="radio" name="shipping" value="1500">
+    <div class="shipping-info">
+        <h5>Ruiru / Membley / Juja / Thika / Tatu City Area</h5>
+        <p>From Ruiru → Membley → Juja → Thika → Tatu City</p>
+    </div>
+    <span>KES 1,500</span>
+</label>
+                    
+                        
+  </div>
+                        
+     </div>
+
+    <!-- =========================
+     PAYMENT
+========================= -->
+
+<div class="checkout-box mt-4">
+
+    <h3>
+        Payment
+    </h3>
+
+    <p class="payment-note">
+        All transactions are secure and encrypted.
+    </p>
+
+    <div class="payment-option active-payment">
+
+        <input
+            type="radio"
+            name="payment"
+            checked>
+
+        <div class="payment-content">
+
+            <h5>
+                Pesapal
+            </h5>
+
+            <p>
+                You will be redirected securely to Pesapal to complete your payment.
+            </p>
+
+        </div>
+
+        <div class="payment-icons">
+
+            <img
+                src="images/mastercard.png"
+                alt="Mastercard"
+                class="payment-logo">
+
+            <img
+                src="images/visa.png"
+                alt="Visa"
+                class="payment-logo">
+
+            <img
+                src="images/mpesa.png"
+                alt="M-Pesa"
+                class="payment-logo">
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================
+     BILLING ADDRESS
+========================= -->
+
+<div class="checkout-box mt-4">
+
+    <h3>
+        Billing Address
+    </h3>
+
+    <div class="payment-option active-payment">
+
+        <input
+            type="radio"
+            name="billing"
+            checked>
+
+        <div class="payment-content">
+
+            <h5>
+                Same as shipping address
+            </h5>
+
+        </div>
+
+    </div>
+
+    <div class="payment-option">
+
+        <input
+            type="radio"
+            name="billing">
+
+        <div class="payment-content">
+
+            <h5>
+                Use a different billing address
+            </h5>
+
+        </div>
+
+    </div>
+
+</div>
+
 
                 <!-- =========================
                      RIGHT SIDE SUMMARY
@@ -450,9 +942,9 @@
                                 Shipping
                             </span>
                     
-                            <span>
+                            <span id="shipping-price">
                     
-                                FREE
+                               
                     
                             </span>
                     
@@ -479,14 +971,7 @@
                         </button>
                     
                     </div>
-                        
-                        <!-- BUTTON -->
-                        <button class="place-order-btn">
-
-                            Place Order
-
-                        </button>
-
+                       
                         <!-- SECURITY -->
                         <div class="secure-checkout">
 
@@ -922,12 +1407,37 @@ margin-left:5px;
             subtotal.innerText =
             "KES " + total.toLocaleString();
         
-            totalElement.innerText =
-            "KES " + total.toLocaleString();
-        
+            const shipping =
+Number(
+document.querySelector(
+'input[name="shipping"]:checked'
+).value
+);
+
+document.getElementById(
+"shipping-price"
+).innerText =
+"KES " + shipping;
+
+totalElement.innerText =
+"KES " +
+(total + shipping).toLocaleString();
         }
         
         renderCheckout();
+
+        document
+.querySelectorAll(
+'input[name="shipping"]'
+)
+.forEach(option=>{
+
+option.addEventListener(
+"change",
+renderCheckout
+);
+
+});
         
         </script>
 </body>
