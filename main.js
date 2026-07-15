@@ -924,7 +924,7 @@ if(newsletterBtn){
 
                 const response =
                 await fetch(
-                    "http://localhost:5000/subscribe",
+                    "https://house-of-kagendo.onrender.com/subscribe",
                     {
 
                         method:"POST",
