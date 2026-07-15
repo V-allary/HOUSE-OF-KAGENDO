@@ -3337,56 +3337,56 @@ a{
 }
 
 /* ACCOUNT CARDS */
-
 .account-card{
 
     background:#fff;
 
-    border-radius:25px;
+    border-radius:20px;
 
-    padding:40px 30px;
+    padding:35px;
 
     text-align:center;
 
-    height:100%;
+    transition:.35s;
 
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    cursor:pointer;
 
-    transition:.4s ease;
+    border:1px solid #ececec;
+
 }
 
 .account-card:hover{
 
     transform:translateY(-8px);
 
-    box-shadow:0 15px 40px rgba(0,0,0,.12);
+    box-shadow:0 20px 45px rgba(0,0,0,.08);
+
 }
 
 .account-card i{
 
-    font-size:42px;
+    font-size:40px;
 
-    color:#c9a46c;
+    color:#b88944;
 
-    margin-bottom:20px;
+    margin-bottom:15px;
+
 }
 
 .account-card h4{
 
-    font-family:'Cormorant Garamond', serif;
+    font-family:"Cormorant Garamond",serif;
 
     font-size:28px;
 
-    margin-bottom:10px;
-
-    color:#111;
 }
 
 .account-card p{
 
-    color:#666;
+    color:#777;
 
-    margin:0;
+    margin-top:8px;
+
 }
 
 /* LOGOUT BUTTON */

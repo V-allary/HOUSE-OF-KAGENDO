@@ -961,6 +961,8 @@ if(newsletterBtn){
 
 }
 
+
+
  // =========================
 // WISHLIST
 // =========================
@@ -1159,5 +1161,37 @@ if(categoryFilter){
 
         }
     );
+
+}
+
+// =========================
+// ACCOUNT LINK
+// =========================
+
+const accountLink =
+document.getElementById("account-link");
+
+if(accountLink){
+
+    accountLink.addEventListener("click", (e) => {
+
+        e.preventDefault();
+
+        const token =
+        localStorage.getItem("token");
+
+        if(token){
+
+            window.location.href =
+            "account.html";
+
+        }else{
+
+            window.location.href =
+            "signup.html";
+
+        }
+
+    });
 
 }

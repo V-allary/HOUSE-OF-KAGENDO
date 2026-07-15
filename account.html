@@ -59,78 +59,119 @@
 
             </div>
 
-            <!-- ACCOUNT CARDS -->
+            <!-- ACCOUNT DASHBOARD -->
 
-            <div class="row g-4 mt-4">
+<div class="row g-4 mt-4">
 
-                <div class="col-lg-4">
+    <div class="col-lg-4">
 
-                    <div class="account-card">
+        <div class="account-card">
 
-                        <i class="bi bi-bag"></i>
+            <i class="bi bi-bag-check"></i>
 
-                        <h4>
+            <h4>
+                My Orders
+            </h4>
 
-                            My Orders
+            <p id="orders-count">
+                0 Orders
+            </p>
 
-                        </h4>
+        </div>
 
-                        <p>
+    </div>
 
-                            View your order history.
+    <div class="col-lg-4">
 
-                        </p>
+        <div class="account-card">
 
-                    </div>
+            <i class="bi bi-heart"></i>
 
-                </div>
+            <h4>
+                Wishlist
+            </h4>
 
-                <div class="col-lg-4">
+            <p id="wishlist-count">
+                0 Items
+            </p>
 
-                    <div class="account-card">
+        </div>
 
-                        <i class="bi bi-cart3"></i>
+    </div>
 
-                        <h4>
+    <div class="col-lg-4">
 
-                            Saved Cart
+        <div class="account-card">
 
-                        </h4>
+            <i class="bi bi-cart3"></i>
 
-                        <p>
+            <h4>
+                Saved Cart
+            </h4>
 
-                            Continue shopping where you left off.
+            <p id="cart-count">
+                0 Items
+            </p>
 
-                        </p>
+        </div>
 
-                    </div>
+    </div>
 
-                </div>
+    <div class="col-lg-4">
 
-                <div class="col-lg-4">
+        <div class="account-card">
 
-                    <div class="account-card">
+            <i class="bi bi-geo-alt"></i>
 
-                        <i class="bi bi-geo-alt"></i>
+            <h4>
+                Shipping Addresses
+            </h4>
 
-                        <h4>
+            <p>
+                Manage your delivery locations
+            </p>
 
-                            Addresses
+        </div>
 
-                        </h4>
+    </div>
 
-                        <p>
+    <div class="col-lg-4">
 
-                            Manage your delivery locations.
+        <div class="account-card">
 
-                        </p>
+            <i class="bi bi-person-gear"></i>
 
-                    </div>
+            <h4>
+                Account Details
+            </h4>
 
-                </div>
+            <p>
+                Update your personal information
+            </p>
 
-            </div>
+        </div>
 
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="account-card">
+
+            <i class="bi bi-shield-check"></i>
+
+            <h4>
+                Security
+            </h4>
+
+            <p>
+                Change password & security settings
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
             <!-- LOGOUT -->
 
             <div class="text-center mt-5">
@@ -148,62 +189,93 @@
         </div>
 
     </section>
-
     <script>
 
-        // CHECK IF USER IS LOGGED IN
-    
         const token =
         localStorage.getItem("token");
-    
+        
         const user =
         JSON.parse(
             localStorage.getItem("user")
         );
-    
-        // IF NOT LOGGED IN, SEND TO LOGIN PAGE
-    
+        
         if(!token || !user){
-    
+        
             window.location.href =
             "login.html";
-    
+        
         }else{
-    
-            // DISPLAY USER INFORMATION
-    
+        
             document.getElementById(
                 "account-name"
             ).innerText =
-            "Hello, " +
+            "Welcome back, " +
             user.firstName + " 👋";
-    
+        
             document.getElementById(
                 "account-email"
             ).innerText =
             user.email;
-    
+        
         }
-    
+        
+        // WISHLIST COUNT
+        
+        const wishlist =
+        JSON.parse(
+            localStorage.getItem("wishlist")
+        ) || [];
+        
+        document.getElementById(
+            "wishlist-count"
+        ).innerText =
+        wishlist.length + " Items";
+        
+        // CART COUNT
+        
+        const cart =
+        JSON.parse(
+            localStorage.getItem("cart")
+        ) || [];
+        
+        let totalCart = 0;
+        
+        cart.forEach(item=>{
+        
+            totalCart += item.quantity;
+        
+        });
+        
+        document.getElementById(
+            "cart-count"
+        ).innerText =
+        totalCart + " Items";
+        
+        // ORDERS
+        
+        const orders =
+        JSON.parse(
+            localStorage.getItem("orders")
+        ) || [];
+        
+        document.getElementById(
+            "orders-count"
+        ).innerText =
+        orders.length + " Orders";
+        
         // LOGOUT
-    
+        
         function logout(){
-    
-            localStorage.removeItem(
-                "token"
-            );
-    
-            localStorage.removeItem(
-                "user"
-            );
-    
+        
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+        
             window.location.href =
             "index.html";
-    
+        
         }
-    
-    </script>
-    
+        
+        </script>
     </body>
     
     </html>
