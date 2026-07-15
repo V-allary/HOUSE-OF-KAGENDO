@@ -4099,3 +4099,303 @@ border-color:#b88944;
 box-shadow:none;
 
 }
+
+/* ==========================================
+   ADMIN LOGIN
+========================================== */
+
+.admin-login-body{
+
+    margin:0;
+    padding:0;
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:url("KA img/admin-bg.jpg") center/cover no-repeat fixed;
+    font-family:"Inter",sans-serif;
+
+}
+
+.admin-overlay{
+
+    width:100%;
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:rgba(0,0,0,.55);
+
+    padding:30px;
+
+}
+
+.admin-login-card{
+
+    width:100%;
+    max-width:450px;
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:45px;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+
+}
+
+.admin-logo{
+
+    text-align:center;
+    margin-bottom:35px;
+
+}
+
+.admin-logo img{
+
+    width:90px;
+    height:90px;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+    margin-bottom:15px;
+
+}
+
+.admin-logo h2{
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:34px;
+
+    margin-bottom:5px;
+
+}
+
+.admin-logo p{
+
+    color:#777;
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+
+}
+
+.password-box{
+
+    position:relative;
+
+}
+
+.password-box i{
+
+    position:absolute;
+
+    right:18px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    cursor:pointer;
+
+    color:#888;
+
+}
+
+.admin-login-btn{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#000;
+
+    color:#fff;
+
+    font-size:16px;
+
+    transition:.3s;
+
+}
+
+.admin-login-btn:hover{
+
+    background:#222;
+
+}
+
+.login-error{
+
+    margin-top:15px;
+
+    text-align:center;
+
+    color:#dc3545;
+
+    font-weight:600;
+
+}
+/* ==========================================
+   ADMIN DASHBOARD
+========================================== */
+
+.admin-body{
+
+    margin:0;
+    background:#f7f7f7;
+    font-family:"Inter",sans-serif;
+
+}
+
+.admin-wrapper{
+
+    display:flex;
+    min-height:100vh;
+
+}
+
+.admin-sidebar{
+
+    width:270px;
+    background:#111;
+    color:#fff;
+    padding:35px 25px;
+
+}
+
+.admin-brand{
+
+    text-align:center;
+    margin-bottom:50px;
+
+}
+
+.admin-brand img{
+
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    object-fit:cover;
+    margin-bottom:15px;
+
+}
+
+.admin-brand h3{
+
+    font-family:"Cormorant Garamond",serif;
+    margin-bottom:5px;
+
+}
+
+.admin-brand p{
+
+    color:#bbb;
+
+}
+
+.admin-menu{
+
+    list-style:none;
+    padding:0;
+
+}
+
+.admin-menu li{
+
+    padding:15px;
+    margin-bottom:12px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.3s;
+
+}
+
+.admin-menu li:hover,
+.admin-menu .active{
+
+    background:#d4af37;
+    color:#111;
+
+}
+
+.admin-menu i{
+
+    margin-right:12px;
+
+}
+
+.admin-main{
+
+    flex:1;
+    padding:40px;
+
+}
+
+.admin-header{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+}
+
+.admin-user{
+
+    font-size:40px;
+
+}
+
+.dashboard-card{
+
+    background:#fff;
+    border-radius:18px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.dashboard-card i{
+
+    font-size:40px;
+    color:#d4af37;
+    margin-bottom:15px;
+
+}
+
+.dashboard-card h3{
+
+    font-size:32px;
+    font-weight:700;
+
+}
+
+.admin-section{
+
+    background:#fff;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.quick-actions{
+
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+
+}

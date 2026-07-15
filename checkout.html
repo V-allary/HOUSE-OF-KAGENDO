@@ -423,7 +423,7 @@
     type="text"
     id="city"
     class="form-control"
-    placeholder="Nairobi"
+    placeholder="Town/ City"
     required>
     
     </div>
@@ -981,6 +981,7 @@
 
     <!-- AOS -->
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="shipping.js"></script>
 
     <script src="products.js"></script>
     <script src="main.js"></script>
@@ -1171,37 +1172,72 @@
         
         }
         
-        // ========================================
-        // AUTOMATIC SHIPPING
-        // ========================================
-        
-        const estateInput =
-        document.getElementById("estate");
-        
-        if(estateInput){
-        
-        estateInput.addEventListener("input",()=>{
-        
-            const result =
-            calculateShipping(
-                estateInput.value.toLowerCase()
-            );
-        
-            shippingCost = result.price;
-            shippingZone = result.zone;
-        
-            document.getElementById("shippingZone").innerHTML =
-        
-            shippingZone +
-            " • KES " +
-            shippingCost.toLocaleString();
-        
-            renderCheckout();
-        
-        });
-        
-        }
-        
+         // ========================================
+// AUTOMATIC SHIPPING
+// ========================================
+
+const countyInput = document.getElementById("county");
+const cityInput = document.getElementById("city");
+const estateInput = document.getElementById("estate");
+const streetInput = document.getElementById("street");
+
+function updateShipping(){
+
+    const address = `
+        ${countyInput.value}
+        ${cityInput.value}
+        ${estateInput.value}
+        ${streetInput.value}
+    `.toLowerCase();
+
+    const result = calculateShipping(address);
+
+    shippingCost = result.price;
+    shippingZone = result.zone;
+
+    const shippingPrice =
+    document.getElementById("shipping-price");
+
+    if(shippingPrice){
+
+        shippingPrice.innerText =
+        "KES " + shippingCost.toLocaleString();
+
+    }
+
+    const shippingZoneElement =
+    document.getElementById("shippingZone");
+
+    if(shippingZoneElement){
+
+        shippingZoneElement.innerHTML =
+        shippingZone +
+        " • KES " +
+        shippingCost.toLocaleString();
+
+    }
+
+    renderCheckout();
+
+}
+
+[countyInput,cityInput,estateInput,streetInput].forEach(input=>{
+
+    if(input){
+
+        input.addEventListener(
+            "input",
+            updateShipping
+        );
+
+        input.addEventListener(
+            "change",
+            updateShipping
+        );
+
+    }
+
+});
         // ========================================
         // SAVE ORDER
         // ========================================

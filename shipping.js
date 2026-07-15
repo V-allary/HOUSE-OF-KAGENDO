@@ -413,3 +413,35 @@ const shippingZones = [
         ]
     }
     ];
+    function calculateShipping(address){
+
+        address = address.toLowerCase();
+    
+        for(const zone of shippingZones){
+    
+            const found =
+            zone.keywords.some(keyword =>
+                address.includes(
+                    keyword.toLowerCase()
+                )
+            );
+    
+            if(found){
+    
+                return {
+                    zone: zone.zone,
+                    price: zone.price,
+                    note: zone.note || ""
+                };
+    
+            }
+    
+        }
+    
+        return {
+            zone: "Area not found",
+            price: 0,
+            note: ""
+        };
+    
+    }

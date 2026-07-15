@@ -1,4 +1,9 @@
-require("dotenv").config();
+require("dotenv").config(); 
+const multer = require("multer");
+const path = require ("path");
+const product = require ("./models/productModel");
+
+
 const express = require("express");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
@@ -51,6 +56,44 @@ mongoose.connect(process.env.MONGODB_URI)
     console.log(error);
 
 });
+
+// =========================================
+// MULTER CONFIGURATION
+// =========================================
+
+const storage = multer.diskStorage({
+
+  destination: (req, file, cb) => {
+
+      cb(null, "uploads/");
+
+  },
+
+  filename: (req, file, cb) => {
+
+      cb(
+
+          null,
+
+          Date.now() +
+
+          path.extname(file.originalname)
+
+      );
+
+  }
+
+});
+
+const upload = multer({
+
+  storage
+
+});
+
+// Serve uploaded images
+
+app.use("/uploads", express.static("uploads"));
 
 // =========================
 // HOME ROUTE
@@ -178,6 +221,185 @@ res.status(201).json({
     }
 
 });
+
+// =========================================
+// CREATE PRODUCT
+// =========================================
+
+app.post(
+  "/products",
+  
+  upload.array("images",10),
+  
+  async(req,res)=>{
+  
+  try{
+  
+  const{
+  
+  name,
+  description,
+  category,
+  price,
+  stock,
+  sizes,
+  colors,
+  featured
+  
+  }=req.body;
+  
+  const images =
+  req.files.map(file=>
+  
+  `/uploads/${file.filename}`
+  
+  );
+  
+  const product =
+  new Product({
+  
+  name,
+  
+  description,
+  
+  category,
+  
+  price,
+  
+  stock,
+  
+  images,
+  
+  sizes:
+  JSON.parse(sizes),
+  
+  colors:
+  JSON.parse(colors),
+  
+  featured:
+  featured==="true"
+  
+  });
+  
+  await product.save();
+  
+  res.status(201).json({
+  
+  message:
+  "Product added successfully."
+  
+  });
+  
+  }catch(error){
+  
+  console.log(error);
+  
+  res.status(500).json({
+  
+  message:
+  "Failed to add product."
+  
+  });
+  
+  }
+  
+  });
+
+// =========================================
+// GET PRODUCTS
+// =========================================
+
+app.get("/products",async(req,res)=>{
+
+  try{
+  
+  const products =
+  await Product.find()
+  
+  .sort({
+  
+  createdAt:-1
+  
+  });
+  
+  res.json(products);
+  
+  }catch(error){
+  
+  res.status(500).json({
+  
+  message:"Server Error"
+  
+  });
+  
+  }
+  
+  });
+// =========================================
+// DELETE PRODUCT
+// =========================================
+
+app.delete("/products/:id", async (req, res) => {
+
+  try {
+
+      await Product.findByIdAndDelete(req.params.id);
+
+      res.json({
+
+          message: "Product deleted successfully."
+
+      });
+
+  } catch (error) {
+
+      res.status(500).json({
+
+          message: "Delete failed."
+
+      });
+
+  }
+
+});
+
+// =========================================
+// UPDATE PRODUCT
+// =========================================
+
+app.put("/products/:id", async (req, res) => {
+
+  try{
+  
+  const updatedProduct =
+  
+  await Product.findByIdAndUpdate(
+  
+  req.params.id,
+  
+  req.body,
+  
+  {
+  
+  new:true
+  
+  }
+  
+  );
+  
+  res.json(updatedProduct);
+  
+  }catch(error){
+  
+  res.status(500).json({
+  
+  message:"Update failed."
+  
+  });
+  
+  }
+  
+  });
 
 /* ===============================
    EMAIL TRANSPORTER (ONCE)
@@ -342,6 +564,8 @@ app.post("/login", async (req, res) => {
 
 });
   
+
+
 // =========================
 // NEWSLETTER SUBSCRIBE
 // =========================
