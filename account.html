@@ -151,44 +151,59 @@
 
     <script>
 
+        // CHECK IF USER IS LOGGED IN
+    
+        const token =
+        localStorage.getItem("token");
+    
         const user =
         JSON.parse(
             localStorage.getItem("user")
         );
-
-        if(user){
-
+    
+        // IF NOT LOGGED IN, SEND TO LOGIN PAGE
+    
+        if(!token || !user){
+    
+            window.location.href =
+            "login.html";
+    
+        }else{
+    
+            // DISPLAY USER INFORMATION
+    
             document.getElementById(
                 "account-name"
             ).innerText =
-            user.firstName +
-            " " +
-            user.lastName;
-
+            "Hello, " +
+            user.firstName + " 👋";
+    
             document.getElementById(
                 "account-email"
             ).innerText =
             user.email;
-
+    
         }
-
+    
+        // LOGOUT
+    
         function logout(){
-
+    
             localStorage.removeItem(
                 "token"
             );
-
+    
             localStorage.removeItem(
                 "user"
             );
-
+    
             window.location.href =
-            "login.html";
-
+            "index.html";
+    
         }
-
+    
     </script>
-
-</body>
-
-</html>
+    
+    </body>
+    
+    </html>

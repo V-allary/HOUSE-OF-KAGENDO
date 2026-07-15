@@ -213,12 +213,26 @@
                             data.message
                         );
 
-                        if (response.ok) {
+                        if(response.ok){
 
-                            window.location.href =
-                                "login.html";
+                            localStorage.setItem(
+                                 "token",
+                                  data.token
+                                 );
 
-                        }
+                       localStorage.setItem(
+                             "user",
+                           JSON.stringify(data.user)
+                        );
+
+                  window.location.href =
+                   "account.html";
+
+                    }else{
+
+                    alert(data.message);
+
+                    }
 
                     } catch (error) {
 

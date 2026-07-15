@@ -121,12 +121,47 @@ app.post("/signup", async (req, res) => {
 
         await user.save();
 
-        res.status(201).json({
+// CREATE TOKEN
 
-            message:
-            "Account created successfully"
+const token = jwt.sign(
 
-        });
+    {
+
+        id: user._id
+
+    },
+
+    process.env.JWT_SECRET,
+
+    {
+
+        expiresIn: "7d"
+
+    }
+
+);
+
+// SEND USER BACK
+
+res.status(201).json({
+
+    message: "Account created successfully",
+
+    token,
+
+    user: {
+
+        id: user._id,
+
+        firstName: user.firstName,
+
+        lastName: user.lastName,
+
+        email: user.email
+
+    }
+
+});
 
     } catch(error){
 
