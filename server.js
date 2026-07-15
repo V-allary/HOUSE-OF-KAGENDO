@@ -18,6 +18,7 @@ require("./models/userModel");
 
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const User = require("./models/userModel");
   
 // MIDDLEWARE
@@ -219,7 +220,91 @@ app.post("/submit-form", async (req, res) => {
       });
     }
   });
-  
+
+
+  // =========================
+// LOGIN ROUTE
+// =========================
+
+app.post("/login", async (req, res) => {
+
+    try {
+
+        const { email, password } = req.body;
+
+        const user = await User.findOne({
+            email: email.toLowerCase()
+        });
+
+        if (!user) {
+
+            return res.status(400).json({
+                message: "Invalid email or password."
+            });
+
+        }
+
+        const passwordMatch =
+        await bcrypt.compare(
+            password,
+            user.password
+        );
+
+        if (!passwordMatch) {
+
+            return res.status(400).json({
+                message: "Invalid email or password."
+            });
+
+        }
+
+        const token = jwt.sign(
+
+            {
+                id: user._id
+            },
+
+            process.env.JWT_SECRET,
+
+            {
+                expiresIn: "7d"
+            }
+
+        );
+
+        res.status(200).json({
+
+            message: "Login successful",
+
+            token,
+
+            user: {
+
+                id: user._id,
+
+                firstName: user.firstName,
+
+                lastName: user.lastName,
+
+                email: user.email
+
+            }
+
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+
+            message: "Server error"
+
+        });
+
+    }
+
+});
   
 // =========================
 // NEWSLETTER SUBSCRIBE
