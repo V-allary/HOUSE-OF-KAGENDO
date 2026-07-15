@@ -26,7 +26,8 @@ const User = require("./models/userModel");
 app.use(cors({
     origin: [
         "http://127.0.0.1:3000",
-        "http://127.0.0.1:3000"
+        "http://127.0.0.1:3000",
+        "https://v-allary.github.io"
     ],
     methods: ["GET", "POST"],
     credentials: true
