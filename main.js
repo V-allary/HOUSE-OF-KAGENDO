@@ -1167,13 +1167,11 @@ if(categoryFilter){
 // =========================
 // ACCOUNT LINK
 // =========================
+document
+.querySelectorAll(".account-link")
+.forEach(link => {
 
-const accountLink =
-document.getElementById("account-link");
-
-if(accountLink){
-
-    accountLink.addEventListener("click", (e) => {
+    link.addEventListener("click", (e) => {
 
         e.preventDefault();
 
@@ -1194,4 +1192,4 @@ if(accountLink){
 
     });
 
-}
+});
