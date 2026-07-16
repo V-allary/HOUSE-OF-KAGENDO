@@ -130,129 +130,7 @@ Add New Product
 });
 
 }
-// =======================================
-// SAVE PRODUCT
-// =======================================
-
-const productForm =
-document.getElementById("productForm");
-
-if(productForm){
-
-productForm.addEventListener(
-"submit",
-async(e)=>{
-
-e.preventDefault();
-
-const formData =
-new FormData();
-
-formData.append(
-"name",
-document.getElementById("productName").value
-);
-
-formData.append(
-"description",
-document.getElementById("productDescription").value
-);
-
-formData.append(
-"category",
-document.getElementById("productCategory").value
-);
-
-formData.append(
-"price",
-document.getElementById("productPrice").value
-);
-
-formData.append(
-"stock",
-document.getElementById("productStock").value
-);
-
-formData.append(
-"sizes",
-JSON.stringify(
-
-document
-.getElementById("productSizes")
-.value
-.split(",")
-
-)
-
-);
-
-formData.append(
-"colors",
-JSON.stringify(
-
-document
-.getElementById("productColors")
-.value
-.split(",")
-
-)
-
-);
-
-formData.append(
-"featured",
-false
-);
-
-const images =
-document.getElementById("productImages").files;
-
-for(let i=0;i<images.length;i++){
-
-formData.append(
-"images",
-images[i]
-);
-
-}
-
-try{
-
-const response =
-await fetch(
-
-"https://house-of-kagendo.onrender.com/products",
-
-{
-
-method:"POST",
-
-body:formData
-
-}
-
-);
-
-const data =
-await response.json();
-
-alert(data.message);
-
-productForm.reset();
-
-loadProducts();
-
-}catch(error){
-
-console.log(error);
-
-alert("Failed to save product.");
-
-}
-
-});
-
-}
+ 
 // =======================================
 // LOAD PRODUCTS
 // =======================================
@@ -417,5 +295,204 @@ async function deleteProduct(id){
     alert("Unable to delete product.");
     
     }
+    
+    }
+
+    // ======================================
+// LOAD DASHBOARD STATISTICS
+// ======================================
+
+function loadDashboard() {
+
+    // Products
+    const products =
+        JSON.parse(localStorage.getItem("products")) || [];
+
+    // Orders
+    const orders =
+        JSON.parse(localStorage.getItem("orders")) || [];
+
+    // Customers
+    const customers =
+        JSON.parse(localStorage.getItem("customers")) || [];
+
+    // Count totals
+    document.getElementById("totalProducts").innerText =
+        products.length;
+
+    document.getElementById("totalOrders").innerText =
+        orders.length;
+
+    document.getElementById("totalCustomers").innerText =
+        customers.length;
+
+    // Revenue
+    let revenue = 0;
+
+    orders.forEach(order => {
+
+        revenue += Number(order.total || 0);
+
+    });
+
+    document.getElementById("totalRevenue").innerText =
+        "KES " + revenue.toLocaleString();
+
+}
+
+loadDashboard();
+
+// ======================================
+// SAVE PRODUCT
+// ======================================
+
+const productForm =
+document.getElementById("productForm");
+
+if(productForm){
+
+productForm.addEventListener("submit",function(e){
+
+e.preventDefault();
+
+const products =
+JSON.parse(localStorage.getItem("products")) || [];
+
+const product = {
+
+id: Date.now(),
+
+name:
+document.getElementById("productName").value,
+
+price:
+Number(document.getElementById("productPrice").value),
+
+category:
+document.getElementById("productCategory").value,
+
+description:
+document.getElementById("productDescription").value,
+
+stock:
+Number(document.getElementById("productStock").value),
+
+image:
+document.getElementById("productImage").value,
+
+sizes:
+document.getElementById("productSizes").value
+.split(","),
+
+colors:
+document.getElementById("productColors").value
+.split(",")
+
+};
+
+products.push(product);
+
+localStorage.setItem(
+"products",
+JSON.stringify(products)
+);
+
+alert("Product Added Successfully!");
+
+productForm.reset();
+
+loadDashboard();
+
+renderProducts();
+
+});
+
+}
+// ======================================
+// DISPLAY PRODUCTS
+// ======================================
+
+function renderProducts(){
+
+    const products =
+    JSON.parse(localStorage.getItem("products")) || [];
+    
+    const table =
+    document.getElementById("productsTable");
+    
+    if(!table) return;
+    
+    table.innerHTML = "";
+    
+    products.forEach(product=>{
+    
+    table.innerHTML += `
+    
+    <tr>
+    
+    <td>
+    
+    <img
+    src="${product.image}"
+    style="width:70px;height:90px;object-fit:cover;border-radius:8px;">
+    
+    </td>
+    
+    <td>${product.name}</td>
+    
+    <td>${product.category}</td>
+    
+    <td>KES ${product.price.toLocaleString()}</td>
+    
+    <td>${product.stock}</td>
+    
+    <td>
+    
+    <button
+    class="btn btn-sm btn-outline-primary">
+    
+    Edit
+    
+    </button>
+    
+    <button
+    class="btn btn-sm btn-outline-danger ms-2"
+    onclick="deleteProduct(${product.id})">
+    
+    Delete
+    
+    </button>
+    
+    </td>
+    
+    </tr>
+    
+    `;
+    
+    });
+    
+    }
+    
+    renderProducts();
+    // ======================================
+// DELETE PRODUCT
+// ======================================
+
+function deleteProduct(id){
+
+    let products =
+    JSON.parse(localStorage.getItem("products")) || [];
+    
+    products =
+    products.filter(product => product.id !== id);
+    
+    localStorage.setItem(
+    "products",
+    JSON.stringify(products)
+    );
+    
+    renderProducts();
+    
+    loadDashboard();
     
     }
