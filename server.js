@@ -220,21 +220,18 @@ res.status(201).json({
     }
 
 });
-
-// =========================================
+ // =========================================
 // CREATE PRODUCT
 // =========================================
 
 app.post(
   "/products",
+  upload.array("images", 10),
+  async (req, res) => {
   
-  upload.array("images",10),
+  try {
   
-  async(req,res)=>{
-  
-  try{
-  
-  const{
+  const {
   
   name,
   description,
@@ -245,17 +242,21 @@ app.post(
   colors,
   featured
   
-  }=req.body;
+  } = req.body;
   
-  const images =
-  req.files.map(file=>
+  const images = [];
   
-  `/uploads/${file.filename}`
+  if(req.files){
   
-  );
+  req.files.forEach(file=>{
   
-  const product =
-  new Product({
+  images.push(`/uploads/${file.filename}`);
+  
+  });
+  
+  }
+  
+  const product = new Product({
   
   name,
   
@@ -263,20 +264,17 @@ app.post(
   
   category,
   
-  price,
+  price:Number(price),
   
-  stock,
+  stock:Number(stock),
   
   images,
   
-  sizes:
-  JSON.parse(sizes),
+  sizes: sizes ? JSON.parse(sizes) : [],
   
-  colors:
-  JSON.parse(colors),
+  colors: colors ? JSON.parse(colors) : [],
   
-  featured:
-  featured==="true"
+  featured: featured === "true"
   
   });
   
@@ -284,26 +282,29 @@ app.post(
   
   res.status(201).json({
   
-  message:
-  "Product added successfully."
+  success:true,
+  
+  message:"Product added successfully.",
+  
+  product
   
   });
   
   }catch(error){
   
-  console.log(error);
+  console.error(error);
   
   res.status(500).json({
   
-  message:
-  "Failed to add product."
+  success:false,
+  
+  message:error.message
   
   });
   
   }
   
   });
-
 // =========================================
 // GET PRODUCTS
 // =========================================

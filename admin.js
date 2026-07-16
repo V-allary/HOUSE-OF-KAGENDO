@@ -147,7 +147,7 @@ async function loadProducts(){
     const response =
     await fetch(
     
-    "https://house-of-kagendo.onrender.com/products"
+    (`${API_URL}/products`)
     
     );
     
@@ -273,7 +273,7 @@ async function deleteProduct(id){
     const response =
     await fetch(
     
-    `https://house-of-kagendo.onrender.com/products/${id}`,
+    `${API_URL}/products/${id}`,
     
     {
     
@@ -422,14 +422,16 @@ if (productForm) {
 
         try {
 
+            const API_URL =
+            window.location.hostname === "127.0.0.1"
+            ? "http://127.0.0.1:5000"
+            : "https://house-of-kagendo.onrender.com";
+            
             const response =
-            await fetch(
-                "https://house-of-kagendo.onrender.com/products",
-                {
-                    method: "POST",
-                    body: formData
-                }
-            );
+            await fetch(`${API_URL}/products`,{
+            method:"POST",
+            body:formData
+            });
 
             const data =
             await response.json();
