@@ -626,7 +626,7 @@ app.post("/subscribe", async (req, res) => {
 // =========================
 
 const PORT =
-process.env.PORT || 5000;
+process.env.PORT || 5050;
 
 app.listen(PORT, () => {
 
