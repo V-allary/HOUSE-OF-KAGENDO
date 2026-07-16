@@ -1,8 +1,7 @@
 require("dotenv").config(); 
 const multer = require("multer");
 const path = require ("path");
-const product = require ("./models/ProductModel");
-
+const Product = require("./models/ProductModel");
 
 const express = require("express");
 const cors = require("cors");

@@ -151,8 +151,8 @@ async function loadProducts(){
     
     );
     
-    const products =
-    await response.json();
+    document.getElementById("totalProducts").innerText =
+products.length;
     
     if(products.length===0){
     
@@ -163,8 +163,8 @@ async function loadProducts(){
     <td colspan="6"
     class="text-center">
     
-    No products found.
-    
+    No products have been added yet.
+Click "Add New Product" to create your first product.
     </td>
     
     </tr>
@@ -341,158 +341,130 @@ function loadDashboard() {
 }
 
 loadDashboard();
-
-// ======================================
-// SAVE PRODUCT
-// ======================================
+ // =======================================
+// SAVE PRODUCT TO MONGODB
+// =======================================
 
 const productForm =
 document.getElementById("productForm");
 
-if(productForm){
+if (productForm) {
 
-productForm.addEventListener("submit",function(e){
+    productForm.addEventListener("submit", async (e) => {
 
-e.preventDefault();
+        e.preventDefault();
 
-const products =
-JSON.parse(localStorage.getItem("products")) || [];
+        const formData = new FormData();
 
-const product = {
+        formData.append(
+            "name",
+            document.getElementById("productName").value
+        );
 
-id: Date.now(),
+        formData.append(
+            "price",
+            document.getElementById("productPrice").value
+        );
 
-name:
-document.getElementById("productName").value,
+        formData.append(
+            "category",
+            document.getElementById("productCategory").value
+        );
 
-price:
-Number(document.getElementById("productPrice").value),
+        formData.append(
+            "description",
+            document.getElementById("productDescription").value
+        );
 
-category:
-document.getElementById("productCategory").value,
+        formData.append(
+            "stock",
+            document.getElementById("productStock").value
+        );
 
-description:
-document.getElementById("productDescription").value,
+        formData.append(
+            "sizes",
+            JSON.stringify(
+                document
+                    .getElementById("productSizes")
+                    .value
+                    .split(",")
+                    .map(size => size.trim())
+            )
+        );
 
-stock:
-Number(document.getElementById("productStock").value),
+        formData.append(
+            "colors",
+            JSON.stringify(
+                document
+                    .getElementById("productColors")
+                    .value
+                    .split(",")
+                    .map(color => color.trim())
+            )
+        );
 
-image:
-document.getElementById("productImage").value,
+        formData.append(
+            "featured",
+            false
+        );
 
-sizes:
-document.getElementById("productSizes").value
-.split(","),
+        const imageFiles =
+        document.getElementById("productImages").files;
 
-colors:
-document.getElementById("productColors").value
-.split(",")
+        for (let i = 0; i < imageFiles.length; i++) {
 
-};
+            formData.append(
+                "images",
+                imageFiles[i]
+            );
 
-products.push(product);
+        }
 
-localStorage.setItem(
-"products",
-JSON.stringify(products)
-);
+        try {
 
-alert("Product Added Successfully!");
+            const response =
+            await fetch(
+                "https://house-of-kagendo.onrender.com/products",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
 
-productForm.reset();
+            const data =
+            await response.json();
 
-loadDashboard();
+            if (!response.ok) {
 
-renderProducts();
+                throw new Error(data.message);
 
-});
+            }
+
+            alert("Product added successfully!");
+
+            productForm.reset();
+
+            productFormContainer.style.display = "none";
+
+            showProductForm.innerHTML = `
+                <i class="bi bi-plus-circle"></i>
+                Add New Product
+            `;
+
+            await loadProducts();
+
+            loadDashboard();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                error.message || "Unable to save product."
+            );
+
+        }
+
+    });
 
 }
-// ======================================
-// DISPLAY PRODUCTS
-// ======================================
-
-function renderProducts(){
-
-    const products =
-    JSON.parse(localStorage.getItem("products")) || [];
-    
-    const table =
-    document.getElementById("productsTable");
-    
-    if(!table) return;
-    
-    table.innerHTML = "";
-    
-    products.forEach(product=>{
-    
-    table.innerHTML += `
-    
-    <tr>
-    
-    <td>
-    
-    <img
-    src="${product.image}"
-    style="width:70px;height:90px;object-fit:cover;border-radius:8px;">
-    
-    </td>
-    
-    <td>${product.name}</td>
-    
-    <td>${product.category}</td>
-    
-    <td>KES ${product.price.toLocaleString()}</td>
-    
-    <td>${product.stock}</td>
-    
-    <td>
-    
-    <button
-    class="btn btn-sm btn-outline-primary">
-    
-    Edit
-    
-    </button>
-    
-    <button
-    class="btn btn-sm btn-outline-danger ms-2"
-    onclick="deleteProduct(${product.id})">
-    
-    Delete
-    
-    </button>
-    
-    </td>
-    
-    </tr>
-    
-    `;
-    
-    });
-    
-    }
-    
-    renderProducts();
-    // ======================================
-// DELETE PRODUCT
-// ======================================
-
-function deleteProduct(id){
-
-    let products =
-    JSON.parse(localStorage.getItem("products")) || [];
-    
-    products =
-    products.filter(product => product.id !== id);
-    
-    localStorage.setItem(
-    "products",
-    JSON.stringify(products)
-    );
-    
-    renderProducts();
-    
-    loadDashboard();
-    
-    }
