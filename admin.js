@@ -1,3 +1,8 @@
+const API_URL =
+window.location.hostname === "127.0.0.1" ||
+window.location.hostname === "localhost"
+? "http://127.0.0.1:5050"
+: "https://house-of-kagendo.onrender.com";
 // =======================================
 // SHOW / HIDE PASSWORD
 // =======================================
@@ -424,7 +429,7 @@ if (productForm) {
 
             const API_URL =
             window.location.hostname === "127.0.0.1"
-            ? "http://127.0.0.1:5000"
+            ? "http://127.0.0.1:5050"
             : "https://house-of-kagendo.onrender.com";
             
             const response =
