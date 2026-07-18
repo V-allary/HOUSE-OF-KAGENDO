@@ -693,6 +693,12 @@ try {
 
 }
 
+// =======================================
+// PRODUCT EDIT MODE
+// =======================================
+
+let editingProductId = null;
+
 
 // =======================================
 // SAVE PRODUCT TO MONGODB
@@ -800,19 +806,73 @@ productForm.addEventListener(
         }
 
         try {
+            let response;
 
-            const response =
-                await fetch(
-                    `${API_URL}/products`,
-                    {
-
-                        method: "POST",
-
-                        body: formData
-
-                    }
-                );
-
+            if (editingProductId) {
+            
+                // EDIT EXISTING PRODUCT
+            
+                const updateData = {
+            
+                    name:
+                        document.getElementById("productName")
+                            .value.trim(),
+            
+                    price:
+                        Number(
+                            document.getElementById("productPrice")
+                                .value
+                        ),
+            
+                    category:
+                        document.getElementById("productCategory")
+                            .value.trim(),
+            
+                    description:
+                        document.getElementById("productDescription")
+                            .value.trim(),
+            
+                    stock:
+                        Number(
+                            document.getElementById("productStock")
+                                .value || 0
+                        ),
+            
+                    sizes,
+            
+                    colors
+            
+                };
+            
+                response =
+                    await fetch(
+                        `${API_URL}/products/${editingProductId}`,
+                        {
+                            method: "PUT",
+            
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+            
+                            body:
+                                JSON.stringify(updateData)
+                        }
+                    );
+            
+            } else {
+            
+                // ADD NEW PRODUCT
+            
+                response =
+                    await fetch(
+                        `${API_URL}/products`,
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+            
+            }
             const data =
                 await response.json();
 
@@ -825,9 +885,31 @@ productForm.addEventListener(
 
             }
 
-            alert(
-                "Product added successfully!"
-            );
+            if (editingProductId) {
+
+                alert(
+                    "Product updated successfully!"
+                );
+            
+            } else {
+            
+                alert(
+                    "Product added successfully!"
+                );
+            
+            }
+            // Exit edit mode
+editingProductId = null;
+
+const submitButton =
+    productForm.querySelector(
+        'button[type="submit"]'
+    );
+
+submitButton.innerHTML = `
+    <i class="bi bi-check-circle"></i>
+    Save Product
+`;
 
             productForm.reset();
 
@@ -877,63 +959,51 @@ productForm.addEventListener(
 
 async function deleteProduct(id) {
 
-const confirmed =
-    confirm(
+    const confirmed = confirm(
         "Are you sure you want to delete this product?"
     );
 
-if (!confirmed) {
+    if (!confirmed) return;
 
-    return;
+    try {
 
-}
-
-try {
-
-    const response =
-        await fetch(
+        const response = await fetch(
             `${API_URL}/products/${id}`,
             {
-
                 method: "DELETE"
-
             }
         );
 
-    const data =
-        await response.json();
+        const data = await response.json();
 
-    if (!response.ok) {
+        if (!response.ok) {
 
-        throw new Error(
-            data.message ||
+            throw new Error(
+                data.message ||
+                "Unable to delete product."
+            );
+
+        }
+
+        alert("Product deleted successfully!");
+
+        await loadProducts();
+
+        await loadDashboard();
+
+    } catch (error) {
+
+        console.error(
+            "Delete product error:",
+            error
+        );
+
+        alert(
+            error.message ||
             "Unable to delete product."
         );
 
     }
-
-    alert(
-        data.message ||
-        "Product deleted successfully."
-    );
-
-    await loadProducts();
-
-    await loadDashboard();
-
-} catch (error) {
-
-    console.error(
-        "Delete product error:",
-        error
-    );
-
-    alert(
-        error.message ||
-        "Unable to delete product."
-    );
-
-}
 
 }
 
@@ -944,17 +1014,90 @@ try {
 
 async function editProduct(id) {
 
-/*
-    The Edit button is now connected.
+    try {
 
-    The actual edit form/update workflow
-    will be implemented after the current
-    product creation flow is stable.
-*/
+        const response =
+            await fetch(`${API_URL}/products/${id}`);
 
-alert(
-    `Edit Product is connected.\nProduct ID: ${id}`
-);
+        const product =
+            await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                product.message ||
+                "Unable to load product."
+            );
+
+        }
+
+        // Enter edit mode
+        editingProductId = id;
+
+        // Fill existing form with product data
+        document.getElementById("productName").value =
+            product.name || "";
+
+        document.getElementById("productPrice").value =
+            product.price || "";
+
+        document.getElementById("productCategory").value =
+            product.category || "";
+
+        document.getElementById("productDescription").value =
+            product.description || "";
+
+        document.getElementById("productStock").value =
+            product.stock ?? 0;
+
+        document.getElementById("productSizes").value =
+            Array.isArray(product.sizes)
+                ? product.sizes.join(",")
+                : "";
+
+        document.getElementById("productColors").value =
+            Array.isArray(product.colors)
+                ? product.colors.join(",")
+                : "";
+
+        // Open form
+        productFormContainer.style.display = "block";
+
+        showProductForm.innerHTML = `
+            <i class="bi bi-x-circle"></i>
+            Cancel Edit
+        `;
+
+        // Change submit button wording
+        const submitButton =
+            productForm.querySelector(
+                'button[type="submit"]'
+            );
+
+        submitButton.innerHTML = `
+            <i class="bi bi-check-circle"></i>
+            Update Product
+        `;
+
+        // Scroll to form
+        productFormContainer.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Edit product error:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Unable to load product."
+        );
+
+    }
 
 }
 
