@@ -5,486 +5,962 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
+<meta
+name="viewport"
 content="width=device-width, initial-scale=1.0">
 
 <title>House of Kagendo | Admin Dashboard</title>
 
 <!-- Bootstrap -->
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
 
 <!-- Bootstrap Icons -->
-
-<link rel="stylesheet"
+<link
+rel="stylesheet"
 href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
 <!-- Google Fonts -->
+<link
+href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+<!-- Main CSS -->
 <link rel="stylesheet" href="style.css">
 
 </head>
+
 
 <body class="admin-body">
 
 <div class="admin-wrapper">
 
-    <!-- ==========================
-         SIDEBAR
-    =========================== -->
 
-    <aside class="admin-sidebar">
+<!-- ==========================================
+     SIDEBAR
+========================================== -->
 
-        <div class="admin-brand">
+<aside class="admin-sidebar">
 
-            <img src="KA img/House Of Ka Log.jpg"
-            alt="House of Kagendo">
+    <div class="admin-brand">
 
-            <h3>
+        <img
+        src="KA img/House Of Ka Log.jpg"
+        alt="House of Kagendo">
 
-                House of Kagendo
+        <h3>
+            House of Kagendo
+        </h3>
 
-            </h3>
+        <p>
+            Admin Panel
+        </p>
+
+    </div>
+
+
+    <ul class="admin-menu">
+
+        <li
+        id="menuDashboard"
+        class="active">
+
+            <i class="bi bi-grid-fill"></i>
+
+            Dashboard
+
+        </li>
+
+
+        <li id="menuProducts">
+
+            <i class="bi bi-box-seam"></i>
+
+            Products
+
+        </li>
+
+
+        <li id="menuOrders">
+
+            <i class="bi bi-bag-check"></i>
+
+            Orders
+
+        </li>
+
+
+        <li id="menuCustomers">
+
+            <i class="bi bi-people"></i>
+
+            Customers
+
+        </li>
+
+
+        <li id="menuNewsletter">
+
+            <i class="bi bi-envelope"></i>
+
+            Newsletter
+
+        </li>
+
+
+        <li id="menuSettings">
+
+            <i class="bi bi-gear"></i>
+
+            Settings
+
+        </li>
+
+
+        <li id="adminLogout">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            Logout
+
+        </li>
+
+    </ul>
+
+</aside>
+
+
+<!-- ==========================================
+     MAIN ADMIN CONTENT
+========================================== -->
+
+<main class="admin-main">
+
+
+<!-- ==========================================
+     DASHBOARD SECTION
+========================================== -->
+
+<section id="dashboardSection">
+
+
+    <!-- HEADER -->
+
+    <div class="admin-header">
+
+        <div>
+
+            <h2>
+                Dashboard
+            </h2>
 
             <p>
-
-                Admin Panel
-
+                Welcome back, Administrator
             </p>
 
         </div>
 
-        <ul class="admin-menu">
 
-            <li class="active">
+        <div class="admin-user">
 
-                <i class="bi bi-grid-fill"></i>
+            <i class="bi bi-person-circle"></i>
 
-                Dashboard
+        </div>
 
-            </li>
+    </div>
 
-            <li>
+
+    <!-- DASHBOARD STATISTICS -->
+
+    <div class="row g-4 mt-3">
+
+
+        <!-- PRODUCTS -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
 
                 <i class="bi bi-box-seam"></i>
 
-                Products
+                <h3 id="totalProducts">
+                    0
+                </h3>
 
-            </li>
+                <p>
+                    Products
+                </p>
 
-            <li>
+            </div>
+
+        </div>
+
+
+        <!-- ORDERS -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <i class="bi bi-bag"></i>
+
+                <h3 id="totalOrders">
+                    0
+                </h3>
+
+                <p>
+                    Orders
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- CUSTOMERS -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <i class="bi bi-people"></i>
+
+                <h3 id="totalCustomers">
+                    0
+                </h3>
+
+                <p>
+                    Customers
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- REVENUE -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <i class="bi bi-cash-stack"></i>
+
+                <h3 id="totalRevenue">
+                    KES 0
+                </h3>
+
+                <p>
+                    Revenue
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="admin-section mt-5">
+
+        <h3>
+            Quick Actions
+        </h3>
+
+        <div class="quick-actions">
+
+            <button
+            type="button"
+            class="btn btn-dark"
+            id="quickAddProduct">
+
+                <i class="bi bi-plus-circle"></i>
+
+                Add Product
+
+            </button>
+
+
+            <button
+            type="button"
+            class="btn btn-outline-dark"
+            id="quickViewOrders">
 
                 <i class="bi bi-bag-check"></i>
 
-                Orders
+                View Orders
 
-            </li>
+            </button>
 
-            <li>
+
+            <button
+            type="button"
+            class="btn btn-outline-dark"
+            id="quickViewCustomers">
 
                 <i class="bi bi-people"></i>
 
                 Customers
 
-            </li>
-
-            <li>
-
-                <i class="bi bi-envelope"></i>
-
-                Newsletter
-
-            </li>
-
-            <li>
-
-                <i class="bi bi-gear"></i>
-
-                Settings
-
-            </li>
-
-            <li id="adminLogout">
-
-                <i class="bi bi-box-arrow-right"></i>
-
-                Logout
-
-            </li>
-
-        </ul>
-
-    </aside>
-
-    <!-- ==========================
-         MAIN CONTENT
-    =========================== -->
-
-    <main class="admin-main">
-
-        
-
-        <!-- HEADER -->
-
-        <div class="admin-header">
-
-            <div>
-
-                <h2>
-
-                    Dashboard
-
-                </h2>
-
-                <p>
-
-                    Welcome back, Administrator
-
-                </p>
-
-            </div>
-
-            <div class="admin-user">
-
-                <i class="bi bi-person-circle"></i>
-
-            </div>
+            </button>
 
         </div>
 
-        <!-- STATS -->
+    </div>
 
-        <div class="row g-4 mt-3">
 
-            <div class="col-lg-3 col-md-6">
+</section>
 
-                <div class="dashboard-card">
-
-                    <i class="bi bi-box-seam"></i>
-
-                    <h3 id="totalProducts">
-
-                        0
-
-                    </h3>
-
-                    <p>
-
-                        Products
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-
-                <div class="dashboard-card">
-
-                    <i class="bi bi-bag"></i>
-
-                    <h3 id="totalOrders">
-
-                        0
-
-                    </h3>
-
-                    <p>
-
-                        Orders
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-
-                <div class="dashboard-card">
-
-                    <i class="bi bi-people"></i>
-
-                    <h3 id="totalCustomers">
-
-                        0
-
-                    </h3>
-
-                    <p>
-
-                        Customers
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-
-                <div class="dashboard-card">
-
-                    <i class="bi bi-cash-stack"></i>
-
-                    <h3 id="totalRevenue">
-
-                        KES 0
-
-                    </h3>
-
-                    <p>
-
-                        Revenue
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- QUICK ACTIONS -->
-
-        <div class="admin-section mt-5">
-
-            <h3>
-
-                Quick Actions
-
-            </h3>
-
-            <div class="quick-actions">
-
-                <button class="btn btn-dark">
-
-                    <i class="bi bi-plus-circle"></i>
-
-                    Add Product
-
-                </button>
-
-                <button class="btn btn-outline-dark">
-
-                    <i class="bi bi-bag-check"></i>
-
-                    View Orders
-
-                </button>
-
-                <button class="btn btn-outline-dark">
-
-                    <i class="bi bi-people"></i>
-
-                    Customers
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </main>
-
-</div>
 
 <!-- ==========================================
-     PRODUCT MANAGEMENT
+     PRODUCTS SECTION
 ========================================== -->
 
-<div class="admin-section mt-5">
+<section
+id="productsSection"
+style="display:none;">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <h3>
+    <div class="admin-header">
 
-            Product Management
+        <div>
 
-        </h3>
+            <h2>
+                Products
+            </h2>
 
-        <button
-        class="btn btn-dark"
-        id="showProductForm">
+            <p>
+                Add, edit and manage your store products
+            </p>
 
-            <i class="bi bi-plus-circle"></i>
-
-            Add New Product
-
-        </button>
+        </div>
 
     </div>
 
-    <!-- PRODUCT FORM -->
 
-    <div
-    id="productFormContainer"
-    style="display:none;">
+    <div class="admin-section mt-4">
 
-    <form id="productForm">
 
-        <div class="row">
-    
-            <div class="col-md-6 mb-3">
-    
-                <label>Product Name</label>
-    
-                <input
-                type="text"
-                class="form-control"
-                id="productName"
-                required>
-    
-            </div>
-    
-            <div class="col-md-6 mb-3">
-    
-                <label>Price (KES)</label>
-    
-                <input
-                type="number"
-                class="form-control"
-                id="productPrice"
-                required>
-    
-            </div>
-    
+        <div
+        class="d-flex justify-content-between align-items-center mb-4">
+
+            <h3>
+                Product Management
+            </h3>
+
+
+            <button
+            type="button"
+            class="btn btn-dark"
+            id="showProductForm">
+
+                <i class="bi bi-plus-circle"></i>
+
+                Add New Product
+
+            </button>
+
         </div>
-    
-        <div class="mb-3">
-    
-            <label>Category</label>
-    
-            <input
-            type="text"
-            class="form-control"
-            id="productCategory">
-    
+
+
+        <!-- PRODUCT FORM -->
+
+        <div
+        id="productFormContainer"
+        style="display:none;">
+
+
+            <form id="productForm">
+
+
+                <div class="row">
+
+
+                    <!-- PRODUCT NAME -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                        for="productName"
+                        class="form-label">
+
+                            Product Name
+
+                        </label>
+
+                        <input
+                        type="text"
+                        class="form-control"
+                        id="productName"
+                        required>
+
+                    </div>
+
+
+                    <!-- PRICE -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                        for="productPrice"
+                        class="form-label">
+
+                            Price (KES)
+
+                        </label>
+
+                        <input
+                        type="number"
+                        class="form-control"
+                        id="productPrice"
+                        min="0"
+                        required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div class="mb-3">
+
+                    <label
+                    for="productCategory"
+                    class="form-label">
+
+                        Category
+
+                    </label>
+
+                    <input
+                    type="text"
+                    class="form-control"
+                    id="productCategory">
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="mb-3">
+
+                    <label
+                    for="productDescription"
+                    class="form-label">
+
+                        Description
+
+                    </label>
+
+                    <textarea
+                    class="form-control"
+                    rows="4"
+                    id="productDescription"></textarea>
+
+                </div>
+
+
+                <div class="row">
+
+
+                    <!-- STOCK -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                        for="productStock"
+                        class="form-label">
+
+                            Stock
+
+                        </label>
+
+                        <input
+                        type="number"
+                        class="form-control"
+                        id="productStock"
+                        min="0">
+
+                    </div>
+
+
+                    <!-- PRODUCT IMAGES -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                        for="productImages"
+                        class="form-label">
+
+                            Product Images
+
+                        </label>
+
+                        <input
+                        type="file"
+                        class="form-control"
+                        id="productImages"
+                        multiple
+                        accept="image/*">
+
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+
+                    <!-- SIZES -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                        for="productSizes"
+                        class="form-label">
+
+                            Sizes
+
+                        </label>
+
+                        <input
+                        type="text"
+                        class="form-control"
+                        id="productSizes"
+                        placeholder="XS,S,M,L,XL">
+
+                    </div>
+
+
+                    <!-- COLORS -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                        for="productColors"
+                        class="form-label">
+
+                            Colors
+
+                        </label>
+
+                        <input
+                        type="text"
+                        class="form-control"
+                        id="productColors"
+                        placeholder="Black,White,Nude">
+
+                    </div>
+
+                </div>
+
+
+                <!-- SAVE PRODUCT -->
+
+                <button
+                type="submit"
+                class="btn btn-dark mt-3">
+
+                    <i class="bi bi-check-circle"></i>
+
+                    Save Product
+
+                </button>
+
+
+            </form>
+
         </div>
-    
-        <div class="mb-3">
-    
-            <label>Description</label>
-    
-            <textarea
-            class="form-control"
-            rows="4"
-            id="productDescription"></textarea>
-    
+
+
+        <!-- PRODUCTS TABLE -->
+
+        <div class="table-responsive mt-5">
+
+            <table class="table align-middle">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Image</th>
+
+                        <th>Name</th>
+
+                        <th>Category</th>
+
+                        <th>Price</th>
+
+                        <th>Stock</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="productsTable">
+
+                    <tr>
+
+                        <td
+                        colspan="6"
+                        class="text-center">
+
+                            No products have been added yet.
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
         </div>
-    
-        <div class="row">
-    
-            <div class="col-md-6">
-    
-                <label>Stock</label>
-    
-                <input
-                type="number"
-                class="form-control"
-                id="productStock">
-    
-            </div>
-    
-            <div class="col-md-6">
-                <label>Product Images</label>
 
-                <input
-                type="file"
-                class="form-control"
-                id="productImages"
-                multiple
-                accept="image/*">
-            </div>
-    
-        </div>
-    
-        <div class="row mt-3">
-    
-            <div class="col-md-6">
-    
-                <label>Sizes</label>
-    
-                <input
-                type="text"
-                class="form-control"
-                id="productSizes"
-                placeholder="XS,S,M,L,XL">
-    
-            </div>
-    
-            <div class="col-md-6">
-    
-                <label>Colors</label>
-    
-                <input
-                type="text"
-                class="form-control"
-                id="productColors"
-                placeholder="Black,White,Nude">
-    
-            </div>
-    
-        </div>
-    
-        <button
-        type="submit"
-        class="btn btn-dark mt-4">
-    
-            Save Product
-    
-        </button>
-    
-    </form>
-              
-    <!-- PRODUCTS TABLE -->
-
-    <div class="table-responsive mt-5">
-
-        <table class="table align-middle">
-
-            <thead>
-
-                <tr>
-
-                    <th>Image</th>
-
-                    <th>Name</th>
-
-                    <th>Category</th>
-
-                    <th>Price</th>
-
-                    <th>Stock</th>
-
-                    <th>Actions</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody id="productsTable">
-
-                <tr>
-
-                    <td colspan="6" class="text-center">
-
-                        No products added yet.
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
 
     </div>
+
+</section>
+
+
+<!-- ==========================================
+     ORDERS SECTION
+========================================== -->
+
+<section
+id="ordersSection"
+style="display:none;">
+
+
+    <div class="admin-header">
+
+        <div>
+
+            <h2>
+                Orders
+            </h2>
+
+            <p>
+                View and manage customer orders
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="admin-section mt-4">
+
+        <div class="table-responsive">
+
+            <table class="table align-middle">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Order</th>
+
+                        <th>Customer</th>
+
+                        <th>Products</th>
+
+                        <th>Delivery</th>
+
+                        <th>Total</th>
+
+                        <th>Payment</th>
+
+                        <th>Status</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="ordersTable">
+
+                    <tr>
+
+                        <td
+                        colspan="8"
+                        class="text-center">
+
+                            No orders yet.
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- ==========================================
+     CUSTOMERS SECTION
+========================================== -->
+
+<section
+id="customersSection"
+style="display:none;">
+
+
+    <div class="admin-header">
+
+        <div>
+
+            <h2>
+                Customers
+            </h2>
+
+            <p>
+                View your registered customers
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="admin-section mt-4">
+
+        <div class="table-responsive">
+
+            <table class="table align-middle">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Name</th>
+
+                        <th>Email</th>
+
+                        <th>Phone</th>
+
+                        <th>Orders</th>
+
+                        <th>Joined</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="customersTable">
+
+                    <tr>
+
+                        <td
+                        colspan="5"
+                        class="text-center">
+
+                            No customers found.
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- ==========================================
+     NEWSLETTER SECTION
+========================================== -->
+
+<section
+id="newsletterSection"
+style="display:none;">
+
+
+    <div class="admin-header">
+
+        <div>
+
+            <h2>
+                Newsletter
+            </h2>
+
+            <p>
+                Manage newsletter subscribers
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="admin-section mt-4">
+
+        <div class="table-responsive">
+
+            <table class="table align-middle">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Email</th>
+
+                        <th>Date Subscribed</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="newsletterTable">
+
+                    <tr>
+
+                        <td
+                        colspan="3"
+                        class="text-center">
+
+                            No newsletter subscribers yet.
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- ==========================================
+     SETTINGS SECTION
+========================================== -->
+
+<section
+id="settingsSection"
+style="display:none;">
+
+
+    <div class="admin-header">
+
+        <div>
+
+            <h2>
+                Settings
+            </h2>
+
+            <p>
+                Manage your store and admin settings
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="admin-section mt-4">
+
+        <form id="adminSettingsForm">
+
+            <div class="row">
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label
+                    for="storeName"
+                    class="form-label">
+
+                        Store Name
+
+                    </label>
+
+                    <input
+                    type="text"
+                    class="form-control"
+                    id="storeName"
+                    value="House of Kagendo">
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label
+                    for="storeEmail"
+                    class="form-label">
+
+                        Store Email
+
+                    </label>
+
+                    <input
+                    type="email"
+                    class="form-control"
+                    id="storeEmail">
+
+                </div>
+
+
+            </div>
+
+
+            <button
+            type="submit"
+            class="btn btn-dark">
+
+                Save Settings
+
+            </button>
+
+        </form>
+
+    </div>
+
+
+</section>
+
+
+</main>
 
 </div>
+
+
+<!-- ==========================================
+     JAVASCRIPT
+========================================== -->
+
+<script
+src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
 
 <script src="admin.js"></script>
 
