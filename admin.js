@@ -5,102 +5,198 @@
 // Local development uses port 5050.
 // Deployed website uses the Render backend.
 const API_URL =
-window.location.hostname === "127.0.0.1" ||
-window.location.hostname === "localhost"
-    ? "http://127.0.0.1:5050"
-    : "https://house-of-kagendo.onrender.com";
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname === "localhost"
+        ? "http://127.0.0.1:5050"
+        : "https://house-of-kagendo.onrender.com";
 
 
+// =======================================
+// PROTECT ADMIN DASHBOARD
+// =======================================
+
+const adminToken =
+    localStorage.getItem(
+        "adminToken"
+    );
+
+if (
+
+    !adminToken &&
+
+    window.location.pathname.endsWith(
+        "admin.html"
+    )
+
+) {
+
+    window.location.href =
+        "admin-login.html";
+
+}
 // =======================================
 // ADMIN LOGIN - SHOW / HIDE PASSWORD
 // =======================================
 
 const togglePassword =
-document.getElementById("togglePassword");
+    document.getElementById("togglePassword");
 
 const adminPasswordInput =
-document.getElementById("adminPassword");
+    document.getElementById("adminPassword");
 
 if (togglePassword && adminPasswordInput) {
 
-togglePassword.addEventListener("click", () => {
+    togglePassword.addEventListener("click", () => {
 
-    if (adminPasswordInput.type === "password") {
+        if (adminPasswordInput.type === "password") {
 
-        adminPasswordInput.type = "text";
+            adminPasswordInput.type = "text";
 
-        togglePassword.classList.remove("bi-eye-slash");
-        togglePassword.classList.add("bi-eye");
+            togglePassword.classList.remove("bi-eye-slash");
+            togglePassword.classList.add("bi-eye");
 
-    } else {
+        } else {
 
-        adminPasswordInput.type = "password";
+            adminPasswordInput.type = "password";
 
-        togglePassword.classList.remove("bi-eye");
-        togglePassword.classList.add("bi-eye-slash");
+            togglePassword.classList.remove("bi-eye");
+            togglePassword.classList.add("bi-eye-slash");
 
-    }
+        }
 
-});
+    });
 
 }
 
-
-// =======================================
-// ADMIN LOGIN
+ // =======================================
+// SECURE ADMIN LOGIN
 // =======================================
 
 const loginForm =
-document.getElementById("adminLoginForm");
+document.getElementById(
+    "adminLoginForm"
+);
 
 if (loginForm) {
 
-loginForm.addEventListener("submit", (e) => {
+loginForm.addEventListener(
+    "submit",
+    async (e) => {
 
-    e.preventDefault();
+        e.preventDefault();
 
-    const email =
-        document.getElementById("adminEmail").value.trim();
+        const email =
+            document
+                .getElementById(
+                    "adminEmail"
+                )
+                .value
+                .trim();
 
-    const password =
-        document.getElementById("adminPassword").value.trim();
-
-    // Temporary admin login.
-    // We will move this to secure backend authentication later.
-    const adminEmail =
-        "houseofka@gmail.com";
-
-    const adminPassword =
-        "HouseOfKa2026";
-
-    if (
-        email === adminEmail &&
-        password === adminPassword
-    ) {
-
-        localStorage.setItem(
-            "adminLoggedIn",
-            "true"
-        );
-
-        window.location.href =
-            "admin.html";
-
-    } else {
+        const password =
+            document
+                .getElementById(
+                    "adminPassword"
+                )
+                .value;
 
         const loginError =
-            document.getElementById("loginError");
+            document.getElementById(
+                "loginError"
+            );
 
         if (loginError) {
 
             loginError.innerText =
-                "Invalid email or password.";
+                "Signing in...";
+
+        }
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_URL}/admin/login`,
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                email,
+                                password
+
+                            })
+
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            if (
+                !response.ok ||
+                !data.success
+            ) {
+
+                throw new Error(
+
+                    data.message ||
+                    "Invalid email or password."
+
+                );
+
+            }
+
+            // Remove old temporary login flag
+            localStorage.removeItem(
+                "adminLoggedIn"
+            );
+
+            // Save secure admin session
+            localStorage.setItem(
+                "adminToken",
+                data.token
+            );
+
+            localStorage.setItem(
+                "adminUser",
+                JSON.stringify(
+                    data.admin
+                )
+            );
+
+            window.location.href =
+                "admin.html";
+
+        } catch (error) {
+
+            console.error(
+                "Admin login error:",
+                error
+            );
+
+            if (loginError) {
+
+                loginError.innerText =
+                    error.message ||
+                    "Unable to log in.";
+
+            }
 
         }
 
     }
-
-});
+);
 
 }
 
@@ -111,23 +207,23 @@ loginForm.addEventListener("submit", (e) => {
 
 const sections = {
 
-dashboard:
-    document.getElementById("dashboardSection"),
+    dashboard:
+        document.getElementById("dashboardSection"),
 
-products:
-    document.getElementById("productsSection"),
+    products:
+        document.getElementById("productsSection"),
 
-orders:
-    document.getElementById("ordersSection"),
+    orders:
+        document.getElementById("ordersSection"),
 
-customers:
-    document.getElementById("customersSection"),
+    customers:
+        document.getElementById("customersSection"),
 
-newsletter:
-    document.getElementById("newsletterSection"),
+    newsletter:
+        document.getElementById("newsletterSection"),
 
-settings:
-    document.getElementById("settingsSection")
+    settings:
+        document.getElementById("settingsSection")
 
 };
 
@@ -138,23 +234,23 @@ settings:
 
 const menuItems = {
 
-dashboard:
-    document.getElementById("menuDashboard"),
+    dashboard:
+        document.getElementById("menuDashboard"),
 
-products:
-    document.getElementById("menuProducts"),
+    products:
+        document.getElementById("menuProducts"),
 
-orders:
-    document.getElementById("menuOrders"),
+    orders:
+        document.getElementById("menuOrders"),
 
-customers:
-    document.getElementById("menuCustomers"),
+    customers:
+        document.getElementById("menuCustomers"),
 
-newsletter:
-    document.getElementById("menuNewsletter"),
+    newsletter:
+        document.getElementById("menuNewsletter"),
 
-settings:
-    document.getElementById("menuSettings")
+    settings:
+        document.getElementById("menuSettings")
 
 };
 
@@ -165,43 +261,43 @@ settings:
 
 function showSection(sectionName) {
 
-Object.values(sections).forEach(section => {
+    Object.values(sections).forEach(section => {
 
-    if (section) {
+        if (section) {
 
-        section.style.display = "none";
+            section.style.display = "none";
+
+        }
+
+    });
+
+    Object.values(menuItems).forEach(item => {
+
+        if (item) {
+
+            item.classList.remove("active");
+
+        }
+
+    });
+
+    const selectedSection =
+        sections[sectionName];
+
+    const selectedMenu =
+        menuItems[sectionName];
+
+    if (selectedSection) {
+
+        selectedSection.style.display = "block";
 
     }
 
-});
+    if (selectedMenu) {
 
-Object.values(menuItems).forEach(item => {
-
-    if (item) {
-
-        item.classList.remove("active");
+        selectedMenu.classList.add("active");
 
     }
-
-});
-
-const selectedSection =
-    sections[sectionName];
-
-const selectedMenu =
-    menuItems[sectionName];
-
-if (selectedSection) {
-
-    selectedSection.style.display = "block";
-
-}
-
-if (selectedMenu) {
-
-    selectedMenu.classList.add("active");
-
-}
 
 }
 
@@ -212,89 +308,89 @@ if (selectedMenu) {
 
 if (menuItems.dashboard) {
 
-menuItems.dashboard.addEventListener(
-    "click",
-    () => {
+    menuItems.dashboard.addEventListener(
+        "click",
+        () => {
 
-        showSection("dashboard");
+            showSection("dashboard");
 
-        loadDashboard();
+            loadDashboard();
 
-    }
-);
+        }
+    );
 
 }
 
 if (menuItems.products) {
 
-menuItems.products.addEventListener(
-    "click",
-    () => {
+    menuItems.products.addEventListener(
+        "click",
+        () => {
 
-        showSection("products");
+            showSection("products");
 
-        loadProducts();
+            loadProducts();
 
-    }
-);
+        }
+    );
 
 }
 
 if (menuItems.orders) {
 
-menuItems.orders.addEventListener(
-    "click",
-    () => {
+    menuItems.orders.addEventListener(
+        "click",
+        () => {
 
-        showSection("orders");
+            showSection("orders");
 
-        loadOrders();
+            loadOrders();
 
-    }
-);
+        }
+    );
 
 }
 
 if (menuItems.customers) {
 
-menuItems.customers.addEventListener(
-    "click",
-    () => {
+    menuItems.customers.addEventListener(
+        "click",
+        () => {
 
-        showSection("customers");
+            showSection("customers");
 
-        loadCustomers();
+            loadCustomers();
 
-    }
-);
+        }
+    );
 
 }
 
 if (menuItems.newsletter) {
 
-menuItems.newsletter.addEventListener(
-    "click",
-    () => {
+    menuItems.newsletter.addEventListener(
+        "click",
+        () => {
 
-        showSection("newsletter");
+            showSection("newsletter");
 
-        loadNewsletter();
+            loadNewsletter();
 
-    }
-);
+        }
+    );
 
 }
 
 if (menuItems.settings) {
 
-menuItems.settings.addEventListener(
-    "click",
-    () => {
+    menuItems.settings.addEventListener(
+        "click",
+        () => {
 
-        showSection("settings");
+            showSection("settings");
 
-    }
-);
+        }
+    );
 
 }
 
@@ -304,170 +400,167 @@ menuItems.settings.addEventListener(
 // =======================================
 
 const quickAddProduct =
-document.getElementById("quickAddProduct");
+    document.getElementById("quickAddProduct");
 
 const quickViewOrders =
-document.getElementById("quickViewOrders");
+    document.getElementById("quickViewOrders");
 
 const quickViewCustomers =
-document.getElementById("quickViewCustomers");
+    document.getElementById("quickViewCustomers");
 
 if (quickAddProduct) {
 
-quickAddProduct.addEventListener(
-    "click",
-    () => {
+    quickAddProduct.addEventListener(
+        "click",
+        () => {
 
-        showSection("products");
+            showSection("products");
 
-        const formContainer =
-            document.getElementById(
-                "productFormContainer"
-            );
+            const formContainer =
+                document.getElementById(
+                    "productFormContainer"
+                );
 
-        if (formContainer) {
+            if (formContainer) {
 
-            formContainer.style.display =
-                "block";
+                formContainer.style.display =
+                    "block";
+
+            }
+
+            const showButton =
+                document.getElementById(
+                    "showProductForm"
+                );
+
+            if (showButton) {
+
+                showButton.innerHTML = `
+                    <i class="bi bi-x-circle"></i>
+                    Close
+                `;
+
+            }
 
         }
-
-        const showButton =
-            document.getElementById(
-                "showProductForm"
-            );
-
-        if (showButton) {
-
-            showButton.innerHTML = `
-                <i class="bi bi-x-circle"></i>
-                Close
-            `;
-
-        }
-
-    }
-);
+    );
 
 }
 
 if (quickViewOrders) {
 
-quickViewOrders.addEventListener(
-    "click",
-    () => {
+    quickViewOrders.addEventListener(
+        "click",
+        () => {
 
-        showSection("orders");
+            showSection("orders");
 
-        loadOrders();
+            loadOrders();
 
-    }
-);
+        }
+    );
 
 }
 
 if (quickViewCustomers) {
 
-quickViewCustomers.addEventListener(
-    "click",
-    () => {
+    quickViewCustomers.addEventListener(
+        "click",
+        () => {
 
-        showSection("customers");
+            showSection("customers");
 
-        loadCustomers();
+            loadCustomers();
 
-    }
-);
+        }
+    );
 
 }
 
-
+ 
 // =======================================
-// LOGOUT
+// ADMIN LOGOUT
 // =======================================
 
 const adminLogout =
-document.getElementById("adminLogout");
+    document.getElementById("adminLogout");
 
 if (adminLogout) {
 
-adminLogout.addEventListener(
-    "click",
-    () => {
+    adminLogout.style.cursor = "pointer";
 
-        const confirmed =
-            confirm(
-                "Are you sure you want to log out?"
+    adminLogout.addEventListener(
+        "click",
+        function () {
+
+            localStorage.removeItem(
+                "adminLoggedIn"
             );
-
-        if (!confirmed) {
-
-            return;
+            
+            localStorage.removeItem(
+                "adminToken"
+            );
+            
+            localStorage.removeItem(
+                "adminUser"
+            );
+            
+            window.location.href =
+                "admin-login.html";
 
         }
-
-        localStorage.removeItem(
-            "adminLoggedIn"
-        );
-
-        window.location.href =
-            "admin-login.html";
-
-    }
-);
+    );
 
 }
-
-
 // =======================================
 // SHOW / HIDE PRODUCT FORM
 // =======================================
 
 const showProductForm =
-document.getElementById("showProductForm");
+    document.getElementById("showProductForm");
 
 const productFormContainer =
-document.getElementById(
-    "productFormContainer"
-);
+    document.getElementById(
+        "productFormContainer"
+    );
 
 if (
-showProductForm &&
-productFormContainer
+    showProductForm &&
+    productFormContainer
 ) {
 
-showProductForm.addEventListener(
-    "click",
-    () => {
+    showProductForm.addEventListener(
+        "click",
+        () => {
 
-        const isHidden =
-            productFormContainer.style.display ===
-            "none";
-
-        if (isHidden) {
-
-            productFormContainer.style.display =
-                "block";
-
-            showProductForm.innerHTML = `
-                <i class="bi bi-x-circle"></i>
-                Close
-            `;
-
-        } else {
-
-            productFormContainer.style.display =
+            const isHidden =
+                productFormContainer.style.display ===
                 "none";
 
-            showProductForm.innerHTML = `
-                <i class="bi bi-plus-circle"></i>
-                Add New Product
-            `;
+            if (isHidden) {
+
+                productFormContainer.style.display =
+                    "block";
+
+                showProductForm.innerHTML = `
+                    <i class="bi bi-x-circle"></i>
+                    Close
+                `;
+
+            } else {
+
+                productFormContainer.style.display =
+                    "none";
+
+                showProductForm.innerHTML = `
+                    <i class="bi bi-plus-circle"></i>
+                    Add New Product
+                `;
+
+            }
 
         }
-
-    }
-);
+    );
 
 }
 
@@ -478,28 +571,28 @@ showProductForm.addEventListener(
 
 function getProductImage(product) {
 
-if (
-    !product.images ||
-    product.images.length === 0
-) {
+    if (
+        !product.images ||
+        product.images.length === 0
+    ) {
 
-    return "";
+        return "";
 
-}
+    }
 
-const image =
-    product.images[0];
+    const image =
+        product.images[0];
 
-if (
-    image.startsWith("http://") ||
-    image.startsWith("https://")
-) {
+    if (
+        image.startsWith("http://") ||
+        image.startsWith("https://")
+    ) {
 
-    return image;
+        return image;
 
-}
+    }
 
-return `${API_URL}${image}`;
+    return `${API_URL}${image}`;
 
 }
 
@@ -510,395 +603,371 @@ return `${API_URL}${image}`;
 
 async function loadProducts() {
 
-const table =
-    document.getElementById(
-        "productsTable"
-    );
-
-try {
-
-    const response =
-        await fetch(
-            `${API_URL}/products`
-        );
-
-    if (!response.ok) {
-
-        throw new Error(
-            "Unable to load products."
-        );
-
-    }
-
-    const products =
-        await response.json();
-
-    const totalProducts =
+    const table =
         document.getElementById(
-            "totalProducts"
+            "productsTable"
         );
 
-    if (totalProducts) {
+    try {
 
-        totalProducts.innerText =
-            products.length;
+        const response =
+            await fetch(
+                `${API_URL}/products`
+            );
 
-    }
+        if (!response.ok) {
 
-    if (!table) {
+            throw new Error(
+                "Unable to load products."
+            );
+
+        }
+
+        const products =
+            await response.json();
+
+        const totalProducts =
+            document.getElementById(
+                "totalProducts"
+            );
+
+        if (totalProducts) {
+
+            totalProducts.innerText =
+                products.length;
+
+        }
+
+        if (!table) {
+
+            return products;
+
+        }
+
+        if (products.length === 0) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                    colspan="6"
+                    class="text-center">
+
+                        No products have been added yet.
+                        Click "Add New Product" to create
+                        your first product.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return products;
+
+        }
+
+        table.innerHTML = "";
+
+        products.forEach(product => {
+
+            const imageURL =
+                getProductImage(product);
+
+            table.innerHTML += `
+
+                <tr>
+
+                    <td>
+
+                        ${
+                            imageURL
+                                ? `
+                                <img
+                                src="${imageURL}"
+                                alt="${product.name}"
+                                style="
+                                width:70px;
+                                height:80px;
+                                object-fit:cover;
+                                border-radius:8px;
+                                ">
+                                `
+                                : `
+                                <span>
+                                    No image
+                                </span>
+                                `
+                        }
+
+                    </td>
+
+                    <td>
+                        ${product.name || ""}
+                    </td>
+
+                    <td>
+                        ${product.category || "-"}
+                    </td>
+
+                    <td>
+
+                        KES ${Number(
+                            product.price || 0
+                        ).toLocaleString()}
+
+                    </td>
+
+                    <td>
+                        ${product.stock ?? 0}
+                    </td>
+
+                    <td>
+
+                        <button
+                        type="button"
+                        class="btn btn-sm btn-warning"
+                        onclick="editProduct('${product._id}')">
+
+                            <i class="bi bi-pencil"></i>
+
+                        </button>
+
+                        <button
+                        type="button"
+                        class="btn btn-sm btn-danger ms-2"
+                        onclick="deleteProduct('${product._id}')">
+
+                            <i class="bi bi-trash"></i>
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
 
         return products;
 
-    }
+    } catch (error) {
 
-    if (products.length === 0) {
+        console.error(
+            "Load products error:",
+            error
+        );
 
-        table.innerHTML = `
+        if (table) {
 
-            <tr>
+            table.innerHTML = `
 
-                <td
-                colspan="6"
-                class="text-center">
+                <tr>
 
-                    No products have been added yet.
-                    Click "Add New Product" to create
-                    your first product.
+                    <td
+                    colspan="6"
+                    class="text-center text-danger">
 
-                </td>
+                        Unable to load products.
 
-            </tr>
+                    </td>
 
-        `;
+                </tr>
 
-        return products;
+            `;
 
-    }
+        }
 
-    table.innerHTML = "";
-
-    products.forEach(product => {
-
-        const imageURL =
-            getProductImage(product);
-
-        table.innerHTML += `
-
-            <tr>
-
-                <td>
-
-                    ${
-                        imageURL
-                            ? `
-                            <img
-                            src="${imageURL}"
-                            alt="${product.name}"
-                            style="
-                            width:70px;
-                            height:80px;
-                            object-fit:cover;
-                            border-radius:8px;
-                            ">
-                            `
-                            : `
-                            <span>
-                                No image
-                            </span>
-                            `
-                    }
-
-                </td>
-
-                <td>
-                    ${product.name || ""}
-                </td>
-
-                <td>
-                    ${product.category || "-"}
-                </td>
-
-                <td>
-
-                    KES ${Number(
-                        product.price || 0
-                    ).toLocaleString()}
-
-                </td>
-
-                <td>
-                    ${product.stock ?? 0}
-                </td>
-
-                <td>
-
-                    <button
-                    type="button"
-                    class="btn btn-sm btn-warning"
-                    onclick="editProduct('${product._id}')">
-
-                        <i class="bi bi-pencil"></i>
-
-                    </button>
-
-                    <button
-                    type="button"
-                    class="btn btn-sm btn-danger ms-2"
-                    onclick="deleteProduct('${product._id}')">
-
-                        <i class="bi bi-trash"></i>
-
-                    </button>
-
-                </td>
-
-            </tr>
-
-        `;
-
-    });
-
-    return products;
-
-} catch (error) {
-
-    console.error(
-        "Load products error:",
-        error
-    );
-
-    if (table) {
-
-        table.innerHTML = `
-
-            <tr>
-
-                <td
-                colspan="6"
-                class="text-center text-danger">
-
-                    Unable to load products.
-
-                </td>
-
-            </tr>
-
-        `;
+        return [];
 
     }
-
-    return [];
 
 }
-
-}
-
 // =======================================
 // PRODUCT EDIT MODE
 // =======================================
 
 let editingProductId = null;
 
-
 // =======================================
 // SAVE PRODUCT TO MONGODB
 // =======================================
 
 const productForm =
-document.getElementById("productForm");
+    document.getElementById("productForm");
 
 if (productForm) {
 
-productForm.addEventListener(
-    "submit",
-    async (e) => {
+    productForm.addEventListener(
+        "submit",
+        async (e) => {
 
-        e.preventDefault();
+            e.preventDefault();
 
-        const formData =
-            new FormData();
-
-        formData.append(
-            "name",
-            document
-                .getElementById("productName")
-                .value
-                .trim()
-        );
-
-        formData.append(
-            "price",
-            document
-                .getElementById("productPrice")
-                .value
-        );
-
-        formData.append(
-            "category",
-            document
-                .getElementById("productCategory")
-                .value
-                .trim()
-        );
-
-        formData.append(
-            "description",
-            document
-                .getElementById("productDescription")
-                .value
-                .trim()
-        );
-
-        formData.append(
-            "stock",
-            document
-                .getElementById("productStock")
-                .value || 0
-        );
-
-        const sizes =
-            document
-                .getElementById("productSizes")
-                .value
-                .split(",")
-                .map(size => size.trim())
-                .filter(Boolean);
-
-        const colors =
-            document
-                .getElementById("productColors")
-                .value
-                .split(",")
-                .map(color => color.trim())
-                .filter(Boolean);
-
-        formData.append(
-            "sizes",
-            JSON.stringify(sizes)
-        );
-
-        formData.append(
-            "colors",
-            JSON.stringify(colors)
-        );
-
-        formData.append(
-            "featured",
-            "false"
-        );
-
-        const imageFiles =
-            document.getElementById(
-                "productImages"
-            ).files;
-
-        for (
-            let i = 0;
-            i < imageFiles.length;
-            i++
-        ) {
+            const formData =
+                new FormData();
 
             formData.append(
-                "images",
-                imageFiles[i]
+                "name",
+                document
+                    .getElementById("productName")
+                    .value
+                    .trim()
             );
 
+            formData.append(
+                "price",
+                document
+                    .getElementById("productPrice")
+                    .value
+            );
+
+            formData.append(
+                "category",
+                document
+                    .getElementById("productCategory")
+                    .value
+                    .trim()
+            );
+
+            formData.append(
+                "description",
+                document
+                    .getElementById("productDescription")
+                    .value
+                    .trim()
+            );
+
+            formData.append(
+                "stock",
+                document
+                    .getElementById("productStock")
+                    .value || 0
+            );
+
+            const sizes =
+                document
+                    .getElementById("productSizes")
+                    .value
+                    .split(",")
+                    .map(size => size.trim())
+                    .filter(Boolean);
+
+            const colors =
+                document
+                    .getElementById("productColors")
+                    .value
+                    .split(",")
+                    .map(color => color.trim())
+                    .filter(Boolean);
+
+            formData.append(
+                "sizes",
+                JSON.stringify(sizes)
+            );
+
+            formData.append(
+                "colors",
+                JSON.stringify(colors)
+            );
+
+            formData.append(
+                "featured",
+                "false"
+            );
+
+            const imageFiles =
+                document.getElementById(
+                    "productImages"
+                ).files;
+
+            for (
+                let i = 0;
+                i < imageFiles.length;
+                i++
+            ) {
+
+                formData.append(
+                    "images",
+                    imageFiles[i]
+                );
+
+            }
+
+            try {
+
+                let response;
+
+if (editingProductId) {
+
+    // =======================================
+    // UPDATE EXISTING PRODUCT
+    // =======================================
+    response = await fetch(
+        `${API_URL}/products/${editingProductId}`,
+        {
+            method: "PUT",
+    
+            headers: {
+    
+                Authorization:
+                    `Bearer ${localStorage.getItem("adminToken")}`
+    
+            },
+    
+            body: formData
         }
+    );
 
-        try {
-            let response;
+} else {
 
-            if (editingProductId) {
-            
-                // EDIT EXISTING PRODUCT
-            
-                const updateData = {
-            
-                    name:
-                        document.getElementById("productName")
-                            .value.trim(),
-            
-                    price:
-                        Number(
-                            document.getElementById("productPrice")
-                                .value
-                        ),
-            
-                    category:
-                        document.getElementById("productCategory")
-                            .value.trim(),
-            
-                    description:
-                        document.getElementById("productDescription")
-                            .value.trim(),
-            
-                    stock:
-                        Number(
-                            document.getElementById("productStock")
-                                .value || 0
-                        ),
-            
-                    sizes,
-            
-                    colors
-            
-                };
-            
-                response =
-                    await fetch(
-                        `${API_URL}/products/${editingProductId}`,
-                        {
-                            method: "PUT",
-            
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-            
-                            body:
-                                JSON.stringify(updateData)
-                        }
+    // =======================================
+    // ADD NEW PRODUCT
+    // =======================================
+    response = await fetch(
+        `${API_URL}/products`,
+        {
+            method: "POST",
+    
+            headers: {
+    
+                Authorization:
+                    `Bearer ${localStorage.getItem("adminToken")}`
+    
+            },
+    
+            body: formData
+        }
+    );
+
+}
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to save product."
                     );
-            
-            } else {
-            
-                // ADD NEW PRODUCT
-            
-                response =
-                    await fetch(
-                        `${API_URL}/products`,
-                        {
-                            method: "POST",
-                            body: formData
-                        }
+
+                }
+                if (editingProductId) {
+
+                    alert(
+                        "Product updated successfully!"
                     );
-            
-            }
-            const data =
-                await response.json();
-
-            if (!response.ok) {
-
-                throw new Error(
-                    data.message ||
-                    "Unable to save product."
-                );
-
-            }
-
-            if (editingProductId) {
-
-                alert(
-                    "Product updated successfully!"
-                );
-            
-            } else {
-            
-                alert(
-                    "Product added successfully!"
-                );
-            
-            }
-            // Exit edit mode
+                
+                } else {
+                
+                    alert(
+                        "Product added successfully!"
+                    );
+                
+                }
+                // Exit edit mode
 editingProductId = null;
 
 const submitButton =
@@ -911,49 +980,48 @@ submitButton.innerHTML = `
     Save Product
 `;
 
-            productForm.reset();
+                productForm.reset();
 
-            if (productFormContainer) {
+                if (productFormContainer) {
 
-                productFormContainer.style.display =
-                    "none";
+                    productFormContainer.style.display =
+                        "none";
+
+                }
+
+                if (showProductForm) {
+
+                    showProductForm.innerHTML = `
+                        <i class="bi bi-plus-circle"></i>
+                        Add New Product
+                    `;
+
+                }
+
+                await loadProducts();
+
+                await loadDashboard();
+
+            } catch (error) {
+
+                console.error(
+                    "Save product error:",
+                    error
+                );
+
+                alert(
+                    error.message ||
+                    "Unable to save product."
+                );
 
             }
-
-            if (showProductForm) {
-
-                showProductForm.innerHTML = `
-                    <i class="bi bi-plus-circle"></i>
-                    Add New Product
-                `;
-
-            }
-
-            await loadProducts();
-
-            await loadDashboard();
-
-        } catch (error) {
-
-            console.error(
-                "Save product error:",
-                error
-            );
-
-            alert(
-                error.message ||
-                "Unable to save product."
-            );
 
         }
-
-    }
-);
+    );
 
 }
 
-
-// =======================================
+ // =======================================
 // DELETE PRODUCT
 // =======================================
 
@@ -967,25 +1035,41 @@ async function deleteProduct(id) {
 
     try {
 
-        const response = await fetch(
-            `${API_URL}/products/${id}`,
-            {
-                method: "DELETE"
-            }
-        );
+        const response =
+            await fetch(
+                `${API_URL}/products/${id}`,
+                {
 
-        const data = await response.json();
+                    method: "DELETE",
+
+                    headers: {
+
+                        Authorization:
+                            `Bearer ${localStorage.getItem("adminToken")}`
+
+                    }
+
+                }
+            );
+
+        const data =
+            await response.json();
 
         if (!response.ok) {
 
             throw new Error(
+
                 data.message ||
+
                 "Unable to delete product."
+
             );
 
         }
 
-        alert("Product deleted successfully!");
+        alert(
+            "Product deleted successfully!"
+        );
 
         await loadProducts();
 
@@ -999,14 +1083,16 @@ async function deleteProduct(id) {
         );
 
         alert(
+
             error.message ||
+
             "Unable to delete product."
+
         );
 
     }
 
 }
-
 
 // =======================================
 // EDIT PRODUCT
@@ -1100,25 +1186,48 @@ async function editProduct(id) {
     }
 
 }
-
-
-// =======================================
+ // =======================================
 // DASHBOARD STATISTICS
 // =======================================
 
 async function loadDashboard() {
 
-try {
+    try {
 
-    const response =
-        await fetch(
-            `${API_URL}/products`
-        );
+        const adminToken =
+            localStorage.getItem(
+                "adminToken"
+            );
 
-    if (response.ok) {
+        const response =
+            await fetch(
+                `${API_URL}/admin/stats`,
+                {
+                    headers: {
 
-        const products =
+                        Authorization:
+                            `Bearer ${adminToken}`
+
+                    }
+                }
+            );
+
+        const data =
             await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load dashboard statistics."
+            );
+
+        }
+
+
+        // =======================================
+        // PRODUCTS
+        // =======================================
 
         const totalProducts =
             document.getElementById(
@@ -1128,101 +1237,106 @@ try {
         if (totalProducts) {
 
             totalProducts.innerText =
-                products.length;
+                data.totalProducts || 0;
 
         }
 
+
+        // =======================================
+        // ORDERS
+        // =======================================
+
+        const totalOrders =
+            document.getElementById(
+                "totalOrders"
+            );
+
+        if (totalOrders) {
+
+            totalOrders.innerText =
+                data.totalOrders || 0;
+
+        }
+
+
+        // =======================================
+        // CUSTOMERS
+        // =======================================
+
+        const totalCustomers =
+            document.getElementById(
+                "totalCustomers"
+            );
+
+        if (totalCustomers) {
+
+            totalCustomers.innerText =
+                data.totalCustomers || 0;
+
+        }
+
+
+        // =======================================
+        // REVENUE
+        // =======================================
+
+        const totalRevenue =
+            document.getElementById(
+                "totalRevenue"
+            );
+
+        if (totalRevenue) {
+
+            totalRevenue.innerText =
+                "KES " +
+                Number(
+                    data.totalRevenue || 0
+                ).toLocaleString();
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Dashboard statistics error:",
+            error
+        );
+
     }
 
-} catch (error) {
-
-    console.error(
-        "Dashboard product count error:",
-        error
-    );
-
 }
-
-
-/*
-    Orders and customers do not yet have
-    backend GET routes in your current
-    server.js.
-
-    Keep these at zero until those routes
-    are built rather than showing fake
-    localStorage data.
-*/
-
-const totalOrders =
-    document.getElementById(
-        "totalOrders"
-    );
-
-const totalCustomers =
-    document.getElementById(
-        "totalCustomers"
-    );
-
-const totalRevenue =
-    document.getElementById(
-        "totalRevenue"
-    );
-
-if (totalOrders) {
-
-    totalOrders.innerText = "0";
-
-}
-
-if (totalCustomers) {
-
-    totalCustomers.innerText = "0";
-
-}
-
-if (totalRevenue) {
-
-    totalRevenue.innerText =
-        "KES 0";
-
-}
-
-}
-
-
 // =======================================
 // ORDERS SECTION
 // =======================================
 
 function loadOrders() {
 
-const table =
-    document.getElementById(
-        "ordersTable"
-    );
+    const table =
+        document.getElementById(
+            "ordersTable"
+        );
 
-if (!table) {
+    if (!table) {
 
-    return;
+        return;
 
-}
+    }
 
-table.innerHTML = `
+    table.innerHTML = `
 
-    <tr>
+        <tr>
 
-        <td
-        colspan="8"
-        class="text-center">
+            <td
+            colspan="8"
+            class="text-center">
 
-            No orders have been loaded yet.
+                No orders have been loaded yet.
 
-        </td>
+            </td>
 
-    </tr>
+        </tr>
 
-`;
+    `;
 
 }
 
@@ -1233,32 +1347,32 @@ table.innerHTML = `
 
 function loadCustomers() {
 
-const table =
-    document.getElementById(
-        "customersTable"
-    );
+    const table =
+        document.getElementById(
+            "customersTable"
+        );
 
-if (!table) {
+    if (!table) {
 
-    return;
+        return;
 
-}
+    }
 
-table.innerHTML = `
+    table.innerHTML = `
 
-    <tr>
+        <tr>
 
-        <td
-        colspan="5"
-        class="text-center">
+            <td
+            colspan="5"
+            class="text-center">
 
-            No customers have been loaded yet.
+                No customers have been loaded yet.
 
-        </td>
+            </td>
 
-    </tr>
+        </tr>
 
-`;
+    `;
 
 }
 
@@ -1269,39 +1383,1263 @@ table.innerHTML = `
 
 function loadNewsletter() {
 
-const table =
-    document.getElementById(
-        "newsletterTable"
-    );
+    const table =
+        document.getElementById(
+            "newsletterTable"
+        );
 
-if (!table) {
+    if (!table) {
 
-    return;
+        return;
+
+    }
+
+    table.innerHTML = `
+
+        <tr>
+
+            <td
+            colspan="3"
+            class="text-center">
+
+                No newsletter subscribers
+                have been loaded yet.
+
+            </td>
+
+        </tr>
+
+    `;
 
 }
 
-table.innerHTML = `
+ 
 
-    <tr>
 
-        <td
-        colspan="3"
-        class="text-center">
+// =======================================
+// INITIALIZE ADMIN DASHBOARD
+// =======================================
 
-            No newsletter subscribers
-            have been loaded yet.
+async function initializeAdmin() {
 
-        </td>
+    if (!sections.dashboard) {
 
-    </tr>
+        return;
 
-`;
+    }
+
+    showSection("dashboard");
+
+    await loadDashboard();
+
+}
+
+initializeAdmin();
+
+// =======================================
+// ORDERS MANAGEMENT
+// =======================================
+
+let allOrders = [];
+
+
+// =======================================
+// LOAD ORDERS
+// =======================================
+
+async function loadOrders() {
+
+    const table =
+        document.getElementById(
+            "ordersTable"
+        );
+
+    if (!table) return;
+
+
+    try {
+        const response =
+        await fetch(
+            `${API_URL}/orders`,
+            {
+                headers: {
+    
+                    Authorization:
+                        `Bearer ${localStorage.getItem("adminToken")}`
+    
+                }
+            }
+        );
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load orders."
+            );
+
+        }
+
+
+        allOrders =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        updateOrderStatistics(
+            allOrders
+        );
+
+
+        renderOrders(
+            allOrders
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Load orders error:",
+            error
+        );
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="text-center text-danger"
+                >
+
+                    Unable to load orders.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
 
 }
 
 
 // =======================================
-// SETTINGS FORM
+// ORDER STATISTICS
+// =======================================
+
+function updateOrderStatistics(
+    orders
+) {
+
+    const total =
+        orders.length;
+
+
+    const pending =
+        orders.filter(
+            order =>
+                order.orderStatus ===
+                "Pending"
+        ).length;
+
+
+    const shipped =
+        orders.filter(
+            order =>
+                order.orderStatus ===
+                "Shipped"
+        ).length;
+
+
+    const delivered =
+        orders.filter(
+            order =>
+                order.orderStatus ===
+                "Delivered"
+        ).length;
+
+
+    const totalElement =
+        document.getElementById(
+            "ordersCount"
+        );
+
+    const pendingElement =
+        document.getElementById(
+            "pendingOrdersCount"
+        );
+
+    const shippedElement =
+        document.getElementById(
+            "shippedOrdersCount"
+        );
+
+    const deliveredElement =
+        document.getElementById(
+            "deliveredOrdersCount"
+        );
+
+
+    if (totalElement) {
+
+        totalElement.innerText =
+            total;
+
+    }
+
+
+    if (pendingElement) {
+
+        pendingElement.innerText =
+            pending;
+
+    }
+
+
+    if (shippedElement) {
+
+        shippedElement.innerText =
+            shipped;
+
+    }
+
+
+    if (deliveredElement) {
+
+        deliveredElement.innerText =
+            delivered;
+
+    }
+
+}
+
+
+// =======================================
+// RENDER ORDERS
+// =======================================
+
+function renderOrders(
+    orders
+) {
+
+    const table =
+        document.getElementById(
+            "ordersTable"
+        );
+
+
+    if (!table) return;
+
+
+    if (orders.length === 0) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="text-center"
+                >
+
+                    No orders have been placed yet.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    table.innerHTML = "";
+
+
+    orders.forEach(
+        order => {
+
+            const date =
+                new Date(
+                    order.createdAt
+                )
+                .toLocaleDateString(
+                    "en-KE",
+                    {
+
+                        year:
+                            "numeric",
+
+                        month:
+                            "short",
+
+                        day:
+                            "numeric"
+
+                    }
+                );
+
+
+            const customerName =
+                `${order.customer?.firstName || ""}
+                 ${order.customer?.lastName || ""}`
+                    .trim();
+
+
+            table.innerHTML += `
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+
+                            ${order.orderNumber}
+
+                        </strong>
+
+                    </td>
+
+
+                    <td>
+
+                        ${customerName}
+
+                        <br>
+
+                        <small
+                            class="text-muted"
+                        >
+
+                            ${order.customer?.email || ""}
+
+                        </small>
+
+                    </td>
+
+
+                    <td>
+
+                        ${date}
+
+                    </td>
+
+
+                    <td>
+
+                        KES
+                        ${Number(
+                            order.total || 0
+                        ).toLocaleString()}
+
+                    </td>
+
+
+                    <td>
+
+                        <select
+                            class="form-select form-select-sm"
+                            onchange="
+                                updatePaymentStatus(
+                                    '${order._id}',
+                                    this.value
+                                )
+                            "
+                        >
+
+                            ${createPaymentOptions(
+                                order.paymentStatus
+                            )}
+
+                        </select>
+
+                    </td>
+
+
+                    <td>
+
+                        <select
+                            class="form-select form-select-sm"
+                            onchange="
+                                updateOrderStatus(
+                                    '${order._id}',
+                                    this.value
+                                )
+                            "
+                        >
+
+                            ${createOrderStatusOptions(
+                                order.orderStatus
+                            )}
+
+                        </select>
+
+                    </td>
+
+
+                    <td>
+
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-dark"
+                            onclick="
+                                viewOrder(
+                                    '${order._id}'
+                                )
+                            "
+                        >
+
+                            <i
+                                class="bi bi-eye"
+                            ></i>
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+}
+
+
+// =======================================
+// ORDER STATUS OPTIONS
+// =======================================
+
+function createOrderStatusOptions(
+    currentStatus
+) {
+
+    const statuses = [
+
+        "Pending",
+
+        "Confirmed",
+
+        "Processing",
+
+        "Shipped",
+
+        "Delivered",
+
+        "Cancelled"
+
+    ];
+
+
+    return statuses
+        .map(
+            status => `
+
+                <option
+                    value="${status}"
+
+                    ${
+                        status ===
+                        currentStatus
+                            ? "selected"
+                            : ""
+                    }
+                >
+
+                    ${status}
+
+                </option>
+
+            `
+        )
+        .join("");
+
+}
+
+
+// =======================================
+// PAYMENT STATUS OPTIONS
+// =======================================
+
+function createPaymentOptions(
+    currentStatus
+) {
+
+    const statuses = [
+
+        "Pending",
+
+        "Paid",
+
+        "Failed",
+
+        "Refunded"
+
+    ];
+
+
+    return statuses
+        .map(
+            status => `
+
+                <option
+                    value="${status}"
+
+                    ${
+                        status ===
+                        currentStatus
+                            ? "selected"
+                            : ""
+                    }
+                >
+
+                    ${status}
+
+                </option>
+
+            `
+        )
+        .join("");
+
+}
+
+
+// =======================================
+// UPDATE ORDER STATUS
+// =======================================
+
+async function updateOrderStatus(
+    id,
+    orderStatus
+) {
+
+    await updateOrder(
+        id,
+        {
+            orderStatus
+        }
+    );
+
+}
+
+
+// =======================================
+// UPDATE PAYMENT STATUS
+// =======================================
+
+async function updatePaymentStatus(
+    id,
+    paymentStatus
+) {
+
+    await updateOrder(
+        id,
+        {
+            paymentStatus
+        }
+    );
+
+}
+
+
+// =======================================
+// SEND ORDER UPDATE
+// =======================================
+
+async function updateOrder(
+    id,
+    updateData
+) {
+
+    try {
+
+        const response =
+    await fetch(
+        `${API_URL}/orders/${id}/status`,
+        {
+            method: "PUT",
+
+            headers: {
+
+                "Content-Type":
+                    "application/json",
+
+                Authorization:
+                    `Bearer ${localStorage.getItem("adminToken")}`
+
+            },
+
+            body:
+                JSON.stringify({
+
+                    orderStatus,
+                    paymentStatus
+
+                })
+
+        }
+    );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to update order."
+            );
+
+        }
+
+
+        await loadOrders();
+
+        await loadDashboard();
+
+
+    } catch (error) {
+
+        console.error(
+            "Update order error:",
+            error
+        );
+
+
+        alert(
+            error.message ||
+            "Unable to update order."
+        );
+
+
+        await loadOrders();
+
+    }
+
+}
+
+
+// =======================================
+// FILTER ORDERS
+// =======================================
+
+const orderFilter =
+    document.getElementById(
+        "orderFilter"
+    );
+
+
+if (orderFilter) {
+
+    orderFilter.addEventListener(
+        "change",
+        () => {
+
+            const status =
+                orderFilter.value;
+
+
+            if (
+                status === "All"
+            ) {
+
+                renderOrders(
+                    allOrders
+                );
+
+                return;
+
+            }
+
+
+            const filteredOrders =
+                allOrders.filter(
+                    order =>
+                        order.orderStatus ===
+                        status
+                );
+
+
+            renderOrders(
+                filteredOrders
+            );
+
+        }
+    );
+
+}
+
+
+// =======================================
+// VIEW ORDER
+// =======================================
+
+async function viewOrder(id) {
+
+    const order =
+        allOrders.find(
+            item =>
+                item._id === id
+        );
+
+
+    if (!order) {
+
+        alert(
+            "Order not found."
+        );
+
+        return;
+
+    }
+
+
+    const products =
+        order.items
+            .map(
+                item =>
+
+                    `${item.name}
+                     x${item.quantity}
+                     - KES ${Number(
+                        item.price *
+                        item.quantity
+                    ).toLocaleString()}`
+
+            )
+            .join("\n");
+
+
+    alert(
+
+`ORDER DETAILS
+
+Order:
+${order.orderNumber}
+
+Customer:
+${order.customer.firstName}
+${order.customer.lastName || ""}
+
+Phone:
+${order.customer.phone}
+
+Email:
+${order.customer.email}
+
+Products:
+${products}
+
+Subtotal:
+KES ${Number(
+    order.subtotal
+).toLocaleString()}
+
+Delivery:
+KES ${Number(
+    order.deliveryFee
+).toLocaleString()}
+
+TOTAL:
+KES ${Number(
+    order.total
+).toLocaleString()}
+
+Payment:
+${order.paymentStatus}
+
+Order Status:
+${order.orderStatus}`
+
+    );
+
+}
+
+
+// Load orders when admin opens
+loadOrders();
+ 
+
+// =======================================
+// LOAD CUSTOMERS
+// =======================================
+
+async function loadCustomers() {
+
+    const table =
+        document.getElementById(
+            "customersTable"
+        );
+
+    if (!table) return;
+
+    const adminToken =
+        localStorage.getItem(
+            "adminToken"
+        );
+
+    try {
+
+        // =======================================
+        // GET ALL CUSTOMERS
+        // =======================================
+
+        const response =
+            await fetch(
+                `${API_URL}/customers`,
+                {
+                    headers: {
+
+                        Authorization:
+                            `Bearer ${adminToken}`
+
+                    }
+                }
+            );
+
+        const customers =
+            await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                customers.message ||
+                "Unable to load customers."
+            );
+
+        }
+
+
+        // =======================================
+        // NO CUSTOMERS
+        // =======================================
+
+        if (customers.length === 0) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                    colspan="5"
+                    class="text-center">
+
+                        No customers found.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        table.innerHTML = "";
+
+
+        // =======================================
+        // DISPLAY CUSTOMERS
+        // =======================================
+
+        for (const customer of customers) {
+
+            let orderCount = 0;
+
+
+            // ===================================
+            // GET CUSTOMER ORDER COUNT
+            // ===================================
+
+            try {
+
+                const detailsResponse =
+                    await fetch(
+                        `${API_URL}/customers/${customer._id}`,
+                        {
+                            headers: {
+
+                                Authorization:
+                                    `Bearer ${adminToken}`
+
+                            }
+                        }
+                    );
+
+                if (detailsResponse.ok) {
+
+                    const details =
+                        await detailsResponse.json();
+
+                    orderCount =
+                        details.statistics
+                            ?.totalOrders || 0;
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Customer order count error:",
+                    error
+                );
+
+            }
+
+
+            // ===================================
+            // CUSTOMER DETAILS
+            // ===================================
+
+            const fullName =
+                `${customer.firstName || ""} ${customer.lastName || ""}`
+                    .trim();
+
+            const joinedDate =
+                customer.createdAt
+
+                    ? new Date(
+                        customer.createdAt
+                    ).toLocaleDateString()
+
+                    : "-";
+
+
+            table.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${fullName || "-"}
+                    </td>
+
+                    <td>
+                        ${customer.email || "-"}
+                    </td>
+
+                    <td>
+                        ${customer.phone || "-"}
+                    </td>
+
+                    <td>
+                        ${orderCount}
+                    </td>
+
+                    <td>
+                        ${joinedDate}
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Load customers error:",
+            error
+        );
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                colspan="5"
+                class="text-center text-danger">
+
+                    Unable to load customers.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+loadCustomers();
+// =======================================
+// LOAD NEWSLETTER SUBSCRIBERS
+// =======================================
+
+async function loadNewsletter() {
+
+    const table =
+        document.getElementById("newsletterTable");
+
+    if (!table) return;
+
+    try {
+        const response =
+        await fetch(
+            `${API_URL}/newsletter`,
+            {
+                headers: {
+    
+                    Authorization:
+                        `Bearer ${localStorage.getItem("adminToken")}`
+    
+                }
+            }
+        );
+        const subscribers =
+            await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                subscribers.message ||
+                "Unable to load newsletter subscribers."
+            );
+
+        }
+
+        if (subscribers.length === 0) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                    colspan="3"
+                    class="text-center">
+
+                        No newsletter subscribers yet.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+        table.innerHTML = "";
+
+        subscribers.forEach(subscriber => {
+
+            const subscribedDate =
+                subscriber.createdAt
+                    ? new Date(
+                        subscriber.createdAt
+                    ).toLocaleDateString()
+                    : "-";
+
+            table.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${subscriber.email || "-"}
+                    </td>
+
+                    <td>
+                        ${subscribedDate}
+                    </td>
+
+                    <td>
+
+                        <button
+                        type="button"
+                        class="btn btn-sm btn-danger"
+                        onclick="deleteSubscriber('${subscriber._id}')">
+
+                            <i class="bi bi-trash"></i>
+
+                            Remove
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Load newsletter error:",
+            error
+        );
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                colspan="3"
+                class="text-center text-danger">
+
+                    Unable to load newsletter subscribers.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+// =======================================
+// DELETE NEWSLETTER SUBSCRIBER
+// =======================================
+
+async function deleteSubscriber(id) {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to remove this subscriber?"
+        );
+
+    if (!confirmed) return;
+
+    try {
+
+        const response =
+    await fetch(
+        `${API_URL}/newsletter/${id}`,
+        {
+            method: "DELETE",
+
+            headers: {
+
+                Authorization:
+                    `Bearer ${localStorage.getItem("adminToken")}`
+
+            }
+        }
+    );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to remove subscriber."
+            );
+
+        }
+
+        alert(
+            "Subscriber removed successfully!"
+        );
+
+        await loadNewsletter();
+
+    } catch (error) {
+
+        console.error(
+            "Delete subscriber error:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Unable to remove subscriber."
+        );
+
+    }
+
+}
+
+
+// =======================================
+// INITIAL LOAD
+// =======================================
+
+loadNewsletter();
+
+// =======================================
+// LOAD ADMIN SETTINGS
+// =======================================
+
+async function loadSettings() {
+
+    const storeName =
+        document.getElementById("storeName");
+
+    const storeEmail =
+        document.getElementById("storeEmail");
+
+    if (!storeName || !storeEmail) return;
+
+    try {
+
+        const response =
+    await fetch(
+        `${API_URL}/settings`,
+        {
+            headers: {
+
+                Authorization:
+                    `Bearer ${localStorage.getItem("adminToken")}`
+
+            }
+        }
+    );
+
+        const settings =
+            await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                settings.message ||
+                "Unable to load settings."
+            );
+
+        }
+
+        storeName.value =
+            settings.storeName || "";
+
+        storeEmail.value =
+            settings.storeEmail || "";
+
+    } catch (error) {
+
+        console.error(
+            "Load settings error:",
+            error
+        );
+
+    }
+
+}
+
+
+// =======================================
+// SAVE ADMIN SETTINGS
 // =======================================
 
 const adminSettingsForm =
@@ -1311,38 +2649,74 @@ document.getElementById(
 
 if (adminSettingsForm) {
 
-adminSettingsForm.addEventListener(
-    "submit",
-    (e) => {
+    adminSettingsForm.addEventListener(
+        "submit",
+        async (event) => {
 
-        e.preventDefault();
+            event.preventDefault();
 
-        alert(
-            "Settings section is connected. Backend settings storage will be added next."
-        );
+            try {
+                const response =
+                await fetch(
+                    `${API_URL}/settings`,
+                    {
+                        method: "PUT",
+            
+                        headers: {
+            
+                            "Content-Type":
+                                "application/json",
+            
+                            Authorization:
+                                `Bearer ${localStorage.getItem("adminToken")}`
+            
+                        },
+            
+                        body:
+                            JSON.stringify({
+            
+                                storeName,
+            
+                                storeEmail
+            
+                            })
+            
+                    }
+                );
 
-    }
-);
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to save settings."
+                    );
+
+                }
+
+                alert(
+                    "Settings saved successfully!"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Save settings error:",
+                    error
+                );
+
+                alert(
+                    error.message ||
+                    "Unable to save settings."
+                );
+
+            }
+
+        }
+    );
 
 }
 
-
-// =======================================
-// INITIALIZE ADMIN DASHBOARD
-// =======================================
-
-async function initializeAdmin() {
-
-if (!sections.dashboard) {
-
-    return;
-
-}
-
-showSection("dashboard");
-
-await loadDashboard();
-
-}
-
-initializeAdmin();
+loadSettings();

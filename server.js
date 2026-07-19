@@ -26,6 +26,9 @@ const fs = require("fs");
 
 const User = require("./models/userModel");
 const Product = require("./models/ProductModel");
+const Order = require("./models/orderModel");
+const Settings= require("./models/settingsModel");
+const Admin= require("./models/adminModel");
 const NewsletterSubscriber =
     require("./models/newsLetterModel");
 
@@ -80,6 +83,79 @@ app.use(
         extended: true
     })
 );
+
+
+// ==========================================
+// VERIFY ADMIN MIDDLEWARE
+// ==========================================
+
+const verifyAdmin =
+    (req, res, next) => {
+
+        try {
+
+            const authHeader =
+                req.headers.authorization;
+
+            if (
+                !authHeader ||
+                !authHeader.startsWith("Bearer ")
+            ) {
+
+                return res.status(401).json({
+
+                    success: false,
+
+                    message:
+                        "Admin authentication required."
+
+                });
+
+            }
+
+            const token =
+                authHeader.split(" ")[1];
+
+            const decoded =
+                jwt.verify(
+                    token,
+                    process.env.JWT_SECRET
+                );
+
+            if (
+                decoded.role !== "admin"
+            ) {
+
+                return res.status(403).json({
+
+                    success: false,
+
+                    message:
+                        "Admin access denied."
+
+                });
+
+            }
+
+            req.admin =
+                decoded;
+
+            next();
+
+        } catch (error) {
+
+            return res.status(401).json({
+
+                success: false,
+
+                message:
+                    "Admin session expired or invalid."
+
+            });
+
+        }
+
+    };
 
 
 // ==========================================
@@ -292,19 +368,16 @@ app.post(
                 !password
             ) {
 
-                return res
-                    .status(400)
-                    .json({
+                return res.status(400).json({
 
-                        success: false,
+                    success: false,
 
-                        message:
-                            "All fields are required."
+                    message:
+                        "All fields are required."
 
-                    });
+                });
 
             }
-
 
             const existingUser =
                 await User.findOne({
@@ -313,26 +386,22 @@ app.post(
 
             if (existingUser) {
 
-                return res
-                    .status(400)
-                    .json({
+                return res.status(400).json({
 
-                        success: false,
+                    success: false,
 
-                        message:
-                            "User already exists."
+                    message:
+                        "User already exists."
 
-                    });
+                });
 
             }
-
 
             const hashedPassword =
                 await bcrypt.hash(
                     password,
                     10
                 );
-
 
             const newUser =
                 new User({
@@ -348,9 +417,7 @@ app.post(
 
                 });
 
-
             await newUser.save();
-
 
             const token =
                 jwt.sign(
@@ -369,35 +436,32 @@ app.post(
 
                 );
 
+            return res.status(201).json({
 
-            return res
-                .status(201)
-                .json({
+                success: true,
 
-                    success: true,
+                message:
+                    "Account created successfully",
 
-                    message:
-                        "Account created successfully",
+                token,
 
-                    token,
+                user: {
 
-                    user: {
+                    id:
+                        newUser._id,
 
-                        id:
-                            newUser._id,
+                    firstName:
+                        newUser.firstName,
 
-                        firstName:
-                            newUser.firstName,
+                    lastName:
+                        newUser.lastName,
 
-                        lastName:
-                            newUser.lastName,
+                    email:
+                        newUser.email
 
-                        email:
-                            newUser.email
+                }
 
-                    }
-
-                });
+            });
 
         } catch (error) {
 
@@ -406,16 +470,14 @@ app.post(
                 error
             );
 
-            return res
-                .status(500)
-                .json({
+            return res.status(500).json({
 
-                    success: false,
+                success: false,
 
-                    message:
-                        "Server error"
+                message:
+                    "Server error"
 
-                });
+            });
 
         }
 
@@ -443,25 +505,21 @@ app.post(
                     ?.trim()
                     .toLowerCase();
 
-
             if (
                 !email ||
                 !password
             ) {
 
-                return res
-                    .status(400)
-                    .json({
+                return res.status(400).json({
 
-                        success: false,
+                    success: false,
 
-                        message:
-                            "Email and password are required."
+                    message:
+                        "Email and password are required."
 
-                    });
+                });
 
             }
-
 
             const user =
                 await User.findOne({
@@ -470,19 +528,16 @@ app.post(
 
             if (!user) {
 
-                return res
-                    .status(400)
-                    .json({
+                return res.status(400).json({
 
-                        success: false,
+                    success: false,
 
-                        message:
-                            "Invalid email or password."
+                    message:
+                        "Invalid email or password."
 
-                    });
+                });
 
             }
-
 
             const passwordMatch =
                 await bcrypt.compare(
@@ -493,22 +548,18 @@ app.post(
 
                 );
 
-
             if (!passwordMatch) {
 
-                return res
-                    .status(400)
-                    .json({
+                return res.status(400).json({
 
-                        success: false,
+                    success: false,
 
-                        message:
-                            "Invalid email or password."
+                    message:
+                        "Invalid email or password."
 
-                    });
+                });
 
             }
-
 
             const token =
                 jwt.sign(
@@ -527,35 +578,32 @@ app.post(
 
                 );
 
+            return res.status(200).json({
 
-            return res
-                .status(200)
-                .json({
+                success: true,
 
-                    success: true,
+                message:
+                    "Login successful",
 
-                    message:
-                        "Login successful",
+                token,
 
-                    token,
+                user: {
 
-                    user: {
+                    id:
+                        user._id,
 
-                        id:
-                            user._id,
+                    firstName:
+                        user.firstName,
 
-                        firstName:
-                            user.firstName,
+                    lastName:
+                        user.lastName,
 
-                        lastName:
-                            user.lastName,
+                    email:
+                        user.email
 
-                        email:
-                            user.email
+                }
 
-                    }
-
-                });
+            });
 
         } catch (error) {
 
@@ -564,16 +612,171 @@ app.post(
                 error
             );
 
-            return res
-                .status(500)
-                .json({
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Server error"
+
+            });
+
+        }
+
+    }
+);
+
+// ==========================================
+// ADMIN LOGIN
+// ==========================================
+
+app.post(
+    "/admin/login",
+    async (req, res) => {
+
+        try {
+
+            let {
+                email,
+                password
+            } = req.body;
+
+            email =
+                email
+                    ?.trim()
+                    .toLowerCase();
+
+            if (!email || !password) {
+
+                return res.status(400).json({
 
                     success: false,
 
                     message:
-                        "Server error"
+                        "Email and password are required."
 
                 });
+
+            }
+
+            // Find admin and include password
+            const admin =
+                await Admin.findOne({
+                    email
+                });
+
+            if (!admin) {
+
+                return res.status(401).json({
+
+                    success: false,
+
+                    message:
+                        "Invalid admin email or password."
+
+                });
+
+            }
+
+            if (!admin.active) {
+
+                return res.status(403).json({
+
+                    success: false,
+
+                    message:
+                        "This admin account is disabled."
+
+                });
+
+            }
+
+            // Compare entered password
+            // with hashed MongoDB password
+            const passwordMatch =
+                await bcrypt.compare(
+                    password,
+                    admin.password
+                );
+
+            if (!passwordMatch) {
+
+                return res.status(401).json({
+
+                    success: false,
+
+                    message:
+                        "Invalid admin email or password."
+
+                });
+
+            }
+
+            // Create ADMIN-specific token
+            const adminToken =
+                jwt.sign(
+
+                    {
+                        id:
+                            admin._id.toString(),
+
+                        role:
+                            "admin"
+
+                    },
+
+                    process.env.JWT_SECRET,
+
+                    {
+                        expiresIn:
+                            "8h"
+                    }
+
+                );
+
+            return res.status(200).json({
+
+                success: true,
+
+                message:
+                    "Admin login successful.",
+
+                token:
+                    adminToken,
+
+                admin: {
+
+                    id:
+                        admin._id,
+
+                    name:
+                        admin.name,
+
+                    email:
+                        admin.email,
+
+                    role:
+                        admin.role
+
+                }
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Admin login error:",
+                error
+            );
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to log in."
+
+            });
 
         }
 
@@ -587,6 +790,7 @@ app.post(
 
 app.post(
     "/products",
+    verifyAdmin,
 
     upload.array(
         "images",
@@ -608,33 +812,28 @@ app.post(
                 featured
             } = req.body;
 
-
             if (
                 !name?.trim() ||
                 price === undefined ||
                 price === ""
             ) {
 
-                return res
-                    .status(400)
-                    .json({
+                return res.status(400).json({
 
-                        success: false,
+                    success: false,
 
-                        message:
-                            "Product name and price are required."
+                    message:
+                        "Product name and price are required."
 
-                    });
+                });
 
             }
-
 
             const numericPrice =
                 Number(price);
 
             const numericStock =
                 Number(stock || 0);
-
 
             if (
                 Number.isNaN(
@@ -643,19 +842,16 @@ app.post(
                 numericPrice < 0
             ) {
 
-                return res
-                    .status(400)
-                    .json({
+                return res.status(400).json({
 
-                        success: false,
+                    success: false,
 
-                        message:
-                            "Please enter a valid product price."
+                    message:
+                        "Please enter a valid product price."
 
-                    });
+                });
 
             }
-
 
             if (
                 Number.isNaN(
@@ -664,31 +860,25 @@ app.post(
                 numericStock < 0
             ) {
 
-                return res
-                    .status(400)
-                    .json({
+                return res.status(400).json({
 
-                        success: false,
+                    success: false,
 
-                        message:
-                            "Please enter a valid stock quantity."
+                    message:
+                        "Please enter a valid stock quantity."
 
-                    });
+                });
 
             }
 
-
             let parsedSizes = [];
             let parsedColors = [];
-
 
             try {
 
                 parsedSizes =
                     sizes
-                        ? JSON.parse(
-                            sizes
-                        )
+                        ? JSON.parse(sizes)
                         : [];
 
             } catch {
@@ -697,14 +887,11 @@ app.post(
 
             }
 
-
             try {
 
                 parsedColors =
                     colors
-                        ? JSON.parse(
-                            colors
-                        )
+                        ? JSON.parse(colors)
                         : [];
 
             } catch {
@@ -713,13 +900,11 @@ app.post(
 
             }
 
-
             const images =
                 (req.files || []).map(
                     file =>
                         `/uploads/${file.filename}`
                 );
-
 
             const product =
                 new Product({
@@ -728,13 +913,11 @@ app.post(
                         name.trim(),
 
                     description:
-                        description
-                            ?.trim() ||
+                        description?.trim() ||
                         "",
 
                     category:
-                        category
-                            ?.trim() ||
+                        category?.trim() ||
                         "",
 
                     price:
@@ -760,27 +943,22 @@ app.post(
                             : [],
 
                     featured:
-                        featured ===
-                        "true"
+                        featured === "true"
 
                 });
-
 
             await product.save();
 
+            return res.status(201).json({
 
-            return res
-                .status(201)
-                .json({
+                success: true,
 
-                    success: true,
+                message:
+                    "Product added successfully.",
 
-                    message:
-                        "Product added successfully.",
+                product
 
-                    product
-
-                });
+            });
 
         } catch (error) {
 
@@ -789,17 +967,15 @@ app.post(
                 error
             );
 
-            return res
-                .status(500)
-                .json({
+            return res.status(500).json({
 
-                    success: false,
+                success: false,
 
-                    message:
-                        error.message ||
-                        "Failed to add product."
+                message:
+                    error.message ||
+                    "Failed to add product."
 
-                });
+            });
 
         }
 
@@ -813,6 +989,7 @@ app.post(
 
 app.get(
     "/products",
+
     async (req, res) => {
 
         try {
@@ -826,12 +1003,9 @@ app.get(
 
                     });
 
-
-            return res
-                .status(200)
-                .json(
-                    products
-                );
+            return res.status(200).json(
+                products
+            );
 
         } catch (error) {
 
@@ -840,16 +1014,14 @@ app.get(
                 error
             );
 
-            return res
-                .status(500)
-                .json({
+            return res.status(500).json({
 
-                    success: false,
+                success: false,
 
-                    message:
-                        "Unable to load products."
+                message:
+                    "Unable to load products."
 
-                });
+            });
 
         }
 
@@ -872,28 +1044,22 @@ app.get(
                     req.params.id
                 );
 
-
             if (!product) {
 
-                return res
-                    .status(404)
-                    .json({
+                return res.status(404).json({
 
-                        success: false,
+                    success: false,
 
-                        message:
-                            "Product not found."
+                    message:
+                        "Product not found."
 
-                    });
+                });
 
             }
 
-
-            return res
-                .status(200)
-                .json(
-                    product
-                );
+            return res.status(200).json(
+                product
+            );
 
         } catch (error) {
 
@@ -902,16 +1068,14 @@ app.get(
                 error
             );
 
-            return res
-                .status(500)
-                .json({
+            return res.status(500).json({
 
-                    success: false,
+                success: false,
 
-                    message:
-                        "Unable to load product."
+                message:
+                    "Unable to load product."
 
-                });
+            });
 
         }
 
@@ -925,88 +1089,274 @@ app.get(
 
 app.put(
     "/products/:id",
+    verifyAdmin,
+
+    upload.array(
+        "images",
+        10
+    ),
+
     async (req, res) => {
 
         try {
 
-            const updateData = {
-                ...req.body
-            };
+            const product =
+                await Product.findById(
+                    req.params.id
+                );
 
+            if (!product) {
 
-            if (
-                updateData.price !==
-                undefined
-            ) {
+                return res.status(404).json({
 
-                updateData.price =
-                    Number(
-                        updateData.price
-                    );
+                    success: false,
 
-            }
+                    message:
+                        "Product not found."
 
-
-            if (
-                updateData.stock !==
-                undefined
-            ) {
-
-                updateData.stock =
-                    Number(
-                        updateData.stock
-                    );
+                });
 
             }
 
+            if (
+                req.body.name !==
+                undefined
+            ) {
 
-            const updatedProduct =
-                await Product
-                    .findByIdAndUpdate(
+                product.name =
+                    req.body.name.trim();
 
-                        req.params.id,
+            }
 
-                        updateData,
+            if (
+                req.body.price !==
+                undefined
+            ) {
 
-                        {
-                            new: true,
-
-                            runValidators:
-                                true
-                        }
-
+                const price =
+                    Number(
+                        req.body.price
                     );
 
+                if (
+                    Number.isNaN(price) ||
+                    price < 0
+                ) {
 
-            if (!updatedProduct) {
-
-                return res
-                    .status(404)
-                    .json({
+                    return res.status(400).json({
 
                         success: false,
 
                         message:
-                            "Product not found."
+                            "Please enter a valid product price."
 
                     });
 
+                }
+
+                product.price =
+                    price;
+
             }
 
+            if (
+                req.body.category !==
+                undefined
+            ) {
 
-            return res
-                .status(200)
-                .json({
+                product.category =
+                    req.body.category.trim();
 
-                    success: true,
+            }
 
-                    message:
-                        "Product updated successfully.",
+            if (
+                req.body.description !==
+                undefined
+            ) {
 
-                    product:
-                        updatedProduct
+                product.description =
+                    req.body.description.trim();
 
-                });
+            }
+
+            if (
+                req.body.stock !==
+                undefined
+            ) {
+
+                const stock =
+                    Number(
+                        req.body.stock
+                    );
+
+                if (
+                    Number.isNaN(stock) ||
+                    stock < 0
+                ) {
+
+                    return res.status(400).json({
+
+                        success: false,
+
+                        message:
+                            "Please enter a valid stock quantity."
+
+                    });
+
+                }
+
+                product.stock =
+                    stock;
+
+            }
+
+            if (
+                req.body.sizes !==
+                undefined
+            ) {
+
+                try {
+
+                    const sizes =
+                        JSON.parse(
+                            req.body.sizes
+                        );
+
+                    product.sizes =
+                        Array.isArray(sizes)
+                            ? sizes
+                            : [];
+
+                } catch {
+
+                    product.sizes = [];
+
+                }
+
+            }
+
+            if (
+                req.body.colors !==
+                undefined
+            ) {
+
+                try {
+
+                    const colors =
+                        JSON.parse(
+                            req.body.colors
+                        );
+
+                    product.colors =
+                        Array.isArray(colors)
+                            ? colors
+                            : [];
+
+                } catch {
+
+                    product.colors = [];
+
+                }
+
+            }
+
+            if (
+                req.body.featured !==
+                undefined
+            ) {
+
+                product.featured =
+                    req.body.featured ===
+                    "true";
+
+            }
+
+            // Replace images only if new images were uploaded.
+            if (
+                req.files &&
+                req.files.length > 0
+            ) {
+
+                if (
+                    Array.isArray(
+                        product.images
+                    )
+                ) {
+
+                    product.images.forEach(
+                        image => {
+
+                            if (
+                                typeof image ===
+                                "string" &&
+                                image.startsWith(
+                                    "/uploads/"
+                                )
+                            ) {
+
+                                const oldFile =
+                                    path.join(
+
+                                        uploadsDirectory,
+
+                                        path.basename(
+                                            image
+                                        )
+
+                                    );
+
+                                if (
+                                    fs.existsSync(
+                                        oldFile
+                                    )
+                                ) {
+
+                                    try {
+
+                                        fs.unlinkSync(
+                                            oldFile
+                                        );
+
+                                    } catch (
+                                        fileError
+                                    ) {
+
+                                        console.error(
+                                            "Old image deletion error:",
+                                            fileError
+                                        );
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+                    );
+
+                }
+
+                product.images =
+                    req.files.map(
+                        file =>
+                            `/uploads/${file.filename}`
+                    );
+
+            }
+
+            await product.save();
+
+            return res.status(200).json({
+
+                success: true,
+
+                message:
+                    "Product updated successfully.",
+
+                product
+
+            });
 
         } catch (error) {
 
@@ -1015,16 +1365,15 @@ app.put(
                 error
             );
 
-            return res
-                .status(500)
-                .json({
+            return res.status(500).json({
 
-                    success: false,
+                success: false,
 
-                    message:
-                        "Update failed."
+                message:
+                    error.message ||
+                    "Unable to update product."
 
-                });
+            });
 
         }
 
@@ -1038,6 +1387,7 @@ app.put(
 
 app.delete(
     "/products/:id",
+    verifyAdmin,
     async (req, res) => {
 
         try {
@@ -1048,24 +1398,19 @@ app.delete(
                         req.params.id
                     );
 
-
             if (!product) {
 
-                return res
-                    .status(404)
-                    .json({
+                return res.status(404).json({
 
-                        success: false,
+                    success: false,
 
-                        message:
-                            "Product not found."
+                    message:
+                        "Product not found."
 
-                    });
+                });
 
             }
 
-
-            // Delete associated local image files.
             if (
                 Array.isArray(
                     product.images
@@ -1077,14 +1422,7 @@ app.delete(
 
                         if (
                             typeof image !==
-                            "string"
-                        ) {
-
-                            return;
-
-                        }
-
-                        if (
+                            "string" ||
                             !image.startsWith(
                                 "/uploads/"
                             )
@@ -1135,17 +1473,14 @@ app.delete(
 
             }
 
+            return res.status(200).json({
 
-            return res
-                .status(200)
-                .json({
+                success: true,
 
-                    success: true,
+                message:
+                    "Product deleted successfully."
 
-                    message:
-                        "Product deleted successfully."
-
-                });
+            });
 
         } catch (error) {
 
@@ -1154,16 +1489,1310 @@ app.delete(
                 error
             );
 
-            return res
-                .status(500)
-                .json({
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Delete failed."
+
+            });
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// CREATE ORDER
+// ==========================================
+
+app.post(
+    "/orders",
+    verifyAdmin,
+    async (req, res) => {
+
+        try {
+
+            const {
+                customer,
+                items,
+                deliveryFee,
+                deliveryAddress,
+                paymentMethod
+            } = req.body;
+
+            if (
+                !customer ||
+                !customer.firstName ||
+                !customer.email ||
+                !customer.phone
+            ) {
+
+                return res.status(400).json({
 
                     success: false,
 
                     message:
-                        "Delete failed."
+                        "Customer information is incomplete."
 
                 });
+
+            }
+
+            if (
+                !Array.isArray(items) ||
+                items.length === 0
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Order must contain at least one product."
+
+                });
+
+            }
+
+            let subtotal = 0;
+
+            const orderItems = [];
+
+            for (
+                const item of items
+            ) {
+
+                if (!item.productId) {
+
+                    return res.status(400).json({
+
+                        success: false,
+
+                        message:
+                            "A product ID is missing from the order."
+
+                    });
+
+                }
+
+                const product =
+                    await Product.findById(
+                        item.productId
+                    );
+
+                if (!product) {
+
+                    return res.status(404).json({
+
+                        success: false,
+
+                        message:
+                            `Product not found: ${item.productId}`
+
+                    });
+
+                }
+
+                const quantity =
+                    Math.max(
+                        1,
+                        Number(
+                            item.quantity
+                        ) || 1
+                    );
+
+                if (
+                    product.stock <
+                    quantity
+                ) {
+
+                    return res.status(400).json({
+
+                        success: false,
+
+                        message:
+                            `Not enough stock for ${product.name}.`
+
+                    });
+
+                }
+
+                subtotal +=
+                    Number(
+                        product.price
+                    ) *
+                    quantity;
+
+                orderItems.push({
+
+                    productId:
+                        product._id,
+
+                    name:
+                        product.name,
+
+                    price:
+                        product.price,
+
+                    quantity,
+
+                    size:
+                        item.size || "",
+
+                    color:
+                        item.color || "",
+
+                    image:
+                        product.images?.[0] ||
+                        ""
+
+                });
+
+            }
+
+            const safeDeliveryFee =
+                Math.max(
+                    0,
+                    Number(
+                        deliveryFee
+                    ) || 0
+                );
+
+            const total =
+                subtotal +
+                safeDeliveryFee;
+
+            const orderNumber =
+                `HOK-${Date.now()}-${Math.floor(
+                    1000 +
+                    Math.random() * 9000
+                )}`;
+
+            const order =
+                new Order({
+
+                    orderNumber,
+
+                    customer: {
+
+                        firstName:
+                            customer.firstName
+                                .trim(),
+
+                        lastName:
+                            customer.lastName
+                                ?.trim() ||
+                            "",
+
+                        email:
+                            customer.email
+                                .trim()
+                                .toLowerCase(),
+
+                        phone:
+                            customer.phone
+                                .trim()
+
+                    },
+
+                    items:
+                        orderItems,
+
+                    subtotal,
+
+                    deliveryFee:
+                        safeDeliveryFee,
+
+                    total,
+
+                    deliveryAddress: {
+
+                        address:
+                            deliveryAddress
+                                ?.address ||
+                            "",
+
+                        city:
+                            deliveryAddress
+                                ?.city ||
+                            "",
+
+                        county:
+                            deliveryAddress
+                                ?.county ||
+                            ""
+
+                    },
+
+                    paymentMethod:
+                        paymentMethod ||
+                        "",
+
+                    paymentStatus:
+                        "Pending",
+
+                    orderStatus:
+                        "Pending"
+
+                });
+
+            await order.save();
+
+            // Stock is deliberately NOT reduced here.
+            // It will be reduced only after successful
+            // payment verification.
+
+            return res.status(201).json({
+
+                success: true,
+
+                message:
+                    "Order created successfully.",
+
+                order
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Create order error:",
+                error
+            );
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    error.message ||
+                    "Unable to create order."
+
+            });
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// GET ALL ORDERS
+// ==========================================
+
+app.get(
+    "/orders",
+    verifyAdmin,
+    async (req, res) => {
+
+        try {
+
+            const orders =
+                await Order
+                    .find()
+                    .sort({
+
+                        createdAt: -1
+
+                    });
+
+            return res.status(200).json(
+                orders
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Get orders error:",
+                error
+            );
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to load orders."
+
+            });
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// GET ONE ORDER
+// ==========================================
+
+app.get(
+    "/orders/:id",
+    verifyAdmin,
+    async (req, res) => {
+
+        try {
+
+            const order =
+                await Order.findById(
+                    req.params.id
+                );
+
+            if (!order) {
+
+                return res.status(404).json({
+
+                    success: false,
+
+                    message:
+                        "Order not found."
+
+                });
+
+            }
+
+            return res.status(200).json(
+                order
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Get order error:",
+                error
+            );
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to load order."
+
+            });
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// UPDATE ORDER STATUS
+// ==========================================
+
+app.put(
+    "/orders/:id/status",
+    async (req, res) => {
+
+        try {
+
+            const {
+                orderStatus,
+                paymentStatus
+            } = req.body;
+
+            const allowedOrderStatuses = [
+
+                "Pending",
+                "Confirmed",
+                "Processing",
+                "Shipped",
+                "Delivered",
+                "Cancelled"
+
+            ];
+
+            const allowedPaymentStatuses = [
+
+                "Pending",
+                "Paid",
+                "Failed",
+                "Refunded"
+
+            ];
+
+            const updateData = {};
+
+            if (orderStatus) {
+
+                if (
+                    !allowedOrderStatuses.includes(
+                        orderStatus
+                    )
+                ) {
+
+                    return res.status(400).json({
+
+                        success: false,
+
+                        message:
+                            "Invalid order status."
+
+                    });
+
+                }
+
+                updateData.orderStatus =
+                    orderStatus;
+
+            }
+
+            if (paymentStatus) {
+
+                if (
+                    !allowedPaymentStatuses.includes(
+                        paymentStatus
+                    )
+                ) {
+
+                    return res.status(400).json({
+
+                        success: false,
+
+                        message:
+                            "Invalid payment status."
+
+                    });
+
+                }
+
+                updateData.paymentStatus =
+                    paymentStatus;
+
+            }
+
+            const order =
+                await Order.findByIdAndUpdate(
+
+                    req.params.id,
+
+                    updateData,
+
+                    {
+                        new: true,
+                        runValidators: true
+                    }
+
+                );
+
+            if (!order) {
+
+                return res.status(404).json({
+
+                    success: false,
+
+                    message:
+                        "Order not found."
+
+                });
+
+            }
+
+            return res.status(200).json({
+
+                success: true,
+
+                message:
+                    "Order updated successfully.",
+
+                order
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Update order error:",
+                error
+            );
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to update order."
+
+            });
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// DASHBOARD STATISTICS
+// ==========================================
+
+app.get(
+    "/admin/stats",
+    verifyAdmin,
+    async (req, res) => {
+
+        try {
+
+            const [
+                totalProducts,
+                totalOrders,
+                totalCustomers,
+                revenueResult
+            ] =
+                await Promise.all([
+
+                    Product.countDocuments(),
+
+                    Order.countDocuments(),
+
+                    User.countDocuments(),
+
+                    Order.aggregate([
+
+                        {
+                            $match: {
+
+                                paymentStatus:
+                                    "Paid"
+
+                            }
+                        },
+
+                        {
+                            $group: {
+
+                                _id: null,
+
+                                total: {
+
+                                    $sum:
+                                        "$total"
+
+                                }
+
+                            }
+                        }
+
+                    ])
+
+                ]);
+
+            const totalRevenue =
+                revenueResult.length > 0
+                    ? revenueResult[0].total
+                    : 0;
+
+            return res.status(200).json({
+
+                totalProducts,
+
+                totalOrders,
+
+                totalCustomers,
+
+                totalRevenue
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Dashboard statistics error:",
+                error
+            );
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to load dashboard statistics."
+
+            });
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// CUSTOMERS - GET ALL
+// ==========================================
+
+app.get(
+    "/customers",
+    verifyAdmin,
+    async (req, res) => {
+
+        try {
+
+            const customers =
+                await User.find(
+                    {},
+                    {
+                        password: 0,
+                        __v: 0
+                    }
+                )
+                    .sort({
+
+                        createdAt: -1
+
+                    });
+
+            return res.status(200).json(
+                customers
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Get customers error:",
+                error
+            );
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to load customers."
+
+            });
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// CUSTOMER DETAILS + ORDERS
+// ==========================================
+
+app.get(
+    "/customers/:id",
+    verifyAdmin,
+    async (req, res) => {
+
+        try {
+
+            const customer =
+                await User.findById(
+                    req.params.id
+                )
+                    .select(
+                        "-password -__v"
+                    );
+
+            if (!customer) {
+
+                return res.status(404).json({
+
+                    success: false,
+
+                    message:
+                        "Customer not found."
+
+                });
+
+            }
+
+            const orders =
+                await Order.find({
+
+                    "customer.email":
+                        customer.email
+                            .toLowerCase()
+
+                })
+                    .sort({
+
+                        createdAt: -1
+
+                    });
+
+            const totalSpent =
+                orders
+
+                    .filter(
+                        order =>
+                            order.paymentStatus ===
+                            "Paid"
+                    )
+
+                    .reduce(
+                        (
+                            total,
+                            order
+                        ) =>
+                            total +
+                            Number(
+                                order.total ||
+                                0
+                            ),
+                        0
+                    );
+
+            return res.status(200).json({
+
+                success: true,
+
+                customer,
+
+                orders,
+
+                statistics: {
+
+                    totalOrders:
+                        orders.length,
+
+                    totalSpent
+
+                }
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Get customer error:",
+                error
+            );
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to load customer."
+
+            });
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// INITIALIZE PAYSTACK PAYMENT
+// ==========================================
+
+app.post(
+    "/payments/paystack/initialize",
+    async (req, res) => {
+
+        try {
+
+            const {
+                orderId
+            } = req.body;
+
+            if (
+                !process.env
+                    .PAYSTACK_SECRET_KEY
+            ) {
+
+                return res.status(503).json({
+
+                    success: false,
+
+                    message:
+                        "Paystack has not been configured yet."
+
+                });
+
+            }
+
+            const order =
+                await Order.findById(
+                    orderId
+                );
+
+            if (!order) {
+
+                return res.status(404).json({
+
+                    success: false,
+
+                    message:
+                        "Order not found."
+
+                });
+
+            }
+
+            if (
+                order.paymentStatus ===
+                "Paid"
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "This order has already been paid."
+
+                });
+
+            }
+
+            const amount =
+                Math.round(
+                    Number(
+                        order.total
+                    ) * 100
+                );
+
+            const reference =
+                `HOK-${order._id}-${Date.now()}`;
+
+            const paymentRequest = {
+
+                email:
+                    order.customer.email,
+
+                amount:
+                    amount.toString(),
+
+                currency:
+                    "KES",
+
+                reference,
+
+                metadata:
+                    JSON.stringify({
+
+                        orderId:
+                            order._id
+                                .toString(),
+
+                        orderNumber:
+                            order.orderNumber
+
+                    })
+
+            };
+
+            // Add callback URL when configured.
+            if (
+                process.env
+                    .PAYSTACK_CALLBACK_URL
+            ) {
+
+                paymentRequest.callback_url =
+                    process.env
+                        .PAYSTACK_CALLBACK_URL;
+
+            }
+
+            const paystackResponse =
+                await fetch(
+
+                    "https://api.paystack.co/transaction/initialize",
+
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            Authorization:
+                                `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                paymentRequest
+                            )
+
+                    }
+
+                );
+
+            const paymentData =
+                await paystackResponse.json();
+
+            if (
+                !paystackResponse.ok ||
+                !paymentData.status
+            ) {
+
+                console.error(
+                    "Paystack initialization:",
+                    paymentData
+                );
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        paymentData.message ||
+                        "Unable to initialize payment."
+
+                });
+
+            }
+
+            return res.status(200).json({
+
+                success: true,
+
+                authorizationUrl:
+                    paymentData.data
+                        .authorization_url,
+
+                accessCode:
+                    paymentData.data
+                        .access_code,
+
+                reference:
+                    paymentData.data
+                        .reference
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Paystack initialization error:",
+                error
+            );
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to initialize payment."
+
+            });
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// VERIFY PAYSTACK PAYMENT
+// ==========================================
+
+app.get(
+    "/payments/paystack/verify/:reference",
+    async (req, res) => {
+
+        try {
+
+            if (
+                !process.env
+                    .PAYSTACK_SECRET_KEY
+            ) {
+
+                return res.status(503).json({
+
+                    success: false,
+
+                    message:
+                        "Paystack has not been configured yet."
+
+                });
+
+            }
+
+            const reference =
+                req.params.reference;
+
+            const paystackResponse =
+                await fetch(
+
+                    `https://api.paystack.co/transaction/verify/${encodeURIComponent(
+                        reference
+                    )}`,
+
+                    {
+
+                        method:
+                            "GET",
+
+                        headers: {
+
+                            Authorization:
+                                `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
+
+                        }
+
+                    }
+
+                );
+
+            const paymentData =
+                await paystackResponse.json();
+
+            if (
+                !paystackResponse.ok ||
+                !paymentData.status
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        paymentData.message ||
+                        "Payment verification failed."
+
+                });
+
+            }
+
+            const transaction =
+                paymentData.data;
+
+            let metadata =
+                transaction.metadata ||
+                {};
+
+            if (
+                typeof metadata ===
+                "string"
+            ) {
+
+                try {
+
+                    metadata =
+                        JSON.parse(
+                            metadata
+                        );
+
+                } catch {
+
+                    metadata = {};
+
+                }
+
+            }
+
+            const orderId =
+                metadata.orderId;
+
+            if (!orderId) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Order information is missing from payment."
+
+                });
+
+            }
+
+            const order =
+                await Order.findById(
+                    orderId
+                );
+
+            if (!order) {
+
+                return res.status(404).json({
+
+                    success: false,
+
+                    message:
+                        "Order not found."
+
+                });
+
+            }
+
+            const expectedAmount =
+                Math.round(
+                    Number(
+                        order.total
+                    ) * 100
+                );
+
+            if (
+                transaction.status !==
+                "success"
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Payment has not been completed.",
+
+                    paymentStatus:
+                        transaction.status
+
+                });
+
+            }
+
+            if (
+                Number(
+                    transaction.amount
+                ) !==
+                expectedAmount
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Payment amount does not match order total."
+
+                });
+
+            }
+
+            if (
+                transaction.currency !==
+                "KES"
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Payment currency does not match."
+
+                });
+
+            }
+
+            // ==========================================
+            // MARK PAID + REDUCE STOCK ONCE
+            // ==========================================
+
+            if (
+                order.paymentStatus !==
+                "Paid"
+            ) {
+
+                // Check every product before
+                // changing any stock.
+                for (
+                    const item
+                    of order.items
+                ) {
+
+                    const product =
+                        await Product.findById(
+                            item.productId
+                        );
+
+                    if (!product) {
+
+                        return res.status(404).json({
+
+                            success: false,
+
+                            message:
+                                `Product no longer exists: ${item.name}`
+
+                        });
+
+                    }
+
+                    if (
+                        product.stock <
+                        item.quantity
+                    ) {
+
+                        return res.status(400).json({
+
+                            success: false,
+
+                            message:
+                                `${item.name} no longer has enough stock.`
+
+                        });
+
+                    }
+
+                }
+
+                // Reduce inventory only after
+                // successful verification.
+                for (
+                    const item
+                    of order.items
+                ) {
+
+                    await Product.findByIdAndUpdate(
+
+                        item.productId,
+
+                        {
+
+                            $inc: {
+
+                                stock:
+                                    -item.quantity
+
+                            }
+
+                        }
+
+                    );
+
+                }
+
+                order.paymentStatus =
+                    "Paid";
+
+                order.orderStatus =
+                    "Confirmed";
+
+                await order.save();
+
+            }
+
+            return res.status(200).json({
+
+                success: true,
+
+                message:
+                    "Payment verified successfully.",
+
+                order
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Paystack verification error:",
+                error
+            );
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to verify payment."
+
+            });
 
         }
 
@@ -1178,7 +2807,8 @@ app.delete(
 const transporter =
     nodemailer.createTransport({
 
-        service: "gmail",
+        service:
+            "gmail",
 
         auth: {
 
@@ -1201,19 +2831,17 @@ app.post(
     "/submit-form",
     async (req, res) => {
 
-        // Honeypot spam protection
-        if (req.body.website) {
+        if (
+            req.body.website
+        ) {
 
-            return res
-                .status(200)
-                .json({
+            return res.status(200).json({
 
-                    success: true
+                success: true
 
-                });
+            });
 
         }
-
 
         const name =
             req.body.name?.trim();
@@ -1227,7 +2855,6 @@ app.post(
         const message =
             req.body.message?.trim();
 
-
         if (
             !name ||
             !email ||
@@ -1235,23 +2862,19 @@ app.post(
             !message
         ) {
 
-            return res
-                .status(400)
-                .json({
+            return res.status(400).json({
 
-                    success: false,
+                success: false,
 
-                    message:
-                        "All fields are required."
+                message:
+                    "All fields are required."
 
-                });
+            });
 
         }
 
-
         const emailRegex =
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 
         if (
             !emailRegex.test(
@@ -1259,19 +2882,16 @@ app.post(
             )
         ) {
 
-            return res
-                .status(400)
-                .json({
+            return res.status(400).json({
 
-                    success: false,
+                success: false,
 
-                    message:
-                        "Please enter a valid email address."
+                message:
+                    "Please enter a valid email address."
 
-                });
+            });
 
         }
-
 
         try {
 
@@ -1325,17 +2945,14 @@ app.post(
 
             });
 
+            return res.status(200).json({
 
-            return res
-                .status(200)
-                .json({
+                success: true,
 
-                    success: true,
+                message:
+                    "Message sent successfully."
 
-                    message:
-                        "Message sent successfully."
-
-                });
+            });
 
         } catch (error) {
 
@@ -1344,16 +2961,14 @@ app.post(
                 error
             );
 
-            return res
-                .status(500)
-                .json({
+            return res.status(500).json({
 
-                    success: false,
+                success: false,
 
-                    message:
-                        "Failed to send message. Please try again later."
+                message:
+                    "Failed to send message. Please try again later."
 
-                });
+            });
 
         }
 
@@ -1376,26 +2991,21 @@ app.post(
                     ?.trim()
                     .toLowerCase();
 
-
             if (!email) {
 
-                return res
-                    .status(400)
-                    .json({
+                return res.status(400).json({
 
-                        success: false,
+                    success: false,
 
-                        message:
-                            "Email is required."
+                    message:
+                        "Email is required."
 
-                    });
+                });
 
             }
 
-
             const emailRegex =
                 /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 
             if (
                 !emailRegex.test(
@@ -1403,19 +3013,16 @@ app.post(
                 )
             ) {
 
-                return res
-                    .status(400)
-                    .json({
+                return res.status(400).json({
 
-                        success: false,
+                    success: false,
 
-                        message:
-                            "Please enter a valid email address."
+                    message:
+                        "Please enter a valid email address."
 
-                    });
+                });
 
             }
-
 
             const existingSubscriber =
                 await NewsletterSubscriber
@@ -1423,24 +3030,20 @@ app.post(
                         email
                     });
 
-
             if (
                 existingSubscriber
             ) {
 
-                return res
-                    .status(400)
-                    .json({
+                return res.status(400).json({
 
-                        success: false,
+                    success: false,
 
-                        message:
-                            "You are already subscribed."
+                    message:
+                        "You are already subscribed."
 
-                    });
+                });
 
             }
-
 
             const subscriber =
                 new NewsletterSubscriber({
@@ -1449,20 +3052,16 @@ app.post(
 
                 });
 
-
             await subscriber.save();
 
+            return res.status(201).json({
 
-            return res
-                .status(201)
-                .json({
+                success: true,
 
-                    success: true,
+                message:
+                    "Welcome to House of Kagendo."
 
-                    message:
-                        "Welcome to House of Kagendo."
-
-                });
+            });
 
         } catch (error) {
 
@@ -1471,16 +3070,14 @@ app.post(
                 error
             );
 
-            return res
-                .status(500)
-                .json({
+            return res.status(500).json({
 
-                    success: false,
+                success: false,
 
-                    message:
-                        "Server error"
+                message:
+                    "Server error"
 
-                });
+            });
 
         }
 
@@ -1494,6 +3091,7 @@ app.post(
 
 app.get(
     "/newsletter",
+    verifyAdmin,
     async (req, res) => {
 
         try {
@@ -1507,12 +3105,9 @@ app.get(
 
                     });
 
-
-            return res
-                .status(200)
-                .json(
-                    subscribers
-                );
+            return res.status(200).json(
+                subscribers
+            );
 
         } catch (error) {
 
@@ -1521,16 +3116,14 @@ app.get(
                 error
             );
 
-            return res
-                .status(500)
-                .json({
+            return res.status(500).json({
 
-                    success: false,
+                success: false,
 
-                    message:
-                        "Unable to load subscribers."
+                message:
+                    "Unable to load subscribers."
 
-                });
+            });
 
         }
 
@@ -1544,6 +3137,7 @@ app.get(
 
 app.delete(
     "/newsletter/:id",
+    verifyAdmin,
     async (req, res) => {
 
         try {
@@ -1554,33 +3148,27 @@ app.delete(
                         req.params.id
                     );
 
-
             if (!subscriber) {
 
-                return res
-                    .status(404)
-                    .json({
+                return res.status(404).json({
 
-                        success: false,
+                    success: false,
 
-                        message:
-                            "Subscriber not found."
+                    message:
+                        "Subscriber not found."
 
-                    });
+                });
 
             }
 
+            return res.status(200).json({
 
-            return res
-                .status(200)
-                .json({
+                success: true,
 
-                    success: true,
+                message:
+                    "Subscriber removed successfully."
 
-                    message:
-                        "Subscriber removed successfully."
-
-                });
+            });
 
         } catch (error) {
 
@@ -1589,16 +3177,68 @@ app.delete(
                 error
             );
 
-            return res
-                .status(500)
-                .json({
+            return res.status(500).json({
 
-                    success: false,
+                success: false,
 
-                    message:
-                        "Unable to remove subscriber."
+                message:
+                    "Unable to remove subscriber."
 
-                });
+            });
+
+        }
+
+    }
+);
+
+// ==========================================
+// GET STORE SETTINGS
+// ==========================================
+
+app.get(
+    "/settings",
+    verifyAdmin,
+    async (req, res) => {
+
+        try {
+
+            let settings =
+                await Settings.findOne();
+
+            if (!settings) {
+
+                settings =
+                    await Settings.create({
+
+                        storeName:
+                            "House of Kagendo",
+
+                        storeEmail:
+                            ""
+
+                    });
+
+            }
+
+            return res.status(200).json(
+                settings
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Get settings error:",
+                error
+            );
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to load settings."
+
+            });
 
         }
 
@@ -1607,13 +3247,93 @@ app.delete(
 
 
 // ==========================================
+// UPDATE STORE SETTINGS
+// ==========================================
+
+app.put(
+    "/settings",
+    verifyAdmin,
+    async (req, res) => {
+
+        try {
+
+            const {
+                storeName,
+                storeEmail
+            } = req.body;
+
+            if (!storeName?.trim()) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Store name is required."
+
+                });
+
+            }
+
+            let settings =
+                await Settings.findOne();
+
+            if (!settings) {
+
+                settings =
+                    new Settings();
+
+            }
+
+            settings.storeName =
+                storeName.trim();
+
+            settings.storeEmail =
+                storeEmail?.trim() || "";
+
+            await settings.save();
+
+            return res.status(200).json({
+
+                success: true,
+
+                message:
+                    "Settings saved successfully.",
+
+                settings
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Update settings error:",
+                error
+            );
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to save settings."
+
+            });
+
+        }
+
+    }
+);
+
+// ==========================================
 // 404 ROUTE
+// KEEP AFTER ALL REAL ROUTES
 // ==========================================
 
 app.use(
     (req, res) => {
 
-        res.status(404).json({
+        return res.status(404).json({
 
             success: false,
 
@@ -1626,8 +3346,10 @@ app.use(
 );
 
 
+
 // ==========================================
 // GLOBAL ERROR HANDLER
+// KEEP AFTER THE 404 HANDLER
 // ==========================================
 
 app.use(
@@ -1643,37 +3365,31 @@ app.use(
             error
         );
 
-
         if (
             error instanceof
             multer.MulterError
         ) {
 
-            return res
-                .status(400)
-                .json({
-
-                    success: false,
-
-                    message:
-                        error.message
-
-                });
-
-        }
-
-
-        return res
-            .status(500)
-            .json({
+            return res.status(400).json({
 
                 success: false,
 
                 message:
-                    error.message ||
-                    "Internal server error."
+                    error.message
 
             });
+
+        }
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                error.message ||
+                "Internal server error."
+
+        });
 
     }
 );
@@ -1684,8 +3400,8 @@ app.use(
 // ==========================================
 
 const PORT =
-    process.env.PORT || 5050;
-
+    process.env.PORT ||
+    5050;
 
 app.listen(
     PORT,
