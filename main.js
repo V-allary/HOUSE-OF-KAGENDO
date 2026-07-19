@@ -67,7 +67,139 @@ document.addEventListener("DOMContentLoaded", () => {
   
   });
 
+  // =======================================
+// QUICK BUY BUTTONS
+// =======================================
 
+document.addEventListener("click", async function (e) {
+
+    const button =
+        e.target.closest(".quick-buy-btn");
+
+    if (!button) return;
+
+    e.preventDefault();
+
+    const id =
+        button.dataset.id;
+
+    const product =
+        await getProduct(id);
+
+    if (!product) return;
+
+    openQuickShop(product);
+
+});
+
+
+  // =======================================
+// QUICK SHOP
+// =======================================
+
+let quickProduct = null;
+
+function openQuickShop(product) {
+
+    quickProduct = product;
+
+    document.getElementById("quickProductImage").src =
+        product.images && product.images.length
+            ? getImageURL(product.images[0])
+            : "";
+
+    document.getElementById("quickProductName").innerText =
+        product.name;
+
+    document.getElementById("quickProductPrice").innerText =
+        "KES " + Number(product.price).toLocaleString();
+
+    document.getElementById("quickQty").value = 1;
+
+    // Sizes
+    const sizes =
+        document.getElementById("quickSizes");
+
+    sizes.innerHTML = "";
+
+    let selectedSize = "";
+
+    (product.sizes || []).forEach(size => {
+
+        const btn =
+            document.createElement("button");
+
+        btn.type = "button";
+        btn.className =
+            "btn btn-outline-dark me-2 mb-2";
+
+        btn.innerText = size;
+
+        btn.onclick = () => {
+
+            selectedSize = size;
+
+            sizes
+                .querySelectorAll("button")
+                .forEach(b =>
+                    b.classList.remove("active")
+                );
+
+            btn.classList.add("active");
+
+        };
+
+        sizes.appendChild(btn);
+
+    });
+
+    // Colours
+    const colors =
+        document.getElementById("quickColors");
+
+    colors.innerHTML = "";
+
+    let selectedColor = "";
+
+    (product.colors || []).forEach(color => {
+
+        const circle =
+            document.createElement("span");
+
+        circle.className =
+            "color-circle";
+
+        circle.style.background = color;
+
+        circle.onclick = () => {
+
+            selectedColor = color;
+
+            colors
+                .querySelectorAll(".color-circle")
+                .forEach(c =>
+                    c.classList.remove("active-color")
+                );
+
+            circle.classList.add("active-color");
+
+        };
+
+        colors.appendChild(circle);
+
+    });
+
+    quickProduct.selectedSize =
+        () => selectedSize;
+
+    quickProduct.selectedColor =
+        () => selectedColor;
+
+    new bootstrap.Modal(
+        document.getElementById("quickShopModal")
+    ).show();
+
+}
 
  // ========================
 // GET CART
@@ -967,79 +1099,66 @@ if(newsletterBtn){
 // WISHLIST
 // =========================
   
-
 let wishlist =
 JSON.parse(
     localStorage.getItem("wishlist")
 ) || [];
 
-document
-.querySelectorAll(".wishlist-btn")
-.forEach(button => {
+document.addEventListener("click", function (e) {
 
-    button.addEventListener("click", () => {
+    const button = e.target.closest(".wishlist-btn");
 
-        const productCard =
-        button.closest(".product-card");
+    if (!button) return;
 
-        const product = {
+    const productCard =
+    button.closest(".product-card");
 
-            id:
-            productCard.dataset.id,
+    if (!productCard) return;
 
-            name:
-            productCard.dataset.name,
+    const product = {
 
-            price:
-            productCard.dataset.price,
+        id: productCard.dataset.id,
 
-            image:
-            productCard.dataset.image
+        name: productCard.dataset.name,
 
-        };
+        price: productCard.dataset.price,
 
-        const exists =
-        wishlist.find(item =>
-            item.id === product.id
+        image: productCard.dataset.image
+
+    };
+
+    const exists =
+    wishlist.find(item => item.id === product.id);
+
+    if (exists) {
+
+        wishlist =
+        wishlist.filter(item => item.id !== product.id);
+
+        button.classList.remove("active-heart");
+
+    } else {
+
+        wishlist.push(product);
+
+        button.classList.add("active-heart");
+
+        showCartNotification(
+            "♡ " + product.name + " wishlisted"
         );
 
-        if(exists){
+        if (navigator.vibrate) {
 
-            wishlist =
-            wishlist.filter(item =>
-                item.id !== product.id
-            );
-
-            button.classList.remove(
-                "active-heart"
-            );
-
-        }else{
-
-            wishlist.push(product);
-
-            button.classList.add(
-                "active-heart"
-            );
-            showCartNotification(
-                "♡ " + product.name + " wishlisted"
-            );
-
-            // MOBILE VIBRATION
-            if(navigator.vibrate){
-
-                navigator.vibrate(100);
-
-            }
+            navigator.vibrate(100);
 
         }
 
-        localStorage.setItem(
-            "wishlist",
-            JSON.stringify(wishlist)
-        );
+    }
 
-    });
+    localStorage.setItem(
+        "wishlist",
+        JSON.stringify(wishlist)
+    );
 
 });
 
@@ -1068,7 +1187,7 @@ function removeFromWishlist(id){
 
 }
 
- // =========================
+  // =========================
 // SHOP PAGE PRODUCTS
 // =========================
 
@@ -1077,54 +1196,135 @@ document.getElementById(
     "productsContainer"
 );
 
+let shopProducts = [];
+
+// =======================================
+// LOAD SHOP PRODUCTS
+// =======================================
+
+async function loadShopProducts() {
+
+    if (!productsContainer) return;
+
+    shopProducts =
+        await getProducts();
+
+    displayProducts();
+
+}
+
+// =======================================
+// DISPLAY PRODUCTS
+// =======================================
+
 function displayProducts(
     category = "all"
-){
+) {
 
-    if(!productsContainer) return;
+    if (!productsContainer) return;
 
     productsContainer.innerHTML = "";
 
     const filteredProducts =
 
-    category === "all"
+        category === "all"
 
-    ? products
+        ? shopProducts
 
-    : products.filter(product =>
+        : shopProducts.filter(product =>
 
-        product.category === category
+            product.category &&
+            product.category.toUpperCase() ===
+            category.toUpperCase()
 
-    );
+        );
+
+    if (filteredProducts.length === 0) {
+
+        productsContainer.innerHTML = `
+
+            <div class="col-12 text-center">
+
+                <h5>
+
+                    No products found.
+
+                </h5>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
 
     filteredProducts.forEach(product => {
+
+        const image =
+
+            product.images &&
+            product.images.length > 0
+
+            ? getImageURL(
+                product.images[0]
+            )
+
+            : "";
 
         productsContainer.innerHTML += `
 
         <div class="col-lg-4 col-md-6 mb-4">
 
-            <div class="product-card">
+            <div
+            class="product-card"
 
-                <a href="product-details.html?id=${product.id}">
+            data-id="${product._id}"
+
+            data-name="${product.name}"
+
+            data-price="${product.price}"
+
+            data-image="${image}">
+
+                <a href="product-details.html?id=${product._id}">
+
                     <img
-                    src="${product.images[0]}"
+                    src="${image}"
                     class="img-fluid"
                     alt="${product.name}">
+
                 </a>
 
                 <div class="product-content">
 
                     <p class="product-category">
-                        ${product.category}
+
+                        ${product.category || ""}
+
                     </p>
 
                     <h5>
+
                         ${product.name}
+
                     </h5>
 
                     <p>
-                        KES ${product.price}
+
+                        KES ${Number(
+                            product.price
+                        ).toLocaleString()}
+
                     </p>
+
+                    <a
+                    href="product-details.html?id=${product._id}"
+                    class="buy-now-btn text-decoration-none">
+
+                        Buy Now
+
+                    </a>
 
                 </div>
 
@@ -1138,18 +1338,22 @@ function displayProducts(
 
 }
 
-// LOAD PRODUCTS WHEN PAGE OPENS
-if(productsContainer){
+// LOAD PRODUCTS
 
-    displayProducts();
+if (productsContainer) {
+
+    loadShopProducts();
 
 }
 
 // CATEGORY FILTER
-const categoryFilter =
-document.getElementById("categoryFilter");
 
-if(categoryFilter){
+const categoryFilter =
+document.getElementById(
+    "categoryFilter"
+);
+
+if (categoryFilter) {
 
     categoryFilter.addEventListener(
         "change",
@@ -1163,7 +1367,6 @@ if(categoryFilter){
     );
 
 }
-
 // =========================
 // ACCOUNT LINK
 // =========================
@@ -1193,3 +1396,263 @@ document
     });
 
 });
+// =======================================
+// LOAD HOME PAGE PRODUCTS
+// =======================================
+
+const homeProducts =
+document.getElementById("homeProducts");
+
+async function loadHomeProducts() {
+
+    if (!homeProducts) return;
+
+    const products = await getProducts();
+
+    homeProducts.innerHTML = "";
+
+    const sections = [
+
+        {
+            title: "✨ NEW ARRIVALS",
+            products: products.filter(p => p.newArrival)
+        },
+
+        {
+            title: "EXECUTIVE WEAR",
+            products: products.filter(
+                p => p.category === "EXECUTIVE WEAR"
+            )
+        },
+
+        {
+            title: "LOUNGE WEAR",
+            products: products.filter(
+                p => p.category === "LOUNGE WEAR"
+            )
+        },
+
+        {
+            title: "CASUAL WEAR",
+            products: products.filter(
+                p => p.category === "CASUAL WEAR"
+            )
+        },
+
+        {
+            title: "🔥 BEST SELLERS",
+            products: products.filter(p => p.bestseller)
+        }
+
+    ];
+
+    sections.forEach(section => {
+
+        if(section.products.length === 0) return;
+
+        homeProducts.innerHTML += `
+
+        <div class="col-12 mt-5 mb-4">
+            <h2 class="section-title">
+                ${section.title}
+            </h2>
+        </div>
+
+        `;
+
+        section.products.forEach(product => {
+
+            const image =
+
+                product.images &&
+                product.images.length
+
+                ? getImageURL(product.images[0])
+
+                : "";
+
+            homeProducts.innerHTML += `
+
+            <div class="col-lg-3 col-md-6 mb-4">
+
+                <div
+                    class="product-card"
+
+                    data-id="${product._id}"
+
+                    data-name="${product.name}"
+
+                    data-price="${product.price}"
+
+                    data-image="${image}">
+
+                    <div class="product-image">
+
+                        <a href="product-details.html?id=${product._id}">
+
+                            <img
+                                src="${image}"
+                                class="img-fluid"
+                                alt="${product.name}">
+
+                        </a>
+
+                        <div class="product-icons">
+
+                            <i class="bi bi-heart wishlist-btn"></i>
+
+                            <a href="product-details.html?id=${product._id}">
+                                <i class="bi bi-eye"></i>
+                            </a>
+
+                            <i class="bi bi-box-arrow-up"></i>
+
+                            <a href="product-details.html?id=${product._id}">
+                                <i class="bi bi-cart3"></i>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                    <div class="product-content">
+
+                        <h5>${product.name}</h5>
+
+                        <p>
+                            KES ${Number(product.price).toLocaleString()}
+                        </p>
+
+                        <a
+href="#"
+class="buy-now-btn text-decoration-none quick-buy-btn"
+data-id="${product._id}">
+
+    Buy Now
+
+</a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            `;
+
+        });
+
+    });
+
+}
+
+loadHomeProducts();
+
+
+// =======================================
+// LOAD RELATED PRODUCTS
+// =======================================
+
+async function loadRelatedProducts() {
+
+if (!product) return;
+
+const container =
+    document.getElementById(
+        "relatedProducts"
+    );
+
+if (!container) return;
+
+const products =
+    await getProducts();
+
+const related =
+    products
+        .filter(p =>
+
+            p._id !== product._id &&
+
+            p.category === product.category
+
+        )
+        .slice(0, 4);
+
+container.innerHTML = "";
+
+related.forEach(item => {
+
+    const image =
+        item.images &&
+        item.images.length
+            ? getImageURL(item.images[0])
+            : "";
+
+    container.innerHTML += `
+
+    <div class="col-lg-3 col-md-6 mb-4">
+
+        <div class="product-card">
+
+            <div class="product-image">
+
+                <a href="product-details.html?id=${item._id}">
+
+                    <img
+                        src="${image}"
+                        class="img-fluid"
+                        alt="${item.name}">
+
+                </a>
+
+                <div class="product-icons">
+
+                    <i class="bi bi-heart wishlist-btn"></i>
+
+                    <a href="product-details.html?id=${item._id}">
+
+                        <i class="bi bi-eye"></i>
+
+                    </a>
+
+                    <i class="bi bi-box-arrow-up"></i>
+
+                    <a href="product-details.html?id=${item._id}">
+
+                        <i class="bi bi-cart3"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="product-content">
+
+                <h5>${item.name}</h5>
+
+                <p>
+
+                    KES ${Number(item.price).toLocaleString()}
+
+                </p>
+
+                <a
+                    href="product-details.html?id=${item._id}"
+                    class="buy-now-btn text-decoration-none">
+
+                    Buy Now
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    `;
+
+});
+
+} 
