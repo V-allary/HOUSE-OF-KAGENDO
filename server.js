@@ -822,7 +822,7 @@ app.post(
 // ==========================================
 
 app.post(
-    "/products",
+    "/api/products",
     verifyAdmin,
 
     upload.array(
@@ -1032,7 +1032,7 @@ app.post(
 // ==========================================
 
 app.get(
-    "/products",
+    "/api/products",
 
     async (req, res) => {
 
@@ -1078,7 +1078,7 @@ app.get(
 // ==========================================
 
 app.get(
-    "/products/:id",
+    "/api/products/:id",
     async (req, res) => {
 
         try {
@@ -1132,7 +1132,7 @@ app.get(
 // ==========================================
 
 app.put(
-    "/products/:id",
+    "/api/products/:id",
     verifyAdmin,
 
     upload.array(
@@ -1447,7 +1447,7 @@ app.put(
 // ==========================================
 
 app.delete(
-    "/products/:id",
+    "/api/products/:id",
     verifyAdmin,
     async (req, res) => {
 
