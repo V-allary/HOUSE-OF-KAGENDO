@@ -3,8 +3,7 @@
 // ==========================================
 
 const API_URL =
-"http://127.0.0.1:5050";
-
+window.location.origin + "/api";
 
 // ==========================================
 // GET ALL PRODUCTS
@@ -82,23 +81,16 @@ try {
  // ==========================================
 // GET IMAGE URL
 // ==========================================
-
 function getImageURL(image) {
 
-    if (!image) {
+    if (!image) return "";
 
-        return "";
-
-    }
-
-    // Uploaded image
     if (image.startsWith("/uploads")) {
 
-        return `${API_URL}${image}`;
+        return `${window.location.origin}${image}`;
 
     }
 
-    // External image
     if (
         image.startsWith("http://") ||
         image.startsWith("https://")
@@ -108,7 +100,6 @@ function getImageURL(image) {
 
     }
 
-    // Original project images
     return image;
 
 }
