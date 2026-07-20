@@ -448,25 +448,36 @@ a{
     opacity:1;
 
     transform:translateY(0);
-}
-/* ACCOUNT ICON */
+} /* ACCOUNT ICON */
 
-.account-icon{
+.account-link{
 
-    position:relative;
+    position: relative;
 
-    color:white;
+    color: white;
 
-    text-decoration:none;
+    text-decoration: none;
 
-    font-size:26px;
 }
 
-.account-icon:hover{
+.account-link i{
 
-    color:#c9a46c;
+    font-size: 26px;
 
-    transform:translateY(-2px);
+    transition: .3s;
+
+}
+
+.account-link:hover{
+
+    color: #c9a46c;
+
+}
+
+.account-link:hover i{
+
+    transform: translateY(-2px);
+
 }
 
 /* =========================
@@ -2026,20 +2037,18 @@ a{
     }
     
     .order-summary{
+
+        position:sticky;
     
-    position:sticky;
+        top:110px;
     
-    top:120px;
+        background:#fff;
     
-    background:#fff;
+        border-radius:20px;
     
-    padding:35px;
+        padding:30px;
     
-    border-radius:22px;
-    
-    box-shadow:0 15px 35px rgba(0,0,0,.05);
-    
-    border:1px solid #eee;
+        box-shadow:0 15px 40px rgba(0,0,0,.08);
     
     }
     
@@ -4397,5 +4406,443 @@ box-shadow:none;
     display:flex;
     gap:15px;
     flex-wrap:wrap;
+
+}   
+
+/* ======================================
+   QUICK SHOP MODAL
+====================================== */
+
+#quickShopModal .modal-dialog{
+
+    max-width:950px;
+
+}
+
+#quickShopModal .modal-content{
+
+    border:none;
+
+    border-radius:22px;
+
+    overflow:hidden;
+
+    background:#fff;
+
+    height:85vh;
+
+    max-height:760px;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.18);
+
+}
+
+#quickShopModal .modal-header{
+
+    border:none;
+
+    padding:18px 25px;
+
+    background:#fff;
+
+}
+
+#quickShopModal .modal-body{
+
+    padding:0;
+
+    overflow:hidden;
+
+}
+
+.quick-shop-wrapper{
+
+    display:flex;
+
+    height:100%;
+
+}
+
+.quick-left{
+
+    width:48%;
+
+    background:#f8f8f8;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:25px;
+
+}
+
+.quick-image-box{
+
+    width:100%;
+
+}
+
+#quickProductImage{
+
+    width:100%;
+
+    height:500px;
+
+    object-fit:cover;
+
+    border-radius:18px;
+
+}
+
+.quick-right{
+
+    width:52%;
+
+    padding:28px;
+
+    overflow-y:auto;
+
+}
+
+#quickProductName{
+
+    font-size:30px;
+
+    font-weight:700;
+
+    margin-bottom:5px;
+
+}
+
+.quick-price{
+
+    color:#C8A05D;
+
+    font-size:26px;
+
+    font-weight:700;
+
+    margin-bottom:18px;
+
+}
+
+.quick-title{
+
+    font-weight:700;
+
+    margin-bottom:8px;
+
+}
+
+.quick-description{
+
+    color:#666;
+
+    line-height:1.7;
+
+    margin-bottom:22px;
+
+}
+
+.quick-option{
+
+    margin-bottom:20px;
+
+}
+
+.quick-option label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+}
+
+
+/* =====================
+   Quantity
+===================== */
+
+.quick-qty{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+.quick-qty button{
+
+    width:40px;
+
+    height:40px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#f3f3f3;
+
+    font-size:24px;
+
+    font-weight:500;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.quick-qty button:hover{
+
+    background:#C8A05D;
+
+    color:#fff;
+
+    transform:scale(1.08);
+
+}
+
+#quickQty{
+
+    width:32px;
+
+    text-align:center;
+
+    font-size:18px;
+
+    font-weight:700;
+
+}
+
+
+/* =====================
+   Buttons
+===================== */
+
+.quick-buttons{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:25px;
+
+}
+
+#quickAddCart{
+
+    flex:1;
+
+    height:48px;
+
+    border:1px solid #111;
+
+    background:#fff;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+#quickAddCart:hover{
+
+    background:#111;
+
+    color:#fff;
+
+}
+
+#quickBuyNow{
+
+    flex:1;
+
+    height:48px;
+
+    border:none;
+
+    background:#C8A05D;
+
+    color:#fff;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+#quickBuyNow:hover{
+
+    background:#B58C48;
+
+}
+
+
+/* =====================
+   View Details
+===================== */
+
+.quick-footer{
+
+    margin-top:20px;
+
+}
+
+#quickViewDetails{
+
+    color:#111;
+
+    font-weight:600;
+
+    text-decoration:none;
+
+}
+
+#quickViewDetails:hover{
+
+    color:#C8A05D;
+
+}
+
+
+/* =====================
+   Responsive
+===================== */
+
+@media(max-width:992px){
+
+    #quickShopModal .modal-content{
+
+        height:auto;
+
+        max-height:90vh;
+
+    }
+
+    .quick-shop-wrapper{
+
+        flex-direction:column;
+
+    }
+
+    .quick-left,
+
+    .quick-right{
+
+        width:100%;
+
+    }
+
+    #quickProductImage{
+
+        height:380px;
+
+    }
+
+}
+
+.quick-message{
+
+    position:fixed;
+
+    top:30px;
+
+    left:50%;
+
+    transform:translateX(-50%) translateY(-20px);
+
+    background:#111;
+
+    color:#fff;
+
+    padding:16px 26px;
+
+    border-radius:14px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    z-index:999999;
+
+    opacity:0;
+
+    transition:.3s;
+
+    box-shadow:0 20px 40px rgba(0,0,0,.25);
+
+}
+
+.quick-message i{
+
+    color:#C8A05D;
+
+    font-size:20px;
+
+}
+
+.quick-message.show{
+
+    opacity:1;
+
+    transform:translateX(-50%) translateY(0);
+
+}
+
+
+/* ======================================
+   PRODUCTS HEADLINE
+====================================== */
+.category-heading{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    margin-bottom:10px;
+
+}
+
+.category-heading h3{
+
+    font-size:1.5rem;
+
+    font-weight:600;
+
+    color:#16213E;
+
+    margin:0;
+
+    letter-spacing:.5px;
+
+}
+
+.category-line{
+
+    width:70px;
+
+    height:2px;
+
+    background:#c8a165;
+
+    margin-top:8px;
+
+    border-radius:10px;
 
 }

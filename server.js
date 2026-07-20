@@ -800,7 +800,6 @@ app.post(
     async (req, res) => {
 
         try {
-
             const {
                 name,
                 description,
@@ -809,7 +808,10 @@ app.post(
                 stock,
                 sizes,
                 colors,
-                featured
+                featured,
+                bestseller,
+                newArrival,
+                sale
             } = req.body;
 
             if (
@@ -942,8 +944,17 @@ app.post(
                             ? parsedColors
                             : [],
 
-                    featured:
-                        featured === "true"
+                            featured:
+                            featured === "true",
+                        
+                        bestseller:
+                            bestseller === "true",
+                        
+                        newArrival:
+                            newArrival === "true",
+                        
+                        sale:
+                            sale === "true"
 
                 });
 
@@ -1260,15 +1271,32 @@ app.put(
 
             }
 
-            if (
-                req.body.featured !==
-                undefined
-            ) {
+            if (req.body.featured !== undefined) {
 
                 product.featured =
-                    req.body.featured ===
-                    "true";
-
+                    req.body.featured === "true";
+            
+            }
+            
+            if (req.body.bestseller !== undefined) {
+            
+                product.bestseller =
+                    req.body.bestseller === "true";
+            
+            }
+            
+            if (req.body.newArrival !== undefined) {
+            
+                product.newArrival =
+                    req.body.newArrival === "true";
+            
+            }
+            
+            if (req.body.sale !== undefined) {
+            
+                product.sale =
+                    req.body.sale === "true";
+            
             }
 
             // Replace images only if new images were uploaded.

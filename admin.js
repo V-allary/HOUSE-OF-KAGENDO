@@ -25,7 +25,7 @@ if (
     !adminToken &&
 
     window.location.pathname.endsWith(
-        "admin.html"
+        "dashboard.html"
     )
 
 ) {
@@ -176,7 +176,7 @@ loginForm.addEventListener(
             );
 
             window.location.href =
-                "admin.html";
+                "dashboard.html";
 
         } catch (error) {
 
@@ -564,8 +564,7 @@ if (
 
 }
 
-
-// =======================================
+ // =======================================
 // GET CORRECT PRODUCT IMAGE URL
 // =======================================
 
@@ -583,6 +582,14 @@ function getProductImage(product) {
     const image =
         product.images[0];
 
+    // Uploaded images
+    if (image.startsWith("/uploads")) {
+
+        return `${API_URL}${image}`;
+
+    }
+
+    // External images
     if (
         image.startsWith("http://") ||
         image.startsWith("https://")
@@ -592,7 +599,8 @@ function getProductImage(product) {
 
     }
 
-    return `${API_URL}${image}`;
+    // Images inside your project
+    return image;
 
 }
 
@@ -805,48 +813,30 @@ if (productForm) {
         async (e) => {
 
             e.preventDefault();
+            const formData = new FormData();
 
-            const formData =
-                new FormData();
-
-            formData.append(
-                "name",
-                document
-                    .getElementById("productName")
-                    .value
-                    .trim()
-            );
-
-            formData.append(
-                "price",
-                document
-                    .getElementById("productPrice")
-                    .value
-            );
-
-            formData.append(
-                "category",
-                document
-                    .getElementById("productCategory")
-                    .value
-                    .trim()
-            );
-
-            formData.append(
-                "description",
-                document
-                    .getElementById("productDescription")
-                    .value
-                    .trim()
-            );
-
-            formData.append(
-                "stock",
-                document
-                    .getElementById("productStock")
-                    .value || 0
-            );
-
+            const name =
+                document.getElementById("productName")
+                .value.trim();
+            
+            const price =
+                Number(
+                    document.getElementById("productPrice").value
+                );
+            
+            const category =
+                document.getElementById("productCategory")
+                .value.trim();
+            
+            const description =
+                document.getElementById("productDescription")
+                .value.trim();
+            
+            const stock =
+                Number(
+                    document.getElementById("productStock").value
+                );
+            
             const sizes =
                 document
                     .getElementById("productSizes")
@@ -854,7 +844,7 @@ if (productForm) {
                     .split(",")
                     .map(size => size.trim())
                     .filter(Boolean);
-
+            
             const colors =
                 document
                     .getElementById("productColors")
@@ -862,38 +852,115 @@ if (productForm) {
                     .split(",")
                     .map(color => color.trim())
                     .filter(Boolean);
+            
+            const imageFiles =
+                document.getElementById("productImages").files;
+            
+            
+            // =======================================
+            // VALIDATE PRODUCT
+            // =======================================
+   
+function showAdminAlert(message, type = "warning") {
 
+    let alertBox =
+        document.getElementById("adminAlert");
+
+    if (!alertBox) {
+
+        alertBox =
+            document.createElement("div");
+
+        alertBox.id = "adminAlert";
+
+        document
+            .querySelector(".admin-main")
+            .prepend(alertBox);
+
+    }
+
+    let icon = "bi-exclamation-triangle";
+
+    if (type === "success") {
+
+        icon = "bi-check-circle-fill";
+
+    } else if (type === "error") {
+
+        icon = "bi-x-circle-fill";
+
+    }
+
+    alertBox.innerHTML = `
+        <div class="admin-alert ${type}">
+            <i class="bi ${icon}"></i>
+            <span>${message}</span>
+        </div>
+    `;
+
+    setTimeout(() => {
+
+        alertBox.innerHTML = "";
+
+    }, 3500);
+
+}
+            
+            // =======================================
+            // BUILD FORMDATA
+            // =======================================
+            
+            formData.append("name", name);
+            
+            formData.append("price", price);
+            
+            formData.append("category", category);
+            
+            formData.append("description", description);
+            
+            formData.append("stock", stock);
+            
             formData.append(
                 "sizes",
                 JSON.stringify(sizes)
             );
-
+            
             formData.append(
                 "colors",
                 JSON.stringify(colors)
             );
-
+            
             formData.append(
                 "featured",
-                "false"
+                document.getElementById("productFeatured").checked
             );
-
-            const imageFiles =
-                document.getElementById(
-                    "productImages"
-                ).files;
-
+            
+            formData.append(
+                "bestseller",
+                document.getElementById("productBestSeller").checked
+            );
+            
+            formData.append(
+                "newArrival",
+                document.getElementById("productNewArrival").checked
+            );
+            
+            formData.append(
+                "sale",
+                document.getElementById("productSale").checked
+            );
+            
             for (
                 let i = 0;
                 i < imageFiles.length;
                 i++
             ) {
-
+            
                 formData.append(
                     "images",
                     imageFiles[i]
                 );
-
+            
             }
 
             try {
@@ -956,14 +1023,16 @@ if (editingProductId) {
                 }
                 if (editingProductId) {
 
-                    alert(
-                        "Product updated successfully!"
+                    showAdminAlert(
+                        "✔ Product updated successfully!",
+                        "success"
                     );
                 
                 } else {
                 
-                    alert(
-                        "Product added successfully!"
+                    showAdminAlert(
+                        "✔ Product added successfully!",
+                        "success"
                     );
                 
                 }
@@ -1008,12 +1077,11 @@ submitButton.innerHTML = `
                     "Save product error:",
                     error
                 );
-
-                alert(
+                showAdminAlert(
                     error.message ||
-                    "Unable to save product."
+                    "Unable to save product.",
+                    "error"
                 );
-
             }
 
         }
@@ -1066,9 +1134,9 @@ async function deleteProduct(id) {
             );
 
         }
-
-        alert(
-            "Product deleted successfully!"
+        showAdminAlert(
+            "✔ Product deleted successfully!",
+            "success"
         );
 
         await loadProducts();
@@ -1082,12 +1150,14 @@ async function deleteProduct(id) {
             error
         );
 
-        alert(
+        showAdminAlert(
 
             error.message ||
-
-            "Unable to delete product."
-
+        
+            "Unable to delete product.",
+        
+            "error"
+        
         );
 
     }
@@ -1177,10 +1247,10 @@ async function editProduct(id) {
             "Edit product error:",
             error
         );
-
-        alert(
+        showAdminAlert(
             error.message ||
-            "Unable to load product."
+            "Unable to load product.",
+            "error"
         );
 
     }

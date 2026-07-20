@@ -319,164 +319,8 @@
                 <p class="mini-title">HOUSE OF KAGENDO</p>
                 <h2>You May Also Like</h2>
             </div>
-    
-            <!-- FIX: ADD ROW -->
-            <div class="row">
-    
-                <!-- PRODUCT 1 -->
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="product-card"
-                        data-id="5"
-                        data-name="Apex Set"
-                        data-price="5000"
-                        data-image="KA img/KA img 24.jpeg">
-    
-                        <div class="product-image">
-                            <a href="product-details.html?id=5">
-                            <img src="KA img/KA img 24.jpeg" class="img-fluid"></a>
-    
-                            <div class="product-icons">
-                                <i class="bi bi-heart wishlist-btn"></i>
-                                <a href="product-details.html?id=5">
-                                    <i class="bi bi-eye"></i>  
-                                </a>
-                                <i class="bi bi-box-arrow-up"></i>
-                                <a href="product-details.html?id=5">
-                                    <i class="bi bi-cart3"></i>
-                                    </a>
-                            </div>
-                        </div>
-    
-                         
-                     <div class="product-content">
-                     <h5>Apex Set</h5>
-                     <p>KES 5,000</p>
-                     <a href="product-details.html?id=5"
-                     class="buy-now-btn text-decoration-none">
-                         Buy Now
-                     </a>
-                     
-                        </div>
-    
-                    </div>
-                </div>
-    
-                <!-- PRODUCT 2 -->
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="product-card"
-                        data-id="6"
-                        data-name="Marv Set"
-                        data-price="4500"
-                        data-image="KA img/KA img 25.jpeg">
-    
-                        <div class="product-image">
-                            <a href="product-details.html?id=6">
-                                <img src="KA img/KA img 25.jpeg" class="img-fluid">
-                            </a>
-    
-                            <div class="product-icons">
-                                <i class="bi bi-heart wishlist-btn"></i>
-                                <a href="product-details.html?id=6">
-                                <i class="bi bi-eye"></i>
-                                </a>
-                                <i class="bi bi-box-arrow-up"></i>
-                                <a href="product-details.html?id=6">
-                                    <i class="bi bi-cart3"></i>
-                                    </a>
-                            </div>
-                        </div>
-
-
-                        <div class="product-content">
-                            <h5>Marv Set</h5>
-                            <p>KES 4,500</p>
-                            <a href="product-details.html?id=6"
-        class="buy-now-btn text-decoration-none">
-            Buy Now
-        </a>
-        
-                        </div>
-    
-                    </div>
-                </div>
-    
-                <!-- PRODUCT 3 -->
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="product-card"
-                        data-id="7"
-                        data-name="Zuri Set"
-                        data-price="3200"
-                        data-image="KA img/KA img 8.jpeg">
-    
-                        <div class="product-image">
-                            <a href="product-details.html?id=7">
-                                <img src="KA img/KA img 8.jpeg" class="img-fluid">
-                            </a>
-    
-                            <div class="product-icons">
-                                <i class="bi bi-heart wishlist-btn"></i>
-                                <a href="product-details.html?id=7">
-                                 <i class="bi bi-eye"></i>
-                                </a>
-                                <i class="bi bi-box-arrow-up"></i>
-                                <a href="product-details.html?id=7">
-                                    <i class="bi bi-cart3"></i>
-                                    </a>
-                            </div>
-                        </div>
-    
-                        <div class="product-content">
-                            <h5>Zuri Set</h5>
-                            <p>KES 3,200</p>
-                            <a href="product-details.html?id=7"
-        class="buy-now-btn text-decoration-none">
-            Buy Now
-        </a>
-        
-                        </div>
-    
-                    </div>
-                </div>
-    
-                <!-- PRODUCT 4 -->
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="product-card"
-                        data-id="8"
-                        data-name="Dress Set"
-                        data-price="3500"
-                        data-image="KA img/KA img 30.jpeg">
-     
-                        <div class="product-image">
-                            <a href="product-details.html?id=8">
-                                <img src="KA img/KA img 30.jpeg" class="img-fluid">
-                            </a>
-    
-                            <div class="product-icons">
-                                <i class="bi bi-heart wishlist-btn"></i>
-                                <a href="product-details.html?id=8">
-                                  <i class="bi bi-eye"></i>
-                                </a>
-                                <i class="bi bi-box-arrow-up"></i>
-                                <a href="product-details.html?id=8">
-                                    <i class="bi bi-cart3"></i>
-                                    </a>
-                            </div>
-                        </div>
-    
-                        <div class="product-content">
-                            <h5>Dress Set</h5>
-                            <p>KES 3,500</p>
-                            <a href="product-details.html?id=8"
-        class="buy-now-btn text-decoration-none">
-            Buy Now
-        </a>
-        
-                        </div>
-    
-                    </div>
-                </div>
-    
-            </div> 
+     <div class="row" id="relatedProducts">
+     </div>
             <!-- END ROW -->
 
             <div id="customAlert" class="custom-alert">
@@ -774,27 +618,103 @@
   <!-- AOS -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
-  <script src="products.js"></script>
+  <script src="products-api.js"></script>
   <script src="main.js"></script>
 
 <script>
-// GET PRODUCT
-const params = new URLSearchParams(window.location.search);
-const productId = parseInt(params.get("id"));
+ // =======================================
+// GET PRODUCT FROM MONGODB
+// =======================================
 
-const product = products.find(
-    p => p.id === productId
+const params =
+new URLSearchParams(
+    window.location.search
 );
 
+const productId =
+params.get("id");
+
+let product = null;
+
 let selectedSize = "";
+
 let selectedColor = "";
+
 let qty = 1;
 
-// LOAD PRODUCT
-if(product){
 
-    document.getElementById("product-image").src =
-    product.images[0];
+// =======================================
+// LOAD PRODUCT
+// =======================================
+
+async function loadProduct(){
+
+    product =
+    await getProduct(productId);
+
+    if(!product){
+
+        document.querySelector(
+            ".product-details-section"
+        ).innerHTML = `
+
+        <div class="container text-center py-5">
+
+            <h2>
+
+                Product not found
+
+            </h2>
+
+        </div>
+
+        `;
+
+        return;
+
+    }
+
+    const image =
+
+    product.images &&
+    product.images.length
+
+    ? getImageURL(
+        product.images[0]
+    )
+
+    : "";
+
+    document.getElementById(
+        "product-image"
+    ).src = image;
+
+    document.getElementById(
+        "product-name"
+    ).innerText =
+    product.name;
+
+    document.getElementById(
+        "product-price"
+    ).innerText =
+    "KES " +
+    Number(
+        product.price
+    ).toLocaleString();
+
+    document.getElementById(
+        "product-description"
+    ).innerText =
+    product.description || "";
+
+    document.getElementById(
+        "breadcrumb-product"
+    ).innerText =
+    product.name;
+
+    // ===================================
+    // THUMBNAILS
+    // ===================================
 
     const wrapper =
     document.getElementById(
@@ -808,7 +728,8 @@ if(product){
         const thumb =
         document.createElement("img");
 
-        thumb.src = img;
+        thumb.src =
+        getImageURL(img);
 
         thumb.classList.add(
             "thumbnail"
@@ -818,116 +739,130 @@ if(product){
 
             document.getElementById(
                 "product-image"
-            ).src = img;
+            ).src =
+            getImageURL(img);
 
         };
 
-        wrapper.appendChild(thumb);
+        wrapper.appendChild(
+            thumb
+        );
 
     });
 
-    document.getElementById(
-        "product-name"
-    ).innerText = product.name;
 
-    document.getElementById(
-        "product-price"
-    ).innerText =
-    "KES " + product.price;
-
-    document.getElementById(
-        "product-description"
-    ).innerText =
-    product.description;
-
+    // ===================================
     // COLORS
+    // ===================================
+
     const colorBox =
     document.getElementById(
         "product-colors"
     );
 
+    colorBox.innerHTML = "";
+
     product.colors.forEach(color => {
 
-        const el =
+        const circle =
         document.createElement("span");
 
-        el.classList.add(
-            "color-circle"
-        );
+        circle.className =
+        "color-circle";
 
-        el.style.background =
+        circle.style.background =
         color;
 
-        el.addEventListener("click", () => {
+        circle.onclick = () => {
 
             document
-            .querySelectorAll(".color-circle")
-            .forEach(item => {
+            .querySelectorAll(
+                ".color-circle"
+            )
+            .forEach(item =>
 
                 item.classList.remove(
                     "active-color"
-                );
+                )
 
-            });
+            );
 
-            el.classList.add(
+            circle.classList.add(
                 "active-color"
             );
 
             selectedColor =
             color;
 
-        });
+        };
 
-        colorBox.appendChild(el);
+        colorBox.appendChild(
+            circle
+        );
 
     });
 
+
+    // ===================================
     // SIZES
+    // ===================================
+
     const sizeBox =
     document.getElementById(
         "product-sizes"
     );
 
+    sizeBox.innerHTML = "";
+
     product.sizes.forEach(size => {
 
-        const btn =
+        const button =
         document.createElement("button");
 
-        btn.innerText = size;
+        button.className =
+        "size-btn";
 
-        btn.classList.add(
-            "size-btn"
-        );
+        button.innerText =
+        size;
 
-        btn.addEventListener("click", () => {
+        button.onclick = () => {
 
             document
-            .querySelectorAll(".size-btn")
-            .forEach(item => {
+            .querySelectorAll(
+                ".size-btn"
+            )
+            .forEach(item =>
 
                 item.classList.remove(
                     "active-size"
-                );
+                )
 
-            });
+            );
 
-            btn.classList.add(
+            button.classList.add(
                 "active-size"
             );
 
             selectedSize =
             size;
 
-        });
+        };
 
-        sizeBox.appendChild(btn);
+        sizeBox.appendChild(
+            button
+        );
 
     });
-
+await loadRelatedProducts();
 }
 
+loadProduct();
+
+
+// =======================================
 // QUANTITY
+// =======================================
+
 document.getElementById(
     "plus-btn"
 ).onclick = () => {
@@ -955,9 +890,11 @@ document.getElementById(
     }
 
 };
+ // =======================================
+// CUSTOM ALERT
+// =======================================
 
-// ADD TO CART
-function showAlert(title,message){
+function showAlert(title, message){
 
 document.getElementById(
     "alertTitle"
@@ -983,190 +920,369 @@ document.getElementById(
 
 };
 
+
+// =======================================
+// ADD TO CART
+// =======================================
+
 document.querySelector(
-    ".add-cart-btn"
+".add-cart-btn"
 ).onclick = () => {
 
-    if(!selectedSize){
+if(!product) return;
 
-        showAlert(
-            "Size Required",
-            "Please select Preferred size."
-        );
+if(
+    product.sizes.length &&
+    !selectedSize
+){
 
-        return;
-    }
-
-    if(!selectedColor){
-
-        showAlert(
-            "Color Required",
-            "Please select your preferred color."
-        );
-
-        return;
-    }
-
-    let cart =
-    JSON.parse(
-        localStorage.getItem("cart")
-    ) || [];
-
-    const existing =
-    cart.find(item =>
-
-        item.id === product.id &&
-        item.size === selectedSize &&
-        item.color === selectedColor
-
+    showAlert(
+        "Size Required",
+        "Please select a size."
     );
 
-    if(existing){
+    return;
 
-        existing.quantity += qty;
+}
 
-    }else{
+if(
+    product.colors.length &&
+    !selectedColor
+){
 
-        cart.push({
-
-            id: product.id,
-
-            name: product.name,
-
-            price: product.price,
-
-            image: product.images[0],
-
-            quantity: qty,
-
-            size: selectedSize,
-
-            color: selectedColor
-
-        });
-
-    }
-
-    localStorage.setItem(
-        "cart",
-        JSON.stringify(cart)
+    showAlert(
+        "Color Required",
+        "Please select a color."
     );
 
-    updateCartCount();
+    return;
 
-    showCartNotification(
-        product.name + "added to cart"
-    );
+}
+
+let cart =
+JSON.parse(
+    localStorage.getItem("cart")
+) || [];
+
+const image =
+
+    product.images.length
+
+    ? getImageURL(
+        product.images[0]
+    )
+
+    : "";
+
+const existing =
+cart.find(item =>
+
+    item.id === product._id &&
+
+    item.size === selectedSize &&
+
+    item.color === selectedColor
+
+);
+
+if(existing){
+
+    existing.quantity += qty;
+
+}else{
+
+    cart.push({
+
+        id: product._id,
+
+        name: product.name,
+
+        price: product.price,
+
+        image,
+
+        quantity: qty,
+
+        size: selectedSize,
+
+        color: selectedColor
+
+    });
+
+}
+
+localStorage.setItem(
+
+    "cart",
+
+    JSON.stringify(cart)
+
+);
+
+updateCartCount();
+
+showCartNotification(
+
+    product.name +
+
+    " added to cart"
+
+);
 
 };
 
+
+// =======================================
 // BUY NOW
+// =======================================
+
 document.querySelector(
-    ".buy-now-btn"
+".buy-now-btn"
 ).onclick = () => {
 
-    if(!selectedSize){
+if(!product) return;
 
-        showAlert(
-            "Size Required",
-            "Please select Preferred size."
-        );
+if(
+    product.sizes.length &&
+    !selectedSize
+){
 
+    showAlert(
 
-        return;
-    }
+        "Size Required",
 
-    if(!selectedColor){
+        "Please select a size."
 
-        
-        showAlert(
-            "Color Required",
-            "Please select your preferred color."
-        );
-
-
-        return;
-    }
-
-    localStorage.setItem(
-        "checkoutProduct",
-        JSON.stringify({
-
-            id: product.id,
-
-            name: product.name,
-
-            price: product.price,
-
-            image: product.images[0],
-
-            quantity: qty,
-
-            size: selectedSize,
-
-            color: selectedColor
-
-        })
     );
 
-    window.location.href =
-    "checkout.html";
+    return;
+
+}
+
+if(
+    product.colors.length &&
+    !selectedColor
+){
+
+    showAlert(
+
+        "Color Required",
+
+        "Please select a color."
+
+    );
+
+    return;
+
+}
+
+const image =
+
+    product.images.length
+
+    ? getImageURL(
+        product.images[0]
+    )
+
+    : "";
+
+localStorage.setItem(
+
+    "checkoutProduct",
+
+    JSON.stringify({
+
+        id: product._id,
+
+        name: product.name,
+
+        price: product.price,
+
+        image,
+
+        quantity: qty,
+
+        size: selectedSize,
+
+        color: selectedColor
+
+    })
+
+);
+
+window.location.href =
+"checkout.html";
 
 };
 
+
+// =======================================
 // UPDATE CART COUNT
+// =======================================
+
 function updateCartCount(){
 
-    let cart =
-    JSON.parse(
-        localStorage.getItem("cart")
-    ) || [];
+let cart =
 
-    let total =
-    cart.reduce(
-        (sum,item) =>
-        sum + item.quantity,
-        0
-    );
+JSON.parse(
 
-    const desktopCount =
-    document.getElementById(
-        "desktop-cart-count"
-    );
+    localStorage.getItem(
+        "cart"
+    )
 
-    const mobileCount =
-    document.getElementById(
-        "mobile-cart-count"
-    );
+) || [];
 
-    if(desktopCount){
+let total =
 
-        desktopCount.innerText =
-        total;
+cart.reduce(
 
-    }
+    (sum,item)=>
 
-    if(mobileCount){
+    sum + item.quantity,
 
-        mobileCount.innerText =
-        total;
+    0
 
-    }
+);
+
+const desktop =
+
+document.getElementById(
+    "desktop-cart-count"
+);
+
+const mobile =
+
+document.getElementById(
+    "mobile-cart-count"
+);
+
+if(desktop){
+
+    desktop.innerText =
+    total;
+
+}
+
+if(mobile){
+
+    mobile.innerText =
+    total;
+
+}
 
 }
 
 updateCartCount();
 
-if(product){
+// =======================================
+// LOAD RELATED PRODUCTS
+// =======================================
 
+async function loadRelatedProducts() {
+
+if (!product) return;
+
+const container =
     document.getElementById(
-        "breadcrumb-product"
-    ).innerText =
-    product.name;
+        "relatedProducts"
+    );
+
+if (!container) return;
+
+const products =
+    await getProducts();
+
+const related =
+    products
+        .filter(p =>
+
+            p._id !== product._id &&
+
+            p.category === product.category
+
+        )
+        .slice(0, 4);
+
+container.innerHTML = "";
+
+related.forEach(item => {
+
+    const image =
+        item.images &&
+        item.images.length
+            ? getImageURL(item.images[0])
+            : "";
+
+    container.innerHTML += `
+
+    <div class="col-lg-3 col-md-6 mb-4">
+
+        <div class="product-card">
+
+            <div class="product-image">
+
+                <a href="product-details.html?id=${item._id}">
+
+                    <img
+                        src="${image}"
+                        class="img-fluid"
+                        alt="${item.name}">
+
+                </a>
+
+                <div class="product-icons">
+
+                    <i class="bi bi-heart wishlist-btn"></i>
+
+                    <a href="product-details.html?id=${item._id}">
+
+                        <i class="bi bi-eye"></i>
+
+                    </a>
+
+                    <i class="bi bi-box-arrow-up"></i>
+
+                    <a href="product-details.html?id=${item._id}">
+
+                        <i class="bi bi-cart3"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="product-content">
+
+                <h5>${item.name}</h5>
+
+                <p>
+
+                    KES ${Number(item.price).toLocaleString()}
+
+                </p>
+
+                <a
+                    href="product-details.html?id=${item._id}"
+                    class="buy-now-btn text-decoration-none">
+
+                    Buy Now
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    `;
+
+});
 
 }
-     
-    </script>
+
+</script>
 
 </body>
 
