@@ -926,16 +926,18 @@ function removeFromWishlist(id){
 // =======================================
 
 let products = [];
-
 async function loadProducts() {
 
     try {
 
         products = await getProducts();
 
+        console.log("Products loaded:", products);
+
         loadHomeProducts();
-        
-         
+
+        loadShopProducts();
+
         setupSearch(
             "search-input",
             "search-results"
@@ -1509,3 +1511,298 @@ document.addEventListener("click", function(e){
     quickProduct._id;
 
 });
+
+ // =======================================
+// SHOP PAGE PRODUCTS
+// =======================================
+
+function renderShopSection(title, items, container) {
+
+    if (!items.length) return;
+
+    container.innerHTML += `
+
+    <div class="col-12 mt-5 mb-4">
+
+        <div class="category-heading">
+
+            <h3>${title}</h3>
+
+            <div class="category-line"></div>
+
+        </div>
+
+    </div>
+
+    `;
+
+    items.forEach(product => {
+
+        const image = getProductImage(product);
+
+        container.innerHTML += `
+
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div
+                class="product-card"
+                data-id="${product._id}"
+                data-name="${product.name}"
+                data-price="${product.price}"
+                data-image="${image}">
+
+                <div class="product-image">
+
+                    <a href="product-details.html?id=${product._id}">
+
+                        <img
+                        src="${image}"
+                        alt="${product.name}">
+
+                    </a>
+
+                    <div class="product-icons">
+
+                        <i class="bi bi-heart wishlist-btn"></i>
+
+                        <a href="product-details.html?id=${product._id}">
+                            <i class="bi bi-eye"></i>
+                        </a>
+
+                        <i
+                        class="bi bi-box-arrow-up quick-buy-btn"
+                        data-id="${product._id}">
+                        </i>
+
+                        <i
+                        class="bi bi-cart3 quick-buy-btn"
+                        data-id="${product._id}">
+                        </i>
+
+                    </div>
+
+                </div>
+
+                <div class="product-content">
+
+                    <h5>${product.name}</h5>
+
+                    <p>
+                        KES ${Number(product.price).toLocaleString()}
+                    </p>
+
+                    <button
+                    class="buy-now-btn quick-buy-btn"
+                    data-id="${product._id}">
+                        Buy Now
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+function loadShopProducts(productList = products){
+
+    const container =
+    document.getElementById("productsContainer");
+
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    if(productList.length === 0){
+
+        container.innerHTML = `
+
+        <div class="col-12 text-center py-5">
+
+            <h3>No products yet.</h3>
+
+            <button
+            id="resetFilters"
+            class="btn btn-dark mt-3">
+
+                Try again Later
+
+            </button>
+
+        </div>
+
+        `;
+
+        document
+        .getElementById("resetFilters")
+        ?.addEventListener("click", () => {
+
+            document.getElementById("categoryFilter").value = "all";
+            document.getElementById("priceFilter").selectedIndex = 0;
+            document.getElementById("sortFilter").selectedIndex = 0;
+
+            loadShopProducts(products);
+
+        });
+
+        return;
+
+    }
+
+    renderShopSection(
+        "✨ NEW ARRIVALS",
+        productList.filter(p => p.newArrival),
+        container
+    );
+
+    renderShopSection(
+        "EXECUTIVE WEAR",
+        productList.filter(p => p.category === "EXECUTIVE WEAR"),
+        container
+    );
+
+    renderShopSection(
+        "LOUNGE WEAR",
+        productList.filter(p => p.category === "LOUNGE WEAR"),
+        container
+    );
+
+    renderShopSection(
+        "CASUAL WEAR",
+        productList.filter(p => p.category === "CASUAL WEAR"),
+        container
+    );
+
+    renderShopSection(
+        "🔥 BEST SELLERS",
+        productList.filter(p => p.bestseller),
+        container
+    );
+
+}
+
+function filterShopProducts(){
+
+    let filtered = [...products];
+
+    const category =
+    document.getElementById("categoryFilter")?.value;
+
+    const price =
+    document.getElementById("priceFilter")?.value;
+
+    const sort =
+    document.getElementById("sortFilter")?.value;
+
+    // CATEGORY
+
+    if(category && category !== "all"){
+
+        if(category === "NEW ARRIVALS"){
+
+            filtered =
+            filtered.filter(p => p.newArrival);
+
+        }
+
+        else if(category === "BEST SELLERS"){
+
+            filtered =
+            filtered.filter(p => p.bestseller);
+
+        }
+
+        else{
+
+            filtered =
+            filtered.filter(
+                p => p.category === category
+            );
+
+        }
+
+    }
+
+    // PRICE
+
+    if(price === "Under KES 5,000"){
+
+        filtered =
+        filtered.filter(p => p.price < 5000);
+
+    }
+
+    if(price === "KES 5,000 - 10,000"){
+
+        filtered =
+        filtered.filter(
+            p => p.price >= 5000 &&
+            p.price <= 10000
+        );
+
+    }
+
+    if(price === "Above KES 10,000"){
+
+        filtered =
+        filtered.filter(
+            p => p.price > 10000
+        );
+
+    }
+
+    // SORT
+
+    if(sort === "Newest"){
+
+        filtered.sort(
+
+            (a,b)=>
+
+            new Date(b.createdAt)-
+            new Date(a.createdAt)
+
+        );
+
+    }
+
+    if(sort === "Price: Low to High"){
+
+        filtered.sort(
+
+            (a,b)=>a.price-b.price
+
+        );
+
+    }
+
+    if(sort === "Price: High to Low"){
+
+        filtered.sort(
+
+            (a,b)=>b.price-a.price
+
+        );
+
+    }
+
+    loadShopProducts(filtered);
+
+}
+
+document
+.getElementById("categoryFilter")
+?.addEventListener("change", filterShopProducts);
+
+document
+.getElementById("priceFilter")
+?.addEventListener("change", filterShopProducts);
+
+document
+.getElementById("sortFilter")
+?.addEventListener("change", filterShopProducts);
