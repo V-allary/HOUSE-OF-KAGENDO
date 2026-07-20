@@ -16,7 +16,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const multer = require("multer");
-const path = require("path");
+ 
 const fs = require("fs");
 
 
@@ -31,6 +31,26 @@ const Settings= require("./models/settingsModel");
 const Admin= require("./models/adminModel");
 const NewsletterSubscriber =
     require("./models/newsLetterModel");
+
+
+
+    // ==========================================
+// WEBSITE PAGES
+// ==========================================
+
+const path = require("path");
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
+});
+
+app.get("/admin", (req, res) => {
+    res.sendFile(path.join(__dirname, "admin.html"));
+});
+
+app.get("/dashboard", (req, res) => {
+    res.sendFile(path.join(__dirname, "dashboard.html"));
+});
 
 
 // ==========================================

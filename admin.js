@@ -25,7 +25,7 @@ if (
     !adminToken &&
 
     window.location.pathname.endsWith(
-        "dashboard.html"
+        "/dashboard"
     )
 
 ) {
@@ -176,7 +176,7 @@ loginForm.addEventListener(
             );
 
             window.location.href =
-                "dashboard.html";
+                "/dashboard";
 
         } catch (error) {
 
@@ -506,7 +506,7 @@ if (adminLogout) {
             );
             
             window.location.href =
-                "admin-login.html";
+                "/admin";
 
         }
     );
