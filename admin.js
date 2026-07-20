@@ -620,7 +620,7 @@ async function loadProducts() {
 
         const response =
             await fetch(
-                `${API_URL}/products`
+                `${API_URL}/api/products`
             );
 
         if (!response.ok) {
@@ -973,7 +973,7 @@ if (editingProductId) {
     // UPDATE EXISTING PRODUCT
     // =======================================
     response = await fetch(
-        `${API_URL}/products/${editingProductId}`,
+        `${API_URL}/api/products/${editingProductId}`,
         {
             method: "PUT",
     
@@ -994,7 +994,7 @@ if (editingProductId) {
     // ADD NEW PRODUCT
     // =======================================
     response = await fetch(
-        `${API_URL}/products`,
+        `${API_URL}/api/products`,
         {
             method: "POST",
     
@@ -1105,7 +1105,7 @@ async function deleteProduct(id) {
 
         const response =
             await fetch(
-                `${API_URL}/products/${id}`,
+                `${API_URL}/api/products/${id}`,
                 {
 
                     method: "DELETE",
@@ -1173,7 +1173,7 @@ async function editProduct(id) {
     try {
 
         const response =
-            await fetch(`${API_URL}/products/${id}`);
+            await fetch(`${API_URL}/api/products/${id}`);
 
         const product =
             await response.json();
