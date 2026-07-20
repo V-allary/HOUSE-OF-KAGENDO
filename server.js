@@ -33,6 +33,15 @@ const NewsletterSubscriber =
     require("./models/newsLetterModel");
 
 
+ 
+
+// ==========================================
+// EXPRESS APP
+// ==========================================
+
+const app = express();
+
+
 
     // ==========================================
 // WEBSITE PAGES
@@ -51,13 +60,6 @@ app.get("/admin", (req, res) => {
 app.get("/dashboard", (req, res) => {
     res.sendFile(path.join(__dirname, "dashboard.html"));
 });
-
-
-// ==========================================
-// EXPRESS APP
-// ==========================================
-
-const app = express();
 
 
 // ==========================================
