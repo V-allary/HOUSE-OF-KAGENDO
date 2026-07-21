@@ -86,7 +86,7 @@ app.use(
             "https://houseofkagendo.com",
 
             "https://www.houseofkagendo.com",
-            
+
             "https://v-allary.github.io"
             
         ],
@@ -3012,7 +3012,7 @@ app.post(
 
             });
 
-            return res.status(200).json({
+            res.status(200).json({
 
                 success: true,
 
@@ -3028,7 +3028,7 @@ app.post(
                 error
             );
 
-            return res.status(500).json({
+            res.status(500).json({
 
                 success: false,
 

@@ -1901,6 +1901,7 @@ document
 // =======================================
 
 const contactForm = document.getElementById("contactForm");
+const status = document.getElementById("formStatus");
 
 if (contactForm) {
 
@@ -1914,7 +1915,7 @@ if (contactForm) {
 
         try {
 
-            const response = await fetch("https://houseofkagendo.com/submit-form", {
+            const response = await fetch("https://house-of-kagendo.onrender.com/submit-form", {
 
                 method: "POST",
 
