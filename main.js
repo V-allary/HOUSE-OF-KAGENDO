@@ -1894,3 +1894,69 @@ document
 document
 .getElementById("sortFilter")
 ?.addEventListener("change", filterShopProducts);
+
+
+// =======================================
+// CONTACT FORM
+// =======================================
+
+const contactForm = document.getElementById("contactForm");
+
+if (contactForm) {
+
+    contactForm.addEventListener("submit", async (e) => {
+
+        e.preventDefault();
+
+        const button = contactForm.querySelector("button");
+        button.disabled = true;
+        button.innerText = "Sending...";
+
+        try {
+
+            const response = await fetch("https://houseofkagendo.com/submit-form", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    name: document.getElementById("name").value,
+
+                    email: document.getElementById("email").value,
+
+                    subject: document.getElementById("subject").value,
+
+                    message: document.getElementById("message").value
+
+                })
+
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message);
+            }
+
+            alert("Message sent successfully!");
+
+            contactForm.reset();
+
+        } catch (error) {
+
+            alert(error.message || "Failed to send message.");
+
+        } finally {
+
+            button.disabled = false;
+            button.innerText = "SEND MESSAGE";
+
+        }
+
+    });
+
+}

@@ -1134,15 +1134,13 @@ async function deleteProduct(id) {
             );
 
         }
-        showAdminAlert(
-            "✔ Product deleted successfully!",
-            "success"
-        );
-
         await loadProducts();
+await loadDashboard();
 
-        await loadDashboard();
-
+showAdminAlert(
+    "✔ Product deleted successfully!",
+    "success"
+);
     } catch (error) {
 
         console.error(
