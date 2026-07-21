@@ -1072,19 +1072,52 @@ async function loadHomeProducts() {
 
             <div class="col-lg-3 col-md-6 mb-4">
 
-                <div
-                class="product-card"
+                      <div
+                       class="product-card ${product.stock <= 0 ? "sold-out-card" : ""}"
 
-                data-id="${product._id}"
+                        data-id="${product._id}"
 
-                data-name="${product.name}"
+                         data-name="${product.name}"
 
-                data-price="${product.price}"
+                        data-price="${product.price}"
 
-                data-image="${image}">
+                        data-image="${image}">
 
-                    <div class="product-image">
 
+
+                        <div class="product-image">
+
+                        ${product.stock <= 0 ? `
+
+                            <div class="sold-out-badge">
+                            
+                                SOLD OUT
+                            
+                            </div>
+                            
+                            `
+                            
+                            : product.stock <= 3 ? `
+                            
+                            <div class="low-stock-badge danger">
+                            
+                                🔥 Only ${product.stock} Left
+                            
+                            </div>
+                            
+                            `
+                            
+                            : product.stock <= 8 ? `
+                            
+                            <div class="low-stock-badge">
+                            
+                                Low Stock
+                            
+                            </div>
+                            
+                            `
+                            
+                            : ""}
                         <a href="product-details.html?id=${product._id}">
 
                             <img
@@ -1104,16 +1137,22 @@ async function loadHomeProducts() {
 
                             </a>
 
-                            <i
-                            class="bi bi-box-arrow-up quick-buy-btn"
-                            data-id="${product._id}">
-                            </i>
 
-                            <i
-                            class="bi bi-cart3 quick-buy-btn"
-                            data-id="${product._id}">
-                            </i>
+                            ${product.stock > 0 ? `
 
+                                 <i
+                             class="bi bi-box-arrow-up quick-buy-btn"
+                            data-id="${product._id}">
+                              </i>
+
+                              <i
+                               class="bi bi-cart3 quick-buy-btn"
+                           data-id="${product._id}">
+                           </i>
+
+                           ` : ""}
+
+                            
                         </div>
 
                     </div>
@@ -1134,13 +1173,15 @@ async function loadHomeProducts() {
 
                         <button
 
-                        class="buy-now-btn quick-buy-btn"
+                       class="buy-now-btn quick-buy-btn"
 
-                        data-id="${product._id}">
+                     data-id="${product._id}"
 
-                            Buy Now
+                     ${product.stock <= 0 ? "disabled" : ""}>
 
-                        </button>
+                    ${product.stock <= 0 ? "Sold Out" : "Buy Now"}
+
+                      </button>
 
                     </div>
 
@@ -1542,17 +1583,52 @@ function renderShopSection(title, items, container) {
 
         container.innerHTML += `
 
-        <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="col-lg-3 col-md-6 mb-4">
 
-            <div
-                class="product-card"
-                data-id="${product._id}"
-                data-name="${product.name}"
-                data-price="${product.price}"
-                data-image="${image}">
+                         <div
+                        class="product-card ${product.stock <= 0 ? "sold-out-card" : ""}"
 
-                <div class="product-image">
+                       data-id="${product._id}"
 
+                       data-name="${product.name}"
+
+                       data-price="${product.price}"
+
+                     data-image="${image}">
+
+                           <div class="product-image">
+
+                           ${product.stock <= 0 ? `
+
+                            <div class="sold-out-badge">
+                            
+                                SOLD OUT
+                            
+                            </div>
+                            
+                            `
+                            
+                            : product.stock <= 3 ? `
+                            
+                            <div class="low-stock-badge danger">
+                            
+                                🔥 Only ${product.stock} Left
+                            
+                            </div>
+                            
+                            `
+                            
+                            : product.stock <= 8 ? `
+                            
+                            <div class="low-stock-badge">
+                            
+                                Low Stock
+                            
+                            </div>
+                            
+                            `
+                            
+                            : ""}
                     <a href="product-details.html?id=${product._id}">
 
                         <img
@@ -1569,15 +1645,21 @@ function renderShopSection(title, items, container) {
                             <i class="bi bi-eye"></i>
                         </a>
 
-                        <i
-                        class="bi bi-box-arrow-up quick-buy-btn"
-                        data-id="${product._id}">
-                        </i>
 
-                        <i
-                        class="bi bi-cart3 quick-buy-btn"
-                        data-id="${product._id}">
-                        </i>
+                        ${product.stock > 0 ? `
+
+                            <i
+                            class="bi bi-box-arrow-up quick-buy-btn"
+                            data-id="${product._id}">
+                            </i>
+                            
+                            <i
+                            class="bi bi-cart3 quick-buy-btn"
+                            data-id="${product._id}">
+                            </i>
+                            
+                            ` : ""}
+ 
 
                     </div>
 
@@ -1591,11 +1673,17 @@ function renderShopSection(title, items, container) {
                         KES ${Number(product.price).toLocaleString()}
                     </p>
 
-                    <button
+                     <button
+
                     class="buy-now-btn quick-buy-btn"
-                    data-id="${product._id}">
-                        Buy Now
-                    </button>
+
+                   data-id="${product._id}"
+
+                  ${product.stock <= 0 ? "disabled" : ""}>
+
+                  ${product.stock <= 0 ? "Sold Out" : "Buy Now"}
+
+                  </button>
 
                 </div>
 
