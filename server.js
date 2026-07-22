@@ -1577,7 +1577,7 @@ app.delete(
 
 app.post(
     "/orders",
-    verifyAdmin,
+    
     async (req, res) => {
 
         try {

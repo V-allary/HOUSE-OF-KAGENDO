@@ -1304,25 +1304,145 @@ function updateShipping(){
         }
         
         // ========================================
-        // PAYMENT BUTTON
-        // ========================================
-        
-        const payButton =
-        document.getElementById("payButton");
-        
-        if(payButton){
-        
-            payButton.addEventListener("click",()=>{
-        
-                saveCheckout();
-        
-                alert("Proceeding to secure payment...");
-        
-                // Pesapal integration comes next
-        
-            });
-        
+// PAYSTACK PAYMENT
+// ========================================
+
+const payButton = document.getElementById("payButton");
+
+if (payButton) {
+
+    payButton.addEventListener("click", async () => {
+
+        try {
+
+            payButton.disabled = true;
+            payButton.innerText = "Please wait...";
+
+            const cart =
+                JSON.parse(localStorage.getItem("cart")) || [];
+
+            if (cart.length === 0) {
+
+                alert("Your cart is empty.");
+                return;
+
+            }
+
+            // ==========================
+            // CREATE ORDER
+            // ==========================
+
+            const orderResponse = await fetch(
+                "https://houseofkagendo.com/orders",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        customer: {
+
+                            firstName:
+                                document.getElementById("firstName").value,
+
+                            lastName:
+                                document.getElementById("lastName").value,
+
+                            email:
+                                document.getElementById("email").value,
+
+                            phone:
+                                document.getElementById("phone").value
+
+                        },
+
+                        items: cart,
+
+                        deliveryFee: shippingCost,
+
+                        deliveryAddress: {
+
+                            address:
+                                document.getElementById("street").value,
+
+                            city:
+                                document.getElementById("city").value,
+
+                            county:
+                                document.getElementById("county").value
+
+                        },
+
+                        paymentMethod: "Paystack"
+
+                    })
+
+                }
+            );
+
+            const orderData = await orderResponse.json();
+
+            if (!orderResponse.ok) {
+
+                throw new Error(orderData.message);
+
+            }
+
+            // ==========================
+            // INITIALIZE PAYMENT
+            // ==========================
+
+            const paymentResponse = await fetch(
+                "https://houseofkagendo.com/payments/paystack/initialize",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        orderId:
+                            orderData.order._id
+
+                    })
+
+                }
+            );
+
+            const paymentData =
+                await paymentResponse.json();
+
+            if (!paymentResponse.ok) {
+
+                throw new Error(paymentData.message);
+
+            }
+
+            window.location.href =
+                paymentData.authorizationUrl;
+
+        } catch (error) {
+
+            alert(error.message);
+
+        } finally {
+
+            payButton.disabled = false;
+            payButton.innerText =
+                "Proceed to Secure Payment";
+
         }
+
+    });
+
+}
         
         // ========================================
         // INITIALIZE
