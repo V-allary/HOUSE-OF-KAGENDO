@@ -1,0 +1,53 @@
+<!-- payment-callback.html -->
+<!DOCTYPE html>
+<html>
+<head><title>Confirming your payment...</title></head>
+<body>
+    <div style="text-align:center; padding:80px 20px;">
+        <h2 id="statusMessage">Confirming your payment...</h2>
+        <p id="statusDetail"></p>
+    </div>
+
+    <script>
+        (async () => {
+            const params = new URLSearchParams(window.location.search);
+            // Paystack sends either "reference" or "trxref" depending on flow
+            const reference = params.get("reference") || params.get("trxref");
+
+            const statusMessage = document.getElementById("statusMessage");
+            const statusDetail = document.getElementById("statusDetail");
+
+            if (!reference) {
+                statusMessage.innerText = "Something went wrong";
+                statusDetail.innerText = "No payment reference was found.";
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    `http://127.0.0.1:5050/payments/paystack/verify/${encodeURIComponent(reference)}`
+                );
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Clear cart now that the order is confirmed paid
+                    localStorage.removeItem("cart");
+                    localStorage.removeItem("checkoutProduct");
+
+                    statusMessage.innerText = "Payment successful!";
+                    statusDetail.innerHTML =
+                        `Your order <strong>${data.order.orderNumber}</strong> is confirmed. ` +
+                        `We'll be in touch with delivery updates.`;
+                } else {
+                    statusMessage.innerText = "Payment not confirmed";
+                    statusDetail.innerText = data.message || "Please contact support with your reference.";
+                }
+            } catch (error) {
+                console.error(error);
+                statusMessage.innerText = "Something went wrong";
+                statusDetail.innerText = "We couldn't confirm your payment. Please contact support.";
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -989,191 +989,192 @@
 
     <script>
 
-        // ========================================
-        // LOAD CUSTOMER DETAILS
-        // ========================================
-        
-        const user = JSON.parse(localStorage.getItem("user"));
-        
-        if(user){
-        
-            document.getElementById("firstName").value = user.firstName || "";
-            document.getElementById("lastName").value = user.lastName || "";
-            document.getElementById("email").value = user.email || "";
-            document.getElementById("phone").value = user.phone || "";
-        
-        }
-        
-        // ========================================
-        // PAYMENT ACTIVE
-        // ========================================
-        
-        const paymentOptions =
-        document.querySelectorAll(".payment-option");
-        
-        paymentOptions.forEach((option)=>{
-        
-            option.addEventListener("click",()=>{
-        
-                paymentOptions.forEach(item=>{
-        
-                    item.classList.remove("active-payment");
-        
-                });
-        
-                option.classList.add("active-payment");
-        
-            });
-        
-        });
-        
-        // ========================================
-        // SHIPPING VARIABLES
-        // ========================================
-        
-        let shippingCost = 0;
-        let shippingZone = "";
-        
-        // ========================================
-        // LOAD CHECKOUT PRODUCTS
-        // ========================================
-        
-        function renderCheckout(){
-        
-            const checkoutProduct =
-            JSON.parse(
-                localStorage.getItem("checkoutProduct")
-            );
-        
-            let cart = [];
-        
-            if(checkoutProduct){
-        
-                cart = [checkoutProduct];
-        
-            }else{
-        
-                cart =
-                JSON.parse(localStorage.getItem("cart")) || [];
-        
-            }
-        
-            const checkoutItems =
-            document.getElementById("checkout-items");
-        
-            const subtotal =
-            document.getElementById("checkout-subtotal");
-        
-            const totalElement =
-            document.getElementById("checkout-total");
-        
-            checkoutItems.innerHTML = "";
-        
-            let total = 0;
-        
-            if(cart.length === 0){
-        
-                checkoutItems.innerHTML = `
-        
-                <div class="text-center p-4">
-        
-                    <h5>Your cart is empty</h5>
-        
-                    <a href="shop.html"
-                    class="btn btn-dark mt-3">
-        
-                        Continue Shopping
-        
-                    </a>
-        
-                </div>
-        
-                `;
-        
-                subtotal.innerText = "KES 0";
-                document.getElementById("shipping-price").innerText = "KES 0";
-                totalElement.innerText = "KES 0";
-        
-                return;
-        
-            }
-        
-            cart.forEach(item => {
-        
-                total += item.price * item.quantity;
-        
-                checkoutItems.innerHTML += `
-        
-                <div class="summary-product">
-        
-                    <div class="summary-image">
-        
-                        <img src="${item.image}">
-        
-                    </div>
-        
-                    <div class="summary-details">
-        
-                        <h5>${item.name}</h5>
-        
-                        <p>
-        
-                            Quantity:
-                            ${item.quantity}
-        
-                        </p>
-        
-                        <p>
-        
-                            Size:
-                            <strong>${item.size || "-"}</strong>
-        
-                        </p>
-        
-                        <p>
-        
-                            Color:
-        
-                            <span
-                            style="
-                            display:inline-block;
-                            width:16px;
-                            height:16px;
-                            border-radius:50%;
-                            background:${item.color};
-                            border:1px solid #ccc;
-                            vertical-align:middle;
-                            margin-left:5px;">
-                            </span>
-        
-                        </p>
-        
-                    </div>
-        
-                    <span class="summary-price">
-        
-                        KES ${(item.price * item.quantity).toLocaleString()}
-        
-                    </span>
-        
-                </div>
-        
-                `;
-        
-            });
-        
-            subtotal.innerText =
-            "KES " + total.toLocaleString();
-        
-            document.getElementById("shipping-price").innerText =
-            "KES " + shippingCost.toLocaleString();
-        
-            totalElement.innerText =
-            "KES " + (total + shippingCost).toLocaleString();
-        
-        }
-        
          // ========================================
+// LOAD CUSTOMER DETAILS
+// ========================================
+
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (user) {
+
+    const firstName = document.getElementById("firstName");
+    const lastName = document.getElementById("lastName");
+    const email = document.getElementById("email");
+    const phone = document.getElementById("phone");
+
+    if (firstName) firstName.value = user.firstName || "";
+    if (lastName) lastName.value = user.lastName || "";
+    if (email) email.value = user.email || "";
+    if (phone) phone.value = user.phone || "";
+
+}
+
+// ========================================
+// PAYMENT ACTIVE
+// ========================================
+
+const paymentOptions = document.querySelectorAll(".payment-option");
+
+if (paymentOptions.length > 0) {
+
+    paymentOptions.forEach(option => {
+
+        option.addEventListener("click", () => {
+
+            paymentOptions.forEach(item => {
+
+                item.classList.remove("active-payment");
+
+            });
+
+            option.classList.add("active-payment");
+
+        });
+
+    });
+
+}  
+
+// ========================================
+// SHIPPING VARIABLES
+// ========================================
+
+let shippingCost = 0;
+let shippingZone = "";
+
+// ========================================
+// LOAD CHECKOUT PRODUCTS
+// ========================================
+
+function renderCheckout() {
+
+    const checkoutProduct = JSON.parse(
+        localStorage.getItem("checkoutProduct")
+    );
+
+    let cart = [];
+
+    if (checkoutProduct) {
+
+        cart = [checkoutProduct];
+
+    } else {
+
+        cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    }
+
+    const checkoutItems = document.getElementById("checkout-items");
+    const subtotal = document.getElementById("checkout-subtotal");
+    const shippingPrice = document.getElementById("shipping-price");
+    const totalElement = document.getElementById("checkout-total");
+
+    if (!checkoutItems || !subtotal || !shippingPrice || !totalElement) {
+        return;
+    }
+
+    checkoutItems.innerHTML = "";
+
+    let total = 0;
+
+    if (cart.length === 0) {
+
+        checkoutItems.innerHTML = `
+
+            <div class="text-center p-4">
+
+                <h5>Your cart is empty</h5>
+
+                <a href="shop.html" class="btn btn-dark mt-3">
+                    Continue Shopping
+                </a>
+
+            </div>
+
+        `;
+
+        subtotal.innerText = "KES 0";
+        shippingPrice.innerText = "KES 0";
+        totalElement.innerText = "KES 0";
+
+        return;
+
+    }
+
+    cart.forEach(item => {
+
+        const quantity = item.quantity || 1;
+        const price = item.price || 0;
+
+        total += price * quantity;
+
+        checkoutItems.innerHTML += `
+
+            <div class="summary-product">
+
+                <div class="summary-image">
+
+                    <img src="${item.image}" alt="${item.name}">
+
+                </div>
+
+                <div class="summary-details">
+
+                    <h5>${item.name}</h5>
+
+                    <p>
+                        Quantity: ${quantity}
+                    </p>
+
+                    <p>
+                        Size:
+                        <strong>${item.size || "-"}</strong>
+                    </p>
+
+                    <p>
+
+                        Color:
+
+                        <span
+                            style="
+                                display:inline-block;
+                                width:16px;
+                                height:16px;
+                                border-radius:50%;
+                                background:${item.color || "#000"};
+                                border:1px solid #ccc;
+                                vertical-align:middle;
+                                margin-left:5px;
+                            ">
+                        </span>
+
+                    </p>
+
+                </div>
+
+                <span class="summary-price">
+
+                    KES ${(price * quantity).toLocaleString()}
+
+                </span>
+
+            </div>
+
+        `;
+
+    });
+
+    subtotal.innerText =
+        "KES " + total.toLocaleString();
+
+    shippingPrice.innerText =
+        "KES " + shippingCost.toLocaleString();
+
+    totalElement.innerText =
+        "KES " + (total + shippingCost).toLocaleString();
+
+}
+ // ========================================
 // AUTOMATIC SHIPPING
 // ========================================
 
@@ -1182,13 +1183,13 @@ const cityInput = document.getElementById("city");
 const estateInput = document.getElementById("estate");
 const streetInput = document.getElementById("street");
 
-function updateShipping(){
+function updateShipping() {
 
     const address = `
-        ${countyInput.value}
-        ${cityInput.value}
-        ${estateInput.value}
-        ${streetInput.value}
+        ${countyInput?.value || ""}
+        ${cityInput?.value || ""}
+        ${estateInput?.value || ""}
+        ${streetInput?.value || ""}
     `.toLowerCase();
 
     const result = calculateShipping(address);
@@ -1196,25 +1197,22 @@ function updateShipping(){
     shippingCost = result.price;
     shippingZone = result.zone;
 
-    const shippingPrice =
-    document.getElementById("shipping-price");
+    const shippingPrice = document.getElementById("shipping-price");
 
-    if(shippingPrice){
+    if (shippingPrice) {
 
         shippingPrice.innerText =
-        "KES " + shippingCost.toLocaleString();
+            "KES " + shippingCost.toLocaleString();
 
     }
 
     const shippingZoneElement =
-    document.getElementById("shippingZone");
+        document.getElementById("shippingZone");
 
-    if(shippingZoneElement){
+    if (shippingZoneElement) {
 
         shippingZoneElement.innerHTML =
-        shippingZone +
-        " • KES " +
-        shippingCost.toLocaleString();
+            `${shippingZone} • KES ${shippingCost.toLocaleString()}`;
 
     }
 
@@ -1222,88 +1220,79 @@ function updateShipping(){
 
 }
 
-[countyInput,cityInput,estateInput,streetInput].forEach(input=>{
+[countyInput, cityInput, estateInput, streetInput].forEach(input => {
 
-    if(input){
+    if (input) {
 
-        input.addEventListener(
-            "input",
-            updateShipping
-        );
-
-        input.addEventListener(
-            "change",
-            updateShipping
-        );
+        input.addEventListener("input", updateShipping);
+        input.addEventListener("change", updateShipping);
 
     }
 
 });
-        // ========================================
-        // SAVE ORDER
-        // ========================================
-        
-        function saveCheckout(){
-        
-            const order = {
-        
-                customer:{
-        
-                    firstName:
-                    document.getElementById("firstName").value,
-        
-                    lastName:
-                    document.getElementById("lastName").value,
-        
-                    email:
-                    document.getElementById("email").value,
-        
-                    phone:
-                    document.getElementById("phone").value
-        
-                },
-        
-                delivery:{
-        
-                    county:
-                    document.getElementById("county").value,
-        
-                    city:
-                    document.getElementById("city").value,
-        
-                    estate:
-                    document.getElementById("estate").value,
-        
-                    street:
-                    document.getElementById("street").value,
-        
-                    building:
-                    document.getElementById("building").value,
-        
-                    notes:
-                    document.getElementById("notes").value,
-        
-                    zone:
-                    shippingZone,
-        
-                    shipping:
-                    shippingCost
-        
-                },
-        
-                cart:
-                JSON.parse(localStorage.getItem("cart")) || []
-        
-            };
-        
-            localStorage.setItem(
-                "checkoutOrder",
-                JSON.stringify(order)
-            );
-        
-        }
-        
-        // ========================================
+
+// ========================================
+// SAVE ORDER
+// ========================================
+
+function saveCheckout() {
+
+    const order = {
+
+        customer: {
+
+            firstName:
+                document.getElementById("firstName")?.value || "",
+
+            lastName:
+                document.getElementById("lastName")?.value || "",
+
+            email:
+                document.getElementById("email")?.value || "",
+
+            phone:
+                document.getElementById("phone")?.value || ""
+
+        },
+
+        delivery: {
+
+            county:
+                document.getElementById("county")?.value || "",
+
+            city:
+                document.getElementById("city")?.value || "",
+
+            estate:
+                document.getElementById("estate")?.value || "",
+
+            street:
+                document.getElementById("street")?.value || "",
+
+            building:
+                document.getElementById("building")?.value || "",
+
+            notes:
+                document.getElementById("notes")?.value || "",
+
+            zone: shippingZone,
+
+            shipping: shippingCost
+
+        },
+
+        cart:
+            JSON.parse(localStorage.getItem("cart")) || []
+
+    };
+
+    localStorage.setItem(
+        "checkoutOrder",
+        JSON.stringify(order)
+    );
+
+}
+ // ========================================
 // PAYSTACK PAYMENT
 // ========================================
 
@@ -1312,28 +1301,73 @@ const payButton = document.getElementById("payButton");
 if (payButton) {
 
     payButton.addEventListener("click", async () => {
+    try {
+        payButton.disabled = true;
+        payButton.innerText = "Please wait...";
 
-        try {
+        // Resolve items the same way renderCheckout() does
+        const checkoutProduct = JSON.parse(localStorage.getItem("checkoutProduct"));
+        const cart = checkoutProduct
+            ? [checkoutProduct]
+            : JSON.parse(localStorage.getItem("cart")) || [];
 
-            payButton.disabled = true;
-            payButton.innerText = "Please wait...";
+        console.log("Items being sent:", cart);
 
-            const cart =
-                JSON.parse(localStorage.getItem("cart")) || [];
+        if (cart.length === 0) {
+            alert("Your cart is empty.");
+            return;
+        }
 
-            if (cart.length === 0) {
-
-                alert("Your cart is empty.");
-                return;
-
-            }
+        // ... rest stays the same (orderPayload, fetch to /orders, etc.)
+        
 
             // ==========================
             // CREATE ORDER
             // ==========================
 
+            const orderPayload = {
+
+                customer: {
+
+                    firstName:
+                        document.getElementById("firstName").value,
+
+                    lastName:
+                        document.getElementById("lastName").value,
+
+                    email:
+                        document.getElementById("email").value,
+
+                    phone:
+                        document.getElementById("phone").value
+
+                },
+
+                items: cart,
+
+                deliveryFee: shippingCost,
+
+                deliveryAddress: {
+
+                    address:
+                        document.getElementById("street").value,
+
+                    city:
+                        document.getElementById("city").value,
+
+                    county:
+                        document.getElementById("county").value
+
+                },
+
+                paymentMethod: "Paystack"
+
+            };
+
+            console.log("Payload being sent:", orderPayload);
+
             const orderResponse = await fetch(
-                "https://houseofkagendo.com/orders",
+                "http://127.0.0.1:5050/orders",
                 {
 
                     method: "POST",
@@ -1342,49 +1376,14 @@ if (payButton) {
                         "Content-Type": "application/json"
                     },
 
-                    body: JSON.stringify({
-
-                        customer: {
-
-                            firstName:
-                                document.getElementById("firstName").value,
-
-                            lastName:
-                                document.getElementById("lastName").value,
-
-                            email:
-                                document.getElementById("email").value,
-
-                            phone:
-                                document.getElementById("phone").value
-
-                        },
-
-                        items: cart,
-
-                        deliveryFee: shippingCost,
-
-                        deliveryAddress: {
-
-                            address:
-                                document.getElementById("street").value,
-
-                            city:
-                                document.getElementById("city").value,
-
-                            county:
-                                document.getElementById("county").value
-
-                        },
-
-                        paymentMethod: "Paystack"
-
-                    })
+                    body: JSON.stringify(orderPayload)
 
                 }
             );
 
             const orderData = await orderResponse.json();
+
+            console.log("Server response:", orderData);
 
             if (!orderResponse.ok) {
 
@@ -1397,8 +1396,8 @@ if (payButton) {
             // ==========================
 
             const paymentResponse = await fetch(
-                "https://houseofkagendo.com/payments/paystack/initialize",
-                {
+                "http://127.0.0.1:5050/payments/paystack/initialize",
+                { 
 
                     method: "POST",
 
@@ -1430,26 +1429,28 @@ if (payButton) {
 
         } catch (error) {
 
+            console.error(error);
+
             alert(error.message);
 
         } finally {
 
             payButton.disabled = false;
+
             payButton.innerText =
                 "Proceed to Secure Payment";
 
         }
 
-    });
-
+    });  
 }
-        
-        // ========================================
-        // INITIALIZE
-        // ========================================
-        
-        renderCheckout();
-        
+// ========================================
+// INITIALIZE
+// ========================================
+
+renderCheckout();
+
+updateShipping();
         </script>
         </body>
 </html>

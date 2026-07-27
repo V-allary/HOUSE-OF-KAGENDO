@@ -25,7 +25,7 @@ const fs = require("fs");
 // ==========================================
 
 const User = require("./models/userModel");
-const Product = require("./models/ProductModel");
+const Product = require("./models/productModel");
 const Order = require("./models/orderModel");
 const Settings= require("./models/settingsModel");
 const Admin= require("./models/adminModel");
@@ -1627,50 +1627,48 @@ app.post(
             let subtotal = 0;
 
             const orderItems = [];
+            for (const item of items) {
 
-            for (
-                const item of items
-            ) {
+                console.log("Incoming itme:",item);
 
-                if (!item.productId) {
+                const productId = item.productId || item.id;
 
+                console.log("Resolved productId:", productId);
+            
+                if (!productId) {
+            
                     return res.status(400).json({
-
+            
                         success: false,
-
-                        message:
-                            "A product ID is missing from the order."
-
+            
+                        message: "A product ID is missing from the order."
+            
                     });
-
+            
                 }
-
-                const product =
-                    await Product.findById(
-                        item.productId
-                    );
-
+            
+                const product = await Product.findById(productId);
+            
                 if (!product) {
-
+            
                     return res.status(404).json({
-
+            
                         success: false,
-
-                        message:
-                            `Product not found: ${item.productId}`
-
+            
+                        message: `Product not found: ${productId}`
+            
                     });
-
+            
                 }
-
+            
                 const quantity =
+            
                     Math.max(
+            
                         1,
-                        Number(
-                            item.quantity
-                        ) || 1
+            
+                        Number(item.quantity) || 1
                     );
-
                 if (
                     product.stock <
                     quantity
