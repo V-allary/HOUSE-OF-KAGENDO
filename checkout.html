@@ -1367,7 +1367,7 @@ if (payButton) {
             console.log("Payload being sent:", orderPayload);
 
             const orderResponse = await fetch(
-                "http://127.0.0.1:5050/orders",
+                "https://houseofkagendo.com/orders",
                 {
 
                     method: "POST",
@@ -1396,7 +1396,7 @@ if (payButton) {
             // ==========================
 
             const paymentResponse = await fetch(
-                "http://127.0.0.1:5050/payments/paystack/initialize",
+                "https://houseofkagendo.com/payments/paystack/initialize",
                 { 
 
                     method: "POST",
