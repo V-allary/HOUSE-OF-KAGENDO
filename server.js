@@ -3,7 +3,7 @@
 // ==========================================
 
 require("dotenv").config();
-console.log("Paystack key loaded:", process.env.PAYSTACK_SECRET_KEY ? "YES" : "NO — missing!");
+console.log("Paystack key loaded:", process.env.LIVE_SECRET_KEY ? "YES" : "NO — missing!");
 
 
 // ==========================================
@@ -2471,7 +2471,7 @@ app.post(
                         headers: {
 
                             Authorization:
-                                `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+                                `Bearer ${process.env.LIVE_SECRET_KEY}`,
 
                             "Content-Type":
                                 "application/json"
@@ -2596,7 +2596,7 @@ app.get(
                         headers: {
 
                             Authorization:
-                                `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
+                                `Bearer ${process.env.LIVE_SECRET_KEY}`
 
                         }
 
