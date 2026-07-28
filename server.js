@@ -25,7 +25,7 @@ const fs = require("fs");
 // ==========================================
 
 const User = require("./models/userModel");
-const Product = require("./models/productModel");
+const Product = require("./models/ProductModel");
 const Order = require("./models/orderModel");
 const Settings= require("./models/settingsModel");
 const Admin= require("./models/adminModel");
