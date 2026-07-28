@@ -3,6 +3,7 @@
 // ==========================================
 
 require("dotenv").config();
+console.log("Paystack key loaded:", process.env.PAYSTACK_SECRET_KEY ? "YES" : "NO — missing!");
 
 
 // ==========================================
