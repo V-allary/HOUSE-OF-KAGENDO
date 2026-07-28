@@ -1291,8 +1291,18 @@ function saveCheckout() {
         JSON.stringify(order)
     );
 
-}
- // ========================================
+} 
+// ========================================
+// API BASE URL
+// ========================================
+
+const API_URL =
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname === "localhost"
+        ? "http://127.0.0.1:5050"
+        : "https://house-of-kagendo.onrender.com";
+
+// ========================================
 // PAYSTACK PAYMENT
 // ========================================
 
@@ -1301,25 +1311,22 @@ const payButton = document.getElementById("payButton");
 if (payButton) {
 
     payButton.addEventListener("click", async () => {
-    try {
-        payButton.disabled = true;
-        payButton.innerText = "Please wait...";
+        try {
+            payButton.disabled = true;
+            payButton.innerText = "Please wait...";
 
-        // Resolve items the same way renderCheckout() does
-        const checkoutProduct = JSON.parse(localStorage.getItem("checkoutProduct"));
-        const cart = checkoutProduct
-            ? [checkoutProduct]
-            : JSON.parse(localStorage.getItem("cart")) || [];
+            // Resolve items the same way renderCheckout() does
+            const checkoutProduct = JSON.parse(localStorage.getItem("checkoutProduct"));
+            const cart = checkoutProduct
+                ? [checkoutProduct]
+                : JSON.parse(localStorage.getItem("cart")) || [];
 
-        console.log("Items being sent:", cart);
+            console.log("Items being sent:", cart);
 
-        if (cart.length === 0) {
-            alert("Your cart is empty.");
-            return;
-        }
-
-        // ... rest stays the same (orderPayload, fetch to /orders, etc.)
-        
+            if (cart.length === 0) {
+                alert("Your cart is empty.");
+                return;
+            }
 
             // ==========================
             // CREATE ORDER
@@ -1328,19 +1335,10 @@ if (payButton) {
             const orderPayload = {
 
                 customer: {
-
-                    firstName:
-                        document.getElementById("firstName").value,
-
-                    lastName:
-                        document.getElementById("lastName").value,
-
-                    email:
-                        document.getElementById("email").value,
-
-                    phone:
-                        document.getElementById("phone").value
-
+                    firstName: document.getElementById("firstName").value,
+                    lastName: document.getElementById("lastName").value,
+                    email: document.getElementById("email").value,
+                    phone: document.getElementById("phone").value
                 },
 
                 items: cart,
@@ -1348,16 +1346,9 @@ if (payButton) {
                 deliveryFee: shippingCost,
 
                 deliveryAddress: {
-
-                    address:
-                        document.getElementById("street").value,
-
-                    city:
-                        document.getElementById("city").value,
-
-                    county:
-                        document.getElementById("county").value
-
+                    address: document.getElementById("street").value,
+                    city: document.getElementById("city").value,
+                    county: document.getElementById("county").value
                 },
 
                 paymentMethod: "Paystack"
@@ -1367,27 +1358,13 @@ if (payButton) {
             console.log("Payload being sent:", orderPayload);
 
             const orderResponse = await fetch(
-                "http://127.0.0.1:3000",
-            "http://localhost:3000",
-            "http://127.0.0.1:5500",
-            "http://localhost:5500",
-
-            "https://houseofkagendo.com",
-
-            "https://www.houseofkagendo.com",
-
-            "https://v-allary.github.io",
-            
+                `${API_URL}/orders`,
                 {
-
                     method: "POST",
-
                     headers: {
                         "Content-Type": "application/json"
                     },
-
                     body: JSON.stringify(orderPayload)
-
                 }
             );
 
@@ -1396,9 +1373,7 @@ if (payButton) {
             console.log("Server response:", orderData);
 
             if (!orderResponse.ok) {
-
                 throw new Error(orderData.message);
-
             }
 
             // ==========================
@@ -1406,70 +1381,50 @@ if (payButton) {
             // ==========================
 
             const paymentResponse = await fetch(
-                "http://127.0.0.1:3000",
-            "http://localhost:3000",
-            "http://127.0.0.1:5500",
-            "http://localhost:5500",
-
-            "https://houseofkagendo.com",
-
-            "https://www.houseofkagendo.com",
-
-            "https://v-allary.github.io",
-            
-                { 
-
+                `${API_URL}/payments/paystack/initialize`,
+                {
                     method: "POST",
-
                     headers: {
                         "Content-Type": "application/json"
                     },
-
                     body: JSON.stringify({
-
-                        orderId:
-                            orderData.order._id
-
+                        orderId: orderData.order._id
                     })
-
                 }
             );
 
-            const paymentData =
-                await paymentResponse.json();
+            const paymentData = await paymentResponse.json();
 
             if (!paymentResponse.ok) {
-
                 throw new Error(paymentData.message);
-
             }
 
-            window.location.href =
-                paymentData.authorizationUrl;
+            // Clear cart now that order + payment init succeeded
+            localStorage.removeItem("cart");
+            localStorage.removeItem("checkoutProduct");
+
+            window.location.href = paymentData.authorizationUrl;
 
         } catch (error) {
 
             console.error(error);
-
             alert(error.message);
 
         } finally {
 
             payButton.disabled = false;
-
-            payButton.innerText =
-                "Proceed to Secure Payment";
+            payButton.innerText = "Proceed to Secure Payment";
 
         }
 
-    });  
+    });
 }
+
 // ========================================
 // INITIALIZE
 // ========================================
 
 renderCheckout();
-
 updateShipping();
         </script>
         </body>
