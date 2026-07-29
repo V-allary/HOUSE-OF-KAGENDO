@@ -51,8 +51,7 @@ const app = express();
 
 app.use(express.static(__dirname));
 
-
-
+ 
     // ==========================================
 // WEBSITE PAGES
 // ==========================================
@@ -1952,6 +1951,7 @@ app.get(
 
 app.put(
     "/orders/:id/status",
+    verifyAdmin,
     async (req, res) => {
 
         try {

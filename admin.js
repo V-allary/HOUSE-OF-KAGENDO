@@ -25,13 +25,13 @@ if (
     !adminToken &&
 
     window.location.pathname.endsWith(
-        "/dashboard"
+        "/dashboard.html"
     )
 
 ) {
 
     window.location.href =
-        "admin-login.html";
+        "/admin.html";
 
 }
 // =======================================
