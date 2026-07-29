@@ -2643,8 +2643,7 @@ async function deleteSubscriber(id) {
 // =======================================
 
 loadNewsletter();
-
-// =======================================
+ // =======================================
 // LOAD ADMIN SETTINGS
 // =======================================
 
@@ -2660,21 +2659,17 @@ async function loadSettings() {
 
     try {
 
-        const response =
-    await fetch(
-        `${API_URL}/settings`,
-        {
-            headers: {
-
-                Authorization:
-                    `Bearer ${localStorage.getItem("adminToken")}`
-
+        const response = await fetch(
+            `${API_URL}/settings`,
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${localStorage.getItem("adminToken")}`
+                }
             }
-        }
-    );
+        );
 
-        const settings =
-            await response.json();
+        const settings = await response.json();
 
         if (!response.ok) {
 
@@ -2708,9 +2703,9 @@ async function loadSettings() {
 // =======================================
 
 const adminSettingsForm =
-document.getElementById(
-    "adminSettingsForm"
-);
+    document.getElementById(
+        "adminSettingsForm"
+    );
 
 if (adminSettingsForm) {
 
@@ -2720,39 +2715,71 @@ if (adminSettingsForm) {
 
             event.preventDefault();
 
+            const storeName =
+                document
+                    .getElementById("storeName")
+                    .value
+                    .trim();
+
+            const storeEmail =
+                document
+                    .getElementById("storeEmail")
+                    .value
+                    .trim();
+
+            if (!storeName) {
+
+                alert("Store name is required.");
+
+                return;
+
+            }
+
             try {
+
                 const response =
-                await fetch(
-                    `${API_URL}/settings`,
-                    {
-                        method: "PUT",
-            
-                        headers: {
-            
-                            "Content-Type":
-                                "application/json",
-            
-                            Authorization:
-                                `Bearer ${localStorage.getItem("adminToken")}`
-            
-                        },
-            
-                        body:
-                            JSON.stringify({
-            
+                    await fetch(
+                        `${API_URL}/settings`,
+                        {
+
+                            method: "PUT",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json",
+
+                                Authorization:
+                                    `Bearer ${localStorage.getItem("adminToken")}`
+
+                            },
+
+                            body: JSON.stringify({
+
                                 storeName,
-            
+
                                 storeEmail
-            
+
                             })
-            
-                    }
-                );
+
+                        }
+                    );
 
                 const data =
                     await response.json();
 
+                console.log(
+                    "Settings response:",
+                    data
+                );
+
                 if (!response.ok) {
+
+                    console.error(
+                        "Server returned:",
+                        response.status,
+                        data
+                    );
 
                     throw new Error(
                         data.message ||
