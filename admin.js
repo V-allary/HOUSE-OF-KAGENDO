@@ -4,11 +4,8 @@
 
 // Local development uses port 5050.
 // Deployed website uses the Render backend.
-const API_URL =
-    window.location.hostname === "127.0.0.1" ||
-    window.location.hostname === "localhost"
-        ? "http://127.0.0.1:5050"
-        : "https://house-of-kagendo.onrender.com";
+const API_URL = "";
+    
 
 
 // =======================================
