@@ -2450,7 +2450,7 @@ loadCustomers();
 async function loadNewsletter() {
 
     const table =
-        document.getElementById("newsletterTable");
+        document.getElementById("newsletterTable"); 
 
     if (!table) return;
 
