@@ -1301,8 +1301,7 @@ const API_URL =
     window.location.hostname === "localhost"
         ? "http://127.0.0.1:5050"
         : "https://house-of-kagendo.onrender.com";
-
-// ========================================
+ // ========================================
 // PAYSTACK PAYMENT
 // ========================================
 
@@ -1311,113 +1310,370 @@ const payButton = document.getElementById("payButton");
 if (payButton) {
 
     payButton.addEventListener("click", async () => {
-        try {
-            payButton.disabled = true;
-            payButton.innerText = "Please wait...";
 
-            // Resolve items the same way renderCheckout() does
-            const checkoutProduct = JSON.parse(localStorage.getItem("checkoutProduct"));
-            const cart = checkoutProduct
-                ? [checkoutProduct]
-                : JSON.parse(localStorage.getItem("cart")) || [];
+        // ========================================
+        // VALIDATE CUSTOMER & DELIVERY INFORMATION
+        // ========================================
 
-            console.log("Items being sent:", cart);
+        const checkoutForm =
+            document.getElementById("checkoutForm");
 
-            if (cart.length === 0) {
-                alert("Your cart is empty.");
-                return;
+        if (!checkoutForm) {
+
+            alert(
+                "Unable to validate checkout information."
+            );
+
+            return;
+
+        }
+
+        // Trigger browser validation for all required fields
+        if (!checkoutForm.checkValidity()) {
+
+            checkoutForm.reportValidity();
+
+            // Scroll to the first invalid field
+            const firstInvalidField =
+                checkoutForm.querySelector(":invalid");
+
+            if (firstInvalidField) {
+
+                firstInvalidField.scrollIntoView({
+
+                    behavior: "smooth",
+
+                    block: "center"
+
+                });
+
+                firstInvalidField.focus();
+
             }
 
-            // ==========================
+            return;
+
+        }
+
+        // ========================================
+        // EXTRA DELIVERY VALIDATION
+        // ========================================
+
+        if (!shippingZone || shippingCost === undefined) {
+
+            alert(
+                "Please complete your delivery address before proceeding to payment."
+            );
+
+            return;
+
+        }
+
+        try {
+
+            payButton.disabled = true;
+
+            payButton.innerText =
+                "Please wait...";
+
+
+            // ========================================
+            // RESOLVE CHECKOUT ITEMS
+            // ========================================
+
+            const checkoutProduct =
+                JSON.parse(
+                    localStorage.getItem(
+                        "checkoutProduct"
+                    )
+                );
+
+            const cart =
+                checkoutProduct
+                    ? [checkoutProduct]
+                    : JSON.parse(
+                        localStorage.getItem(
+                            "cart"
+                        )
+                    ) || [];
+
+
+            console.log(
+                "Items being sent:",
+                cart
+            );
+
+
+            if (cart.length === 0) {
+
+                alert(
+                    "Your cart is empty."
+                );
+
+                return;
+
+            }
+
+
+            // ========================================
             // CREATE ORDER
-            // ==========================
+            // ========================================
 
             const orderPayload = {
 
                 customer: {
-                    firstName: document.getElementById("firstName").value,
-                    lastName: document.getElementById("lastName").value,
-                    email: document.getElementById("email").value,
-                    phone: document.getElementById("phone").value
+
+                    firstName:
+                        document
+                            .getElementById(
+                                "firstName"
+                            )
+                            .value
+                            .trim(),
+
+                    lastName:
+                        document
+                            .getElementById(
+                                "lastName"
+                            )
+                            .value
+                            .trim(),
+
+                    email:
+                        document
+                            .getElementById(
+                                "email"
+                            )
+                            .value
+                            .trim(),
+
+                    phone:
+                        document
+                            .getElementById(
+                                "phone"
+                            )
+                            .value
+                            .trim()
+
                 },
+
 
                 items: cart,
 
-                deliveryFee: shippingCost,
+
+                deliveryFee:
+                    shippingCost,
+
 
                 deliveryAddress: {
-                    address: document.getElementById("street").value,
-                    city: document.getElementById("city").value,
-                    county: document.getElementById("county").value
+
+                    address:
+                        document
+                            .getElementById(
+                                "street"
+                            )
+                            .value
+                            .trim(),
+
+                    city:
+                        document
+                            .getElementById(
+                                "city"
+                            )
+                            .value
+                            .trim(),
+
+                    county:
+                        document
+                            .getElementById(
+                                "county"
+                            )
+                            .value
+                            .trim(),
+
+                    estate:
+                        document
+                            .getElementById(
+                                "estate"
+                            )
+                            .value
+                            .trim(),
+
+                    building:
+                        document
+                            .getElementById(
+                                "building"
+                            )
+                            .value
+                            .trim(),
+
+                    notes:
+                        document
+                            .getElementById(
+                                "notes"
+                            )
+                            .value
+                            .trim(),
+
+                    zone:
+                        shippingZone
+
                 },
 
-                paymentMethod: "Paystack"
+
+                paymentMethod:
+                    "Paystack"
 
             };
 
-            console.log("Payload being sent:", orderPayload);
 
-            const orderResponse = await fetch(
-                `${API_URL}/orders`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(orderPayload)
-                }
+            console.log(
+                "Payload being sent:",
+                orderPayload
             );
 
-            const orderData = await orderResponse.json();
 
-            console.log("Server response:", orderData);
+            const orderResponse =
+                await fetch(
+
+                    `${API_URL}/orders`,
+
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                orderPayload
+                            )
+
+                    }
+
+                );
+
+
+            const orderData =
+                await orderResponse.json();
+
+
+            console.log(
+                "Server response:",
+                orderData
+            );
+
 
             if (!orderResponse.ok) {
-                throw new Error(orderData.message);
+
+                throw new Error(
+                    orderData.message ||
+                    "Unable to create your order."
+                );
+
             }
 
-            // ==========================
+
+            // ========================================
             // INITIALIZE PAYMENT
-            // ==========================
+            // ========================================
 
-            const paymentResponse = await fetch(
-                `${API_URL}/payments/paystack/initialize`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        orderId: orderData.order._id
-                    })
-                }
-            );
+            const paymentResponse =
+                await fetch(
 
-            const paymentData = await paymentResponse.json();
+                    `${API_URL}/payments/paystack/initialize`,
+
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                orderId:
+                                    orderData
+                                        .order
+                                        ._id
+
+                            })
+
+                    }
+
+                );
+
+
+            const paymentData =
+                await paymentResponse.json();
+
 
             if (!paymentResponse.ok) {
-                throw new Error(paymentData.message);
+
+                throw new Error(
+                    paymentData.message ||
+                    "Unable to initialize payment."
+                );
+
             }
 
-            // Clear cart now that order + payment init succeeded
-            localStorage.removeItem("cart");
-            localStorage.removeItem("checkoutProduct");
 
-            window.location.href = paymentData.authorizationUrl;
+            // ========================================
+            // CLEAR CART
+            // ========================================
+
+            localStorage.removeItem(
+                "cart"
+            );
+
+            localStorage.removeItem(
+                "checkoutProduct"
+            );
+
+
+            // ========================================
+            // REDIRECT TO PAYSTACK
+            // ========================================
+
+            window.location.href =
+                paymentData.authorizationUrl;
+
 
         } catch (error) {
 
-            console.error(error);
-            alert(error.message);
+            console.error(
+                error
+            );
+
+            alert(
+                error.message ||
+                "Something went wrong. Please try again."
+            );
 
         } finally {
 
-            payButton.disabled = false;
-            payButton.innerText = "Proceed to Secure Payment";
+            payButton.disabled =
+                false;
+
+            payButton.innerText =
+                "Proceed to Secure Payment";
 
         }
 
     });
+
 }
 
 // ========================================
