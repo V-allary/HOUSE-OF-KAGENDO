@@ -1,12 +1,14 @@
  // ==========================================
 // HOUSE OF KAGENDO API
 // ==========================================
- 
-const API_URL =
-    window.location.hostname === "127.0.0.1" ||
-    window.location.hostname === "localhost"
-        ? "http://127.0.0.1:5050/api"
-        : window.location.origin + "/api";
+const SERVER_URL =
+window.location.hostname === "127.0.0.1" ||
+window.location.hostname === "localhost"
+    ? "http://127.0.0.1:5050"
+    : "https://house-of-kagendo.onrender.com";
+
+const API_URL = SERVER_URL + "/api";
+
 // ==========================================
 // GET ALL PRODUCTS
 // ==========================================
@@ -89,7 +91,8 @@ function getImageURL(image) {
 
     if (image.startsWith("/uploads")) {
 
-        return `${window.location.origin}${image}`;
+        return `${SERVER_URL}${image}`;
+
 
     }
 
