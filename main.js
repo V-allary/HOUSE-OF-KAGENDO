@@ -96,7 +96,7 @@ function setupSearch(inputId, resultsId) {
 
         }
 
-        lilteredProducts = products.filter(product => {
+        filteredProducts = products.filter(product => {
 
             return (
 
